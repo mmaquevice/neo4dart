@@ -1,0 +1,4 @@
+name: neo4dart
+description: A sample application
+dependencies:
+  http_server: any
