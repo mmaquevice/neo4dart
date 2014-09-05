@@ -1,4 +1,11 @@
 name: neo4dart
-description: A sample application
+version: 0.0.1
+description: Driver for neo4j
+homepage: https://github.com/matth3o/neo4dart
+environment:
+  sdk: '>=1.0.0'
 dependencies:
-  http_server: any
+  path: '>=1.0.0 <2.0.0'
+dev_dependencies:
+  unittest: '>=0.11.0'
+  matcher: '>=0.10.0'
