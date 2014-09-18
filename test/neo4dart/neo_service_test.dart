@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'dart:convert';
 
+import 'package:neo4dart/testing/person.dart';
 import 'package:neo4dart/testing/node_bean.dart';
 import 'dart:mirrors';
 
@@ -30,15 +31,14 @@ main() {
     test('- json is well formated', () {
       try {
 
-        ClassMirror classMirror = reflectClass(NodeBean);
-        var metadata = classMirror.metadata;
-        var obj = metadata.first.reflectee;
+        NeoService neoService = new NeoService();
 
-        print(metadata);
-        print(metadata.length);
-        _logger.info(classMirror.declarations.values);
+        neoService.insertNode(new Person("Lucille", "Fleur"));
+        neoService.insertNode(new Person("Matthieu", "Voiture"));
+        neoService.insertNode(new Person("Catherine", "Maison"));
 
-        print(obj);
+        return neoService.insertNode(new Person("Jimmy", "Caca++")).then((ok) => expect(ok, equals(true)));
+
 
       } catch(e, s) {
         _logger.severe(e);

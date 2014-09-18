@@ -26,10 +26,7 @@ main() {
 
     test('- if code 200 then true', () {
       try {
-        BatchToken batchToken = new BatchToken(0, "POST", "/node");
-        batchToken.body = {
-            "name" : "bob"
-        };
+        BatchToken batchToken = new BatchToken("POST", "/node", {"name" : "bob"});
 
         var client200 = new MockClient((request) {
           return new http.Response("", 200);
@@ -47,10 +44,7 @@ main() {
 
     test('- if code 500 then false', () {
       try {
-        BatchToken batchToken = new BatchToken(0, "POST", "/node");
-        batchToken.body = {
-            "name" : "bob"
-        };
+        BatchToken batchToken = new BatchToken("POST", "/node", {"name" : "bob"});
 
         var client500 = new MockClient((request) {
           return new http.Response("", 500);
