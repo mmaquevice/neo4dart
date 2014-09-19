@@ -11,6 +11,10 @@ import 'package:logging/logging.dart';
 import 'dart:mirrors';
 
 part 'src/neo4dart/batch_token.dart';
+part 'src/neo4dart/batch_tokens.dart';
 part 'src/neo4dart/neo_client.dart';
 part 'src/neo4dart/neo_service.dart';
-part 'src/neo4dart/annotations/node.dart';
+part 'src/neo4dart/model/node.dart';
+part 'src/neo4dart/model/relation.dart';
+part 'src/neo4dart/annotations/relationship.dart';
+

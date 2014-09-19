@@ -1,6 +1,5 @@
 part of neo4dart;
 
-
 class NeoClient {
 
   final _logger = new Logger("NeoClient");
@@ -35,6 +34,9 @@ class NeoClient {
   }
 
   List _convertBatchTokensToJsonArray(Set<BatchToken> batchTokens) {
-    return batchTokens.map((batchToken) => new JsonEncoder().convert(batchToken)).toList();
+    return batchTokens.map((batchToken) {
+      _logger.info(batchToken.body);
+      return new JsonEncoder().convert(batchToken);
+    }).toList();
   }
 }

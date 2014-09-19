@@ -7,7 +7,12 @@ class Person extends Node {
   String name;
   String language;
 
+  @Relationship()
+  Person lover;
+
   Person(this.name, this.language);
+
+  Person.withLover(this.name, this.language, this.lover);
 
   Map toJson() {
     Map map = new Map();

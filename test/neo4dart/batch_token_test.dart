@@ -26,10 +26,7 @@ main() {
 
     test('- json is well formated', () {
       try {
-        BatchToken batchToken = new BatchToken(0, "POST", "/node");
-        batchToken.body = {
-            "name" : "bob"
-        };
+        BatchToken batchToken = new BatchToken("POST", "/node", {"name" : "bob"});
         var json = new JsonEncoder().convert(batchToken);
         expect(json, '{"id":0,"method":"POST","to":"/node","body":{"name":"bob"}}');
       } catch(e, s) {

@@ -1,5 +1,6 @@
 library neo4dart.batch_token_test;
 
+import 'dart:core';
 import 'dart:io';
 
 import 'package:unittest/unittest.dart';
@@ -47,5 +48,25 @@ main() {
     });
 
   });
+
+  group('convert to relationship', () {
+
+    test('- relationship from node', () {
+      try {
+
+        NeoService neoService = new NeoService();
+        neoService.insertNode(new Person.withLover("Lucille", "Fleur", new Person("Matthieu", "Voiture")));
+
+      } catch(e, s) {
+        _logger.severe(e);
+        _logger.severe(s);
+      }
+    });
+
+  });
+
+  Set isTUtu() {
+
+  }
 
 }
