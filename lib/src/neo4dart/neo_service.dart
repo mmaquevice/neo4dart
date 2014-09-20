@@ -7,73 +7,95 @@ class NeoService {
   NeoClient neoClient = new NeoClient();
 
   Future insertNode(Node node) {
-    BatchTokens batch = new BatchTokens();
-    BatchToken batchToken = convertNodeToBatchToken(node, batch);
-    batch.batchTokens.add(batchToken);
 
-    Set<Relation> relations = findRelationsFrom(node);
-    relations.forEach((relation) {
-      batch.batchTokens.addAll(convertRelationToBatchTokens(relation, batch));
-    });
+    BatchTokens batch = new BatchTokens();
+    _addNodeToBatch(node, batch);
+    _addNodeAndRelationsToBatch(node, batch);
 
     return neoClient.executeBatch(batch.batchTokens);
   }
 
-  BatchToken convertNodeToBatchToken(Node node, BatchTokens batch) {
+  BatchToken _addNodeToBatch(Node node, BatchTokens batch) {
 
-    int id = batch.findTokenIdFromNode(node);
-    if(id == null) {
-      return new BatchToken.withId(batch.findIdNotUsed(), "POST", "/node", node.toJson());
+    _logger.info("Converting node ${node} to token...");
+
+    BatchToken token = batch.findTokenFromNode(node);
+    if (token == null) {
+      token = new BatchToken.withId(batch.findIdNotUsed(), "POST", "/node", node.toJson());
+      batch.batchTokens.add(token);
+      _logger.info("Node ${node} has been inserted in batch via token ${token}.");
+    } else {
+      _logger.info("Node ${node} is already present in batch.");
     }
-    return null;
+    return token;
   }
 
-  Set<BatchToken> convertRelationToBatchTokens(Relation relation, BatchTokens batch) {
+  Set<BatchToken> _addNodeAndRelationsToBatch(Node node, BatchTokens batch) {
+
+    Set<BatchToken> tokens = new Set();
+    Set<Relation> relations = _findRelationsFrom(node);
+    relations.forEach((relation) {
+      tokens.addAll(_convertRelationToBatchTokens(relation, batch));
+      if(node != relation.startNode && !batch.nodesWithRelationsConverted.contains(relation.startNode)) {
+        batch.nodesWithRelationsConverted.add(relation.startNode);
+        tokens.addAll(_addNodeAndRelationsToBatch(relation.startNode, batch));
+      }
+      if(node != relation.endNode && !batch.nodesWithRelationsConverted.contains(relation.endNode)) {
+        batch.nodesWithRelationsConverted.add(relation.endNode);
+        tokens.addAll(_addNodeAndRelationsToBatch(relation.endNode, batch));
+      }
+      batch.nodesWithRelationsConverted.add(node);
+    });
+    return tokens;
+  }
+
+  Set<BatchToken> _convertRelationToBatchTokens(Relation relation, BatchTokens batch) {
 
     Set<BatchToken> tokens = new Set();
 
-    int id = batch.findIdNotUsed();
-
-    int startId = batch.findTokenIdFromNode(relation.startNode);
-    if(startId == null) {
-      BatchToken startToken = convertNodeToBatchToken(relation.startNode, batch);
+    BatchToken startToken = batch.findTokenFromNode(relation.startNode);
+    if (startToken == null) {
+      startToken = _addNodeToBatch(relation.startNode, batch);
       tokens.add(startToken);
-      startId = startToken.id;
     }
 
-    int endId = batch.findTokenIdFromNode(relation.endNode);
-    if(endId == null) {
-      BatchToken stopToken =  convertNodeToBatchToken(relation.endNode, batch);
-      tokens.add(stopToken);
-      stopToken.id = stopToken.id + 1;
-      endId = stopToken.id;
+    BatchToken endToken = batch.findTokenFromNode(relation.endNode);
+    if (endToken == null) {
+      endToken = _addNodeToBatch(relation.endNode, batch);
+      tokens.add(endToken);
     }
 
-    tokens.add(new BatchToken("POST", "{${startId}}/relationships", {'to' : '{${endId}}', 'data' : {'since' : '2010'}, 'type' : 'loves'}));
+    var token = new BatchToken("POST", "{${startToken.id}}/relationships", {
+        'to' : '{${endToken.id}}', 'data' : {
+            'since' : '2010'
+        }, 'type' : 'loves'
+    });
+    batch.batchTokens.add(token);
+
+    tokens.add(token);
 
     return tokens;
   }
 
-  Set<Relation> findRelationsFrom(Node node) {
+  Set<Relation> _findRelationsFrom(Node node) {
 
     Set<Relation> relations = new Set();
-
-    Set<Node> nodes = findRelationshipNodes(node);
+    Set<Node> nodes = _findRelationshipNodes(node);
 
     nodes.forEach((endNode) {
-      if(endNode != null) {
-      relations.add(new Relation(node, endNode));
-    }
+      if (endNode != null) {
+        relations.add(new Relation(node, endNode));
+      }
     });
 
     return relations;
   }
 
-  Set<Node> findRelationshipNodes(Node node) {
+  Set<Node> _findRelationshipNodes(Node node) {
 
     Set<Node> nodes = new Set();
 
-    Set<Symbol> symbols = findRelationshipSymbols(node);
+    Set<Symbol> symbols = _findRelationshipSymbols(node);
     symbols.forEach((symbol) {
       nodes.add(reflect(node).getField(symbol).reflectee);
     });
@@ -81,14 +103,14 @@ class NeoService {
     return nodes;
   }
 
-  Set<Symbol> findRelationshipSymbols(Node node) {
+  Set<Symbol> _findRelationshipSymbols(Node node) {
 
     Set<Symbol> symbols = new Set();
 
     InstanceMirror instanceMirror = reflect(node);
     instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror value) {
       value.metadata.forEach((InstanceMirror value) {
-        if(value.reflectee is Relationship) {
+        if (value.reflectee is Relationship) {
           symbols.add(key);
         }
       });

@@ -55,7 +55,15 @@ main() {
       try {
 
         NeoService neoService = new NeoService();
-        neoService.insertNode(new Person.withLover("Lucille", "Fleur", new Person("Matthieu", "Voiture")));
+
+        Person lucille = new Person("Lucille", "Beaucoup");
+        Person matthieu = new Person("Matthieu", "A la folie");
+        Person gerard = new Person("Gérard", "Le dauphin");
+        lucille.lover = matthieu;
+        matthieu.lover = gerard;
+        gerard.lover = lucille;
+
+        neoService.insertNode(lucille);
 
       } catch(e, s) {
         _logger.severe(e);

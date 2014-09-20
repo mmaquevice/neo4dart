@@ -22,4 +22,8 @@ class BatchToken {
     return map;
   }
 
+  String toString() {
+    return '${toJson()}';
+  }
+
 }

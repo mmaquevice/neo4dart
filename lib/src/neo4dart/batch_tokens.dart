@@ -4,33 +4,30 @@ class BatchTokens {
 
   Set<BatchToken> batchTokens = new Set();
 
+  Set<Node> nodesWithRelationsConverted = new Set();
+
   BatchTokens();
 
-  int findTokenIdFromNode(Node node) {
+  BatchToken findTokenFromNode(Node node) {
     if(node == null) {
       return null;
     }
 
-    int tokenId = findTokenIdWith(node.toJson());
-
-    print('Token found : ${tokenId}');
-
-    return findTokenIdWith(node.toJson());
+    BatchToken token = findTokenWith(node.toJson());
+    return token;
   }
 
-  int findTokenIdWith(Map body) {
+  BatchToken findTokenWith(Map body) {
     if(batchTokens == null) {
       return null;
     }
 
-    int found;
+    BatchToken found;
     batchTokens.forEach((batchToken) {
       if(batchToken != null) {
-        print('BODY to test : ${body}');
-        print('BODY of list : ${batchToken.body}');
         // TODO mma - find a way to correctly verify equality
         if ('${batchToken.body}' == '${body}') {
-          found = batchToken.id;
+          found = batchToken;
         }
       }
     });
