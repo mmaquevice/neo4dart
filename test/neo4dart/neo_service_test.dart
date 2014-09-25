@@ -15,7 +15,6 @@ import 'package:http/testing.dart';
 import 'dart:convert';
 
 import 'package:neo4dart/testing/person.dart';
-import 'package:neo4dart/testing/node_bean.dart';
 import 'dart:mirrors';
 
 main() {
