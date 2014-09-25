@@ -25,7 +25,7 @@ class BatchTokens {
 
 
   BatchToken _findTokenFromNode(Node node) {
-    if(node == null) {
+    if (node == null) {
       return null;
     }
 
@@ -34,13 +34,13 @@ class BatchTokens {
   }
 
   BatchToken _findTokenWith(Map body) {
-    if(batchTokens == null) {
+    if (batchTokens == null) {
       return null;
     }
 
     BatchToken found;
     batchTokens.forEach((batchToken) {
-      if(batchToken != null) {
+      if (batchToken != null) {
         // TODO mma - find a way to correctly verify equality
         if ('${batchToken.body}' == '${body}') {
           found = batchToken;
@@ -54,7 +54,7 @@ class BatchTokens {
   int _findIdNotUsed() {
     int max = -1;
     batchTokens.forEach((batchToken) {
-      if(batchToken != null) {
+      if (batchToken != null) {
         if (batchToken.id != null) {
           if (batchToken.id > max) {
             max = batchToken.id;
@@ -62,20 +62,23 @@ class BatchTokens {
         }
       }
     });
-    return max+1;
+    return max + 1;
   }
 
   Set<BatchToken> addNodeAndRelationsToBatch(Node node) {
 
+    _logger.info("Converting node ${node} to token...");
+
     Set<BatchToken> tokens = new Set();
-    Set<Relation> relations = _findRelationsFrom(node);
+    Set<Relation> relations = _findRelationshipNodes(node);
     relations.forEach((relation) {
+      _logger.info("Converting relation ${relation} to token...");
       tokens.addAll(_convertRelationToBatchTokens(relation));
-      if(node != relation.startNode && !nodesWithRelationsConverted.contains(relation.startNode)) {
+      if (node != relation.startNode && !nodesWithRelationsConverted.contains(relation.startNode)) {
         nodesWithRelationsConverted.add(relation.startNode);
         tokens.addAll(addNodeAndRelationsToBatch(relation.startNode));
       }
-      if(node != relation.endNode && !nodesWithRelationsConverted.contains(relation.endNode)) {
+      if (node != relation.endNode && !nodesWithRelationsConverted.contains(relation.endNode)) {
         nodesWithRelationsConverted.add(relation.endNode);
         tokens.addAll(addNodeAndRelationsToBatch(relation.endNode));
       }
@@ -101,9 +104,7 @@ class BatchTokens {
     }
 
     var token = new BatchToken("POST", "{${startToken.id}}/relationships", {
-        'to' : '{${endToken.id}}', 'data' : {
-            'since' : '2010'
-        }, 'type' : 'loves'
+        'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
     });
     batchTokens.add(token);
 
@@ -112,46 +113,36 @@ class BatchTokens {
     return tokens;
   }
 
-  Set<Relation> _findRelationsFrom(Node node) {
+  Set<Relation> _findRelationshipNodes(Node node) {
 
     Set<Relation> relations = new Set();
-    Set<Node> nodes = _findRelationshipNodes(node);
 
-    nodes.forEach((endNode) {
-      if (endNode != null) {
-        relations.add(new Relation(node, endNode));
+    Map<Symbol, Relationship> fieldsByRelationship = _findRelationshipSymbols(node);
+    fieldsByRelationship.forEach((symbol, relationship) {
+      Node toNode = reflect(node).getField(symbol).reflectee;
+      if (toNode != null) {
+        relations.add(new Relation(node, relationship, toNode));
       }
     });
 
     return relations;
   }
 
-  Set<Node> _findRelationshipNodes(Node node) {
+  Map<Symbol, Relationship> _findRelationshipSymbols(Node node) {
 
-    Set<Node> nodes = new Set();
-
-    Set<Symbol> symbols = _findRelationshipSymbols(node);
-    symbols.forEach((symbol) {
-      nodes.add(reflect(node).getField(symbol).reflectee);
-    });
-
-    return nodes;
-  }
-
-  Set<Symbol> _findRelationshipSymbols(Node node) {
-
-    Set<Symbol> symbols = new Set();
+    var fieldsByRelationship = <Symbol, Relationship>{
+    };
 
     InstanceMirror instanceMirror = reflect(node);
     instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror value) {
       value.metadata.forEach((InstanceMirror value) {
         if (value.reflectee is Relationship) {
-          symbols.add(key);
+          fieldsByRelationship[key] = value.reflectee;
         }
       });
     });
 
-    return symbols;
+    return fieldsByRelationship;
   }
 
 }

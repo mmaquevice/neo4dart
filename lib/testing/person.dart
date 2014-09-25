@@ -7,7 +7,7 @@ class Person extends Node {
   String name;
   String language;
 
-  @Relationship()
+  @Relationship("loves", data: const {"since":"2010", "with": "passion"})
   Person lover;
 
   Person(this.name, this.language);

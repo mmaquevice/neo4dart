@@ -72,8 +72,4 @@ main() {
 
   });
 
-  Set isTUtu() {
-
-  }
-
 }

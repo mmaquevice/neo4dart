@@ -1,5 +1,10 @@
 part of neo4dart;
 
 class Relationship {
-  const Relationship();
+
+  final String type;
+  final Map data;
+
+  const Relationship(this.type, {this.data});
+
 }
