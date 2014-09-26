@@ -10,9 +10,7 @@ class Person extends Node {
   @Relationship("loves", data: const {"since":"2010", "with": "passion"})
   Person lover;
 
-  Person(this.name, this.language);
-
-  Person.withLover(this.name, this.language, this.lover);
+  Person(this.name, this.language, {this.lover}) : super();
 
   Map toJson() {
     Map map = new Map();

@@ -26,27 +26,27 @@ main() {
 
   final _logger = new Logger("neo4dart.neo_service_test");
 
-  group('batch_token toJson', () {
-
-    test('- json is well formated', () {
-      try {
-
-        NeoService neoService = new NeoService();
-
-        neoService.insertNode(new Person("Lucille", "Fleur"));
-        neoService.insertNode(new Person("Matthieu", "Voiture"));
-        neoService.insertNode(new Person("Catherine", "Maison"));
-
-        return neoService.insertNode(new Person("Jimmy", "Caca++")).then((ok) => expect(ok, equals(true)));
-
-
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
-    });
-
-  });
+//  group('batch_token toJson', () {
+//
+//    test('- json is well formated', () {
+//      try {
+//
+//        NeoService neoService = new NeoService();
+//
+//        neoService.insertNode(new Person("Lucille", "Fleur"));
+//        neoService.insertNode(new Person("Matthieu", "Voiture"));
+//        neoService.insertNode(new Person("Catherine", "Maison"));
+//
+//        return neoService.insertNode(new Person("Jimmy", "Caca++")).then((ok) => expect(ok, equals(true)));
+//
+//
+//      } catch(e, s) {
+//        _logger.severe(e);
+//        _logger.severe(s);
+//      }
+//    });
+//
+//  });
 
   group('convert to relationship', () {
 

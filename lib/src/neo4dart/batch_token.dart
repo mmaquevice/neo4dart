@@ -8,8 +8,7 @@ class BatchToken {
   Map body = {
   };
 
-  BatchToken(this.method, this.to, this.body);
-  BatchToken.withId(this.id, this.method, this.to, this.body);
+  BatchToken(this.method, this.to, this.body, {this.id});
 
   Map toJson() {
     Map map = new Map();

@@ -14,8 +14,10 @@ class BatchTokens {
 
     BatchToken token = _findTokenFromNode(node);
     if (token == null) {
-      token = new BatchToken.withId(_findIdNotUsed(), "POST", "/node", node.toJson());
+      token = new BatchToken("POST", "/node", node.toJson(), id : _findIdNotUsed());
       batchTokens.add(token);
+      BatchToken tokenForLabel =  new BatchToken("POST", "{${token.id}}/labels", node.labels, id: _findIdNotUsed());
+      batchTokens.add(tokenForLabel);
       _logger.info("Node ${node} has been inserted in batch via token ${token}.");
     } else {
       _logger.info("Node ${node} is already present in batch.");
