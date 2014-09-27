@@ -82,9 +82,11 @@ main() {
 
         Person asterix = new Person("Asterix", "Tutu");
         Person obelix = new Person("Obelix", "A la folie");
+        Person idefix = new Person("Idefix", "Nonos");
 
-        Love love = new Love(asterix, obelix, "crazy", "always");
-        asterix.love = love;
+        asterix.love = new Love(asterix, obelix, "crazy", "always");
+        obelix.love = new Love(obelix, idefix, "wouaaff", "romain");
+        idefix.love = new Love(idefix, obelix, "woufff wouff", "croquette");
 
         neoService.insertNode(asterix);
 

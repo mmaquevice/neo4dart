@@ -7,6 +7,7 @@ class BatchTokens {
   Set<BatchToken> batchTokens = new Set();
 
   Set<Node> nodesWithRelationsConverted = new Set();
+  Set<Node> nodesWithRelationsViaConverted = new Set();
 
   BatchToken addNodeToBatch(Node node) {
 
@@ -119,32 +120,14 @@ class BatchTokens {
 
     Set<RelationshipWithNodes> relations = new Set();
 
-    Map<Symbol, Relationship> fieldsByRelationship = _findRelationshipSymbols(node);
-    fieldsByRelationship.forEach((symbol, relationship) {
-      Node toNode = reflect(node).getField(symbol).reflectee;
+    Map<Relationship, Node> nodesByRelationship = _findEntityByAnnotations(node, Relationship);
+    nodesByRelationship.forEach((relationship, toNode) {
       if (toNode != null) {
         relations.add(new RelationshipWithNodes(node, relationship, toNode));
       }
     });
 
     return relations;
-  }
-
-  Map<Symbol, Relationship> _findRelationshipSymbols(Node node) {
-
-    var fieldsByRelationship = <Symbol, Relationship>{
-    };
-
-    InstanceMirror instanceMirror = reflect(node);
-    instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror value) {
-      value.metadata.forEach((InstanceMirror value) {
-        if (value.reflectee is Relationship) {
-          fieldsByRelationship[key] = value.reflectee;
-        }
-      });
-    });
-
-    return fieldsByRelationship;
   }
 
     Set<BatchToken> addNodeAndRelationsViaToBatch(Node node) {
@@ -155,15 +138,15 @@ class BatchTokens {
       relations.forEach((relation) {
         _logger.info("Converting relation ${relation} to token...");
         tokens.addAll(_convertRelationToBatchTokens(relation));
-        if (node != relation.startNode && !nodesWithRelationsConverted.contains(relation.startNode)) {
-          nodesWithRelationsConverted.add(relation.startNode);
-          tokens.addAll(addNodeAndRelationsToBatch(relation.startNode));
+        if (node != relation.startNode && !nodesWithRelationsViaConverted.contains(relation.startNode)) {
+          nodesWithRelationsViaConverted.add(relation.startNode);
+          tokens.addAll(addNodeAndRelationsViaToBatch(relation.startNode));
         }
-        if (node != relation.endNode && !nodesWithRelationsConverted.contains(relation.endNode)) {
-          nodesWithRelationsConverted.add(relation.endNode);
-          tokens.addAll(addNodeAndRelationsToBatch(relation.endNode));
+        if (node != relation.endNode && !nodesWithRelationsViaConverted.contains(relation.endNode)) {
+          nodesWithRelationsViaConverted.add(relation.endNode);
+          tokens.addAll(addNodeAndRelationsViaToBatch(relation.endNode));
         }
-        nodesWithRelationsConverted.add(node);
+        nodesWithRelationsViaConverted.add(node);
       });
       return tokens;
     }
@@ -172,9 +155,8 @@ class BatchTokens {
 
     Set<RelationshipWithNodes> relations = new Set();
 
-    Map<Symbol, RelationshipVia> fieldsByRelationship = _findRelationshipViaSymbols(node);
-    fieldsByRelationship.forEach((symbol, relationship) {
-      Relation relation = reflect(node).getField(symbol).reflectee;
+    Map<RelationshipVia, Relation> fieldsByRelationship = _findEntityByAnnotations(node, RelationshipVia);
+    fieldsByRelationship.forEach((relationship, relation) {
       if (relation != null) {
         Node startNode = _findNodesAnnotatedBy(StartNode, relation).first;
         Node endNode = _findNodesAnnotatedBy(EndNode, relation).first;
@@ -183,6 +165,21 @@ class BatchTokens {
     });
 
     return relations;
+  }
+
+  Map _findEntityByAnnotations(Object objectAnnotated, Type type) {
+
+    var fieldsByRelationship = {};
+
+    InstanceMirror instanceMirror = reflect(objectAnnotated);
+    instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror value) {
+      value.metadata.forEach((InstanceMirror value) {
+        if (value.reflectee.runtimeType == type) {
+          fieldsByRelationship[value.reflectee] = instanceMirror.getField(key).reflectee;
+        }
+      });
+    });
+    return fieldsByRelationship;
   }
 
   Set<Node> _findNodesAnnotatedBy(Type type, Object instance) {
@@ -213,22 +210,6 @@ class BatchTokens {
     });
 
     return symbols;
-  }
-
-  Map<Symbol, RelationshipVia> _findRelationshipViaSymbols(Node node) {
-
-    var fieldsByRelationship = <Symbol, RelationshipVia>{
-    };
-
-    InstanceMirror instanceMirror = reflect(node);
-    instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror value) {
-      value.metadata.forEach((InstanceMirror value) {
-        if (value.reflectee is RelationshipVia) {
-          fieldsByRelationship[key] = value.reflectee;
-        }
-      });
-    });
-    return fieldsByRelationship;
   }
 
 }
