@@ -11,6 +11,7 @@ class NeoService {
     BatchTokens batch = new BatchTokens();
     batch.addNodeToBatch(node);
     batch.addNodeAndRelationsToBatch(node);
+    batch.addNodeAndRelationsViaToBatch(node);
 
     return neoClient.executeBatch(batch.batchTokens);
   }

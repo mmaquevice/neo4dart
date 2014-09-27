@@ -15,6 +15,7 @@ import 'package:http/testing.dart';
 import 'dart:convert';
 
 import 'package:neo4dart/testing/person.dart';
+import 'package:neo4dart/testing/love.dart';
 import 'dart:mirrors';
 
 main() {
@@ -63,6 +64,29 @@ main() {
         gerard.lover = lucille;
 
         neoService.insertNode(lucille);
+
+      } catch(e, s) {
+        _logger.severe(e);
+        _logger.severe(s);
+      }
+    });
+
+  });
+
+  group('convert to relationshipVia', () {
+
+    test('- relationship from node', () {
+      try {
+
+        NeoService neoService = new NeoService();
+
+        Person asterix = new Person("Asterix", "Tutu");
+        Person obelix = new Person("Obelix", "A la folie");
+
+        Love love = new Love(asterix, obelix, "crazy", "always");
+        asterix.love = love;
+
+        neoService.insertNode(asterix);
 
       } catch(e, s) {
         _logger.severe(e);
