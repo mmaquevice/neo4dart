@@ -49,46 +49,74 @@ main() {
 //
 //  });
 
-  group('convert to relationship', () {
+//  group('convert to relationship', () {
+//
+//    test('- relationship from node', () {
+//      try {
+//
+//        NeoService neoService = new NeoService();
+//
+//        Person lucille = new Person("Lucille", "Beaucoup");
+//        Person matthieu = new Person("Matthieu", "A la folie");
+//        Person gerard = new Person("Gérard", "Le dauphin");
+//        lucille.lover = matthieu;
+//        matthieu.lover = gerard;
+//        gerard.lover = lucille;
+//
+//        neoService.insertNode(lucille);
+//
+//      } catch(e, s) {
+//        _logger.severe(e);
+//        _logger.severe(s);
+//      }
+//    });
+//
+//  });
+//
+//  group('convert to relationshipVia', () {
+//
+//    test('- relationship from node', () {
+//      try {
+//
+//        NeoService neoService = new NeoService();
+//
+//        Person asterix = new Person("Asterix", "Tutu");
+//        Person obelix = new Person("Obelix", "A la folie");
+//        Person idefix = new Person("Idefix", "Nonos");
+//
+//        asterix.love = new Love(asterix, obelix, "crazy", "always");
+//        obelix.love = new Love(obelix, idefix, "wouaaff", "romain");
+//        idefix.love = new Love(idefix, asterix, "woufff wouff", "croquette");
+//
+//        neoService.insertNode(asterix);
+//
+//      } catch(e, s) {
+//        _logger.severe(e);
+//        _logger.severe(s);
+//      }
+//    });
+//
+//  });
 
-    test('- relationship from node', () {
+  group('Get by label and properties', () {
+//
+//    test('Type and properties', () {
+//      try {
+//
+//        NeoService neoService = new NeoService();
+//        neoService.findNodesByTypeAndProperties(Person, {"name":"Lucille"});
+//
+//      } catch(e, s) {
+//        _logger.severe(e);
+//        _logger.severe(s);
+//      }
+//    });
+
+    test('Only Type', () {
       try {
 
         NeoService neoService = new NeoService();
-
-        Person lucille = new Person("Lucille", "Beaucoup");
-        Person matthieu = new Person("Matthieu", "A la folie");
-        Person gerard = new Person("Gérard", "Le dauphin");
-        lucille.lover = matthieu;
-        matthieu.lover = gerard;
-        gerard.lover = lucille;
-
-        neoService.insertNode(lucille);
-
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
-    });
-
-  });
-
-  group('convert to relationshipVia', () {
-
-    test('- relationship from node', () {
-      try {
-
-        NeoService neoService = new NeoService();
-
-        Person asterix = new Person("Asterix", "Tutu");
-        Person obelix = new Person("Obelix", "A la folie");
-        Person idefix = new Person("Idefix", "Nonos");
-
-        asterix.love = new Love(asterix, obelix, "crazy", "always");
-        obelix.love = new Love(obelix, idefix, "wouaaff", "romain");
-        idefix.love = new Love(idefix, obelix, "woufff wouff", "croquette");
-
-        neoService.insertNode(asterix);
+        neoService.findNodesByType(Person);
 
       } catch(e, s) {
         _logger.severe(e);
