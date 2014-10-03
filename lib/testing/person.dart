@@ -3,6 +3,8 @@ library neo4dart.testing.person;
 import 'package:neo4dart/neo4dart.dart';
 import 'package:neo4dart/testing/love.dart';
 
+import 'package:quiver/core.dart';
+
 class Person extends Node {
 
   String name;
@@ -23,5 +25,8 @@ class Person extends Node {
     return map;
   }
 
+  // TODO mma - test client get with id
+  bool operator ==(o) => o is Person && o.name == name && o.language == language;
+  int get hashCode => hash2(name.hashCode, language.hashCode);
 
 }
