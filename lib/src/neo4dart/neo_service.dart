@@ -17,31 +17,11 @@ class NeoService {
   }
 
   Future findNodesByType(Type type) {
-
-    ClassMirror classMirror = reflectClass(type);
-    Symbol symbol = classMirror.simpleName;
-    String simpleName = MirrorSystem.getName(symbol);
-
-    return findNodesByLabel(simpleName);
-  }
-
-  Future findNodesByLabel(String label) {
-
-    return neoClient.executeGetByLabel(label);
+    return neoClient.executeGetByLabel(type);
   }
 
   Future findNodesByTypeAndProperties(Type type, Map properties) {
-
-    ClassMirror classMirror = reflectClass(type);
-    Symbol symbol = classMirror.simpleName;
-    String simpleName = MirrorSystem.getName(symbol);
-
-    return findNodesByLabelAndProperties(simpleName, properties);
-  }
-
-  Future findNodesByLabelAndProperties(String label, Map properties) {
-
-    return neoClient.executeGetByLabelAndProperties(label, properties);
+    return neoClient.executeGetByLabelAndProperties(type, properties);
   }
 
 }

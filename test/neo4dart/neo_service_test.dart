@@ -95,28 +95,39 @@ main() {
 //        _logger.severe(s);
 //      }
 //    });
-//
+////
 //  });
 
   group('Get by label and properties', () {
-//
-//    test('Type and properties', () {
-//      try {
-//
-//        NeoService neoService = new NeoService();
-//        neoService.findNodesByTypeAndProperties(Person, {"name":"Lucille"});
-//
-//      } catch(e, s) {
-//        _logger.severe(e);
-//        _logger.severe(s);
-//      }
-//    });
+
+    test('Type and properties', () {
+      try {
+        NeoService neoService = new NeoService();
+        neoService.findNodesByTypeAndProperties(Person, {"name":"Asterix"}).then((nodes) {
+          nodes.forEach((node){
+            Person person = node;
+            _logger.info(person.id);
+            _logger.info(person.toJson());
+          });
+        });
+
+      } catch(e, s) {
+        _logger.severe(e);
+        _logger.severe(s);
+      }
+    });
 
     test('Only Type', () {
       try {
 
         NeoService neoService = new NeoService();
-        neoService.findNodesByType(Person);
+        neoService.findNodesByType(Person).then((nodes) {
+          nodes.forEach((node){
+            Person person = node;
+            _logger.info(person.id);
+            _logger.info(person.toJson());
+          });
+        });
 
       } catch(e, s) {
         _logger.severe(e);
