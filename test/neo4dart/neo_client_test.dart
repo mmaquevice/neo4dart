@@ -31,7 +31,7 @@ main() {
         var client200 = new MockClient((request) {
           return new http.Response("", 200);
         });
-        NeoClient neoClient = new NeoClient.withClient(client200);
+        NeoClientBatch neoClient = new NeoClientBatch.withClient(client200);
         Set batchTokens = new Set();
         batchTokens.add(batchToken);
 
@@ -49,7 +49,7 @@ main() {
         var client500 = new MockClient((request) {
           return new http.Response("", 500);
         });
-        NeoClient neoClient = new NeoClient.withClient(client500);
+        NeoClientBatch neoClient = new NeoClientBatch.withClient(client500);
         Set batchTokens = new Set();
         batchTokens.add(batchToken);
 

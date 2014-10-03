@@ -4,7 +4,8 @@ class NeoService {
 
   final _logger = new Logger("NeoService");
 
-  NeoClient neoClient = new NeoClient();
+  NeoClientGet neoClientGet = new NeoClientGet();
+  NeoClientBatch neoClientBatch = new NeoClientBatch();
 
   Future insertNode(Node node) {
 
@@ -13,15 +14,15 @@ class NeoService {
     batch.addNodeAndRelationsToBatch(node);
     batch.addNodeAndRelationsViaToBatch(node);
 
-    return neoClient.executeBatch(batch.batchTokens);
+    return neoClientBatch.executeBatch(batch.batchTokens);
   }
 
   Future findNodesByType(Type type) {
-    return neoClient.executeGetByLabel(type);
+    return neoClientGet.executeGetByType(type);
   }
 
   Future findNodesByTypeAndProperties(Type type, Map properties) {
-    return neoClient.executeGetByLabelAndProperties(type, properties);
+    return neoClientGet.executeGetByTypeAndProperties(type, properties);
   }
 
 }
