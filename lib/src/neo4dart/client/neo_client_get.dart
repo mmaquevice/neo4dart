@@ -12,16 +12,12 @@ class NeoClientGet extends NeoClient {
 
   NeoClientGet.withClient(this._client);
 
-  Future executeGetByType(Type type) {
+  Future findNodesByType(Type type) {
 
     String label = _convertTypeToLabel(type);
     String url = "http://localhost:7474/db/data/label/${label}/nodes";
 
-    return _client.get(url).then((response) => _convertResponseToNodes(response, type))
-    .catchError((error, stackTrace) {
-      _logger.info(error);
-      _logger.info(stackTrace);
-    });
+    return _client.get(url).then((response) => _convertResponseToNodes(response, type));
   }
 
   String _convertTypeToLabel(Type type) {
@@ -30,20 +26,20 @@ class NeoClientGet extends NeoClient {
     return MirrorSystem.getName(symbol);
   }
 
-  Future executeGetByTypeAndProperties(Type type, Map properties) {
+  Future findNodesByTypeAndProperties(Type type, Map properties) {
 
     String label = _convertTypeToLabel(type);
+
+    if(properties.isEmpty) {
+      throw new StateError('Properties are empty');
+    }
 
     String propertyKey = properties.keys.first;
     String propertyValue = "\"${properties[propertyKey]}\"";
 
     String url = "http://localhost:7474/db/data/label/${label}/nodes?${propertyKey}=${propertyValue}";
 
-    return _client.get(url).then((response) => _convertResponseToNodes(response, type))
-    .catchError((error, stackTrace) {
-      _logger.info(error);
-      _logger.info(stackTrace);
-    });
+    return _client.get(url).then((response) => _convertResponseToNodes(response, type));
   }
 
   List<Node> _convertResponseToNodes(var response, Type typeToConvertInto) {

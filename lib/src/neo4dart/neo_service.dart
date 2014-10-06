@@ -18,11 +18,11 @@ class NeoService {
   }
 
   Future findNodesByType(Type type) {
-    return neoClientGet.executeGetByType(type);
+    return neoClientGet.findNodesByType(type);
   }
 
   Future findNodesByTypeAndProperties(Type type, Map properties) {
-    return neoClientGet.executeGetByTypeAndProperties(type, properties);
+    return neoClientGet.findNodesByTypeAndProperties(type, properties);
   }
 
 }
