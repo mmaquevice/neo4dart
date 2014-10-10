@@ -49,29 +49,29 @@ main() {
 //
 //  });
 
-//  group('convert to relationship', () {
-//
-//    test('- relationship from node', () {
-//      try {
-//
-//        NeoService neoService = new NeoService();
-//
-//        Person lucille = new Person("Lucille", "Beaucoup");
-//        Person matthieu = new Person("Matthieu", "A la folie");
-//        Person gerard = new Person("Gérard", "Le dauphin");
-//        lucille.lover = matthieu;
-//        matthieu.lover = gerard;
-//        gerard.lover = lucille;
-//
-//        neoService.insertNode(lucille);
-//
-//      } catch(e, s) {
-//        _logger.severe(e);
-//        _logger.severe(s);
-//      }
-//    });
-//
-//  });
+  group('convert to relationship', () {
+
+    test('- relationship from node', () {
+      try {
+
+        NeoService neoService = new NeoService();
+
+        Person lucille = new Person("Lucille", "Beaucoup");
+        Person matthieu = new Person("Matthieu", "A la folie");
+        Person gerard = new Person("Gérard", "Le dauphin");
+        lucille.lover = matthieu;
+        matthieu.lover = gerard;
+        gerard.lover = lucille;
+
+        neoService.insertNode(lucille);
+
+      } catch(e, s) {
+        _logger.severe(e);
+        _logger.severe(s);
+      }
+    });
+
+  });
 //
 //  group('convert to relationshipVia', () {
 //
@@ -95,46 +95,46 @@ main() {
 //        _logger.severe(s);
 //      }
 //    });
-////
+//
 //  });
 
-  group('Get by label and properties', () {
-
-    test('Type and properties', () {
-      try {
-        NeoService neoService = new NeoService();
-        neoService.findNodesByTypeAndProperties(Person, {"name":"Asterix"}).then((nodes) {
-          nodes.forEach((node){
-            Person person = node;
-            _logger.info(person.id);
-            _logger.info(person.toJson());
-          });
-        });
-
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
-    });
-
-    test('Only Type', () {
-      try {
-
-        NeoService neoService = new NeoService();
-        neoService.findNodesByType(Person).then((nodes) {
-          nodes.forEach((node){
-            Person person = node;
-            _logger.info(person.id);
-            _logger.info(person.toJson());
-          });
-        });
-
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
-    });
-
-  });
+//  group('Get by label and properties', () {
+//
+//    test('Type and properties', () {
+//      try {
+//        NeoService neoService = new NeoService();
+//        neoService.findNodesByTypeAndProperties(Person, {"name":"Asterix"}).then((nodes) {
+//          nodes.forEach((node){
+//            Person person = node;
+//            _logger.info(person.id);
+//            _logger.info(person.toJson());
+//          });
+//        });
+//
+//      } catch(e, s) {
+//        _logger.severe(e);
+//        _logger.severe(s);
+//      }
+//    });
+//
+//    test('Only Type', () {
+//      try {
+//
+//        NeoService neoService = new NeoService();
+//        neoService.findNodesByType(Person).then((nodes) {
+//          nodes.forEach((node){
+//            Person person = node;
+//            _logger.info(person.id);
+//            _logger.info(person.toJson());
+//          });
+//        });
+//
+//      } catch(e, s) {
+//        _logger.severe(e);
+//        _logger.severe(s);
+//      }
+//    });
+//
+//  });
 
 }

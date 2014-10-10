@@ -10,7 +10,7 @@ class Person extends Node {
   String name;
   String language;
 
-  @Relationship("loves", data: const {"since":"2010", "with": "passion"})
+  @Relationship("loves", data: const {"since":"2010", "with": "passion"}, direction: Direction.OUTGOING)
   Person lover;
 
   @RelationshipVia("lovesVia")

@@ -123,7 +123,14 @@ class BatchTokens {
     Map<Relationship, Node> nodesByRelationship = _findEntityByAnnotations(node, Relationship);
     nodesByRelationship.forEach((relationship, toNode) {
       if (toNode != null) {
-        relations.add(new RelationshipWithNodes(node, relationship, toNode));
+        if(relationship.direction == Direction.OUTGOING) {
+          relations.add(new RelationshipWithNodes(node, relationship, toNode));
+        } else if(relationship.direction == Direction.INGOING) {
+          relations.add(new RelationshipWithNodes(toNode, relationship, node));
+        } else if(relationship.direction == Direction.BOTH) {
+          relations.add(new RelationshipWithNodes(node, relationship, toNode));
+          relations.add(new RelationshipWithNodes(toNode, relationship, node));
+        }
       }
     });
 
