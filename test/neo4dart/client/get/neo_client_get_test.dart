@@ -1,4 +1,4 @@
-library neo4dart.neo_client_test;
+library neo4dart.client.get.neo_client_get_test;
 
 import 'dart:io';
 
@@ -37,15 +37,16 @@ main() {
 
         List expectedList = new List();
 
-        Person asterix = new Person("Asterix", "Tutu");
-        Person obelix = new Person("Obelix", "A la folie");
-        Person idefix = new Person("Idefix", "Nonos");
+        Person asterix = new Person("Asterix", city:"Gaule");
+        Person obelix = new Person("Obelix", city:"Gaule");
+        Person idefix = new Person("Idefix", city:"Gaule");
 
         expectedList.add(asterix);
         expectedList.add(obelix);
         expectedList.add(idefix);
 
         return neoClient.findNodesByType(Person).then((nodes) => expect(nodes, unorderedEquals(expectedList)));
+
       } catch(e, s) {
         _logger.severe(e);
         _logger.severe(s);
@@ -78,7 +79,7 @@ main() {
         NeoClientGet neoClient = new NeoClientGet.withClient(client200);
 
         List expectedList = new List();
-        expectedList.add(new Person("Asterix", "Tutu"));
+        expectedList.add(new Person("Asterix", city:"Gaule"));
 
         return neoClient.findNodesByTypeAndProperties(Person, {"name":"Asterix"}).then((nodes) => expect(nodes, unorderedEquals(expectedList)));
       } catch(e, s) {
@@ -105,7 +106,7 @@ main() {
         NeoClientGet neoClient = new NeoClientGet.withClient(null);
 
         List expectedList = new List();
-        expectedList.add(new Person("Asterix", "Tutu"));
+        expectedList.add(new Person("Asterix", city:"Gaule"));
 
         expect(neoClient.findNodesByTypeAndProperties(Person, {}), throwsA(new isInstanceOf<StateError>()));
       } catch(e, s) {

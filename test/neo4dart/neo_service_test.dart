@@ -56,16 +56,16 @@ main() {
 
         NeoService neoService = new NeoService();
 
-        Person lucille = new Person("Lucille", "Beaucoup");
-        Person matthieu = new Person("Matthieu", "A la folie");
-        Person gerard = new Person("Gérard", "Le dauphin");
+        Person lucille = new Person("Lucille", city:"Paris");
+        Person matthieu = new Person("Matthieu", city:"Paris");
+        Person gerard = new Person("Gérard", city:"Paris");
         lucille.lover = matthieu;
         matthieu.lover = gerard;
         gerard.lover = lucille;
 
 //        matthieu.coworkers = [new Person("Mikael", "Assembleur"), new Person("Quentin", "Rhum arrangé")];
 
-        lucille.eternalLovers.addAll([new Love(lucille, new Person("Roméo", "Italian"), "1", "1200"), new Love(lucille, new Person("Toto", "Blagounettes"), "1", "1200")]);
+        lucille.eternalLovers.addAll([new Love(lucille, new Person("Roméo", city:"Roma"), "A lot", "1985"), new Love(lucille, new Person("Toto", city:"Madrid"), "Muchos", "1984")]);
 
         neoService.insertNode(lucille);
 

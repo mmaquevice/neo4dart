@@ -1,4 +1,4 @@
-library neo4dart.neo_client_test;
+library neo4dart.client.batch.neo_client_batch_test;
 
 import 'dart:io';
 

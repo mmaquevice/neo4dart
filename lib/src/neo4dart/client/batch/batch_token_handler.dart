@@ -1,6 +1,6 @@
 part of neo4dart;
 
-class BatchTokens {
+class BatchTokenHandler {
 
   final _logger = new Logger("BatchTokens");
 

@@ -3,7 +3,7 @@
     "labels" : "http://localhost:7474/db/data/node/95/labels",
     "data" : {
         "name" : "Asterix",
-        "language" : "Tutu"
+        "city" : "Gaule"
     },
     "all_typed_relationships" : "http://localhost:7474/db/data/node/95/relationships/all/{-list|&|types}",
     "traverse" : "http://localhost:7474/db/data/node/95/traverse/{returnType}",
@@ -23,7 +23,7 @@
     "labels" : "http://localhost:7474/db/data/node/96/labels",
     "data" : {
         "name" : "Obelix",
-        "language" : "A la folie"
+        "city" : "Gaule"
     },
     "all_typed_relationships" : "http://localhost:7474/db/data/node/96/relationships/all/{-list|&|types}",
     "traverse" : "http://localhost:7474/db/data/node/96/traverse/{returnType}",
@@ -43,7 +43,7 @@
     "labels" : "http://localhost:7474/db/data/node/97/labels",
     "data" : {
         "name" : "Idefix",
-        "language" : "Nonos"
+        "city" : "Gaule"
     },
     "all_typed_relationships" : "http://localhost:7474/db/data/node/97/relationships/all/{-list|&|types}",
     "traverse" : "http://localhost:7474/db/data/node/97/traverse/{returnType}",

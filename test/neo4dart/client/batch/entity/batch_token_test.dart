@@ -1,4 +1,4 @@
-library neo4dart.batch_token_test;
+library neo4dart.client.batch.entity.batch_token_test;
 
 import 'dart:io';
 

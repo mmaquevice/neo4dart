@@ -62,10 +62,13 @@ class NeoClientGet extends NeoClient {
   Node _convertToNode(Type type, Map nodeJson) {
 
     ClassMirror classMirror = reflectClass(type);
-    List<String> parameters = _getConstructorParameters(type);
-    List<String> values = _getDataValuesFromParameters(parameters, nodeJson['data']);
+    List<String> parameters = _getConstructorParameters(type, false);
+    Map<Symbol, dynamic> valuesByParameter = _getDataValuesFromParameters(parameters, nodeJson['data']);
 
-    InstanceMirror instanceMirror = classMirror.newInstance(new Symbol(''), values);
+    List<String> optionalParameters = _getConstructorParameters(type, true);
+    Map<Symbol, dynamic> optionalValuesByParameter = _getDataValuesFromParameters(optionalParameters, nodeJson['data']);
+
+    InstanceMirror instanceMirror = classMirror.newInstance(new Symbol(''), valuesByParameter.values, optionalValuesByParameter);
     instanceMirror.setField(new Symbol('id'), _extractNodeId( nodeJson['self']));
     return instanceMirror.reflectee;
   }
@@ -78,7 +81,7 @@ class NeoClientGet extends NeoClient {
     return idNode;
   }
 
-  List<String> _getConstructorParameters(Type type) {
+  List<String> _getConstructorParameters(Type type, bool optional) {
 
     List<String> parametersToReturn = new List();
 
@@ -91,7 +94,7 @@ class NeoClientGet extends NeoClient {
       if (constructor is MethodMirror) {
         List<ParameterMirror> parameters = constructor.parameters;
         parameters.forEach((parameter) {
-          if (!parameter.isOptional) {
+          if (optional && parameter.isOptional || !optional && !parameter.isOptional) {
             parametersToReturn.add(MirrorSystem.getName(parameter.simpleName));
           }
         });
@@ -101,19 +104,17 @@ class NeoClientGet extends NeoClient {
     return parametersToReturn;
   }
 
-  List<String> _getDataValuesFromParameters(List parameters, Map data) {
+  Map<Symbol, dynamic> _getDataValuesFromParameters(List parameters, Map data) {
 
-    List<String> values = new List();
+    Map<String, String> valueByParameter = new Map();
 
     parameters.forEach((parameter) {
       if (data.containsKey(parameter)) {
-        values.add(data[parameter]);
-      } else {
-        throw "Data does not contain parameter <${parameter}>.";
+        valueByParameter[new Symbol(parameter)] = data[parameter];
       }
     });
 
-    return values;
+    return valueByParameter;
   }
 
 }

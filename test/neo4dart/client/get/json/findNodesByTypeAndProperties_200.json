@@ -3,7 +3,7 @@
     "labels" : "http://localhost:7474/db/data/node/95/labels",
     "data" : {
         "name" : "Asterix",
-        "language" : "Tutu"
+        "city" : "Gaule"
     },
     "all_typed_relationships" : "http://localhost:7474/db/data/node/95/relationships/all/{-list|&|types}",
     "traverse" : "http://localhost:7474/db/data/node/95/traverse/{returnType}",
