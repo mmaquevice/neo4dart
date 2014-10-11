@@ -63,6 +63,10 @@ main() {
         matthieu.lover = gerard;
         gerard.lover = lucille;
 
+//        matthieu.coworkers = [new Person("Mikael", "Assembleur"), new Person("Quentin", "Rhum arrangé")];
+
+        lucille.eternalLovers.addAll([new Love(lucille, new Person("Roméo", "Italian"), "1", "1200"), new Love(lucille, new Person("Toto", "Blagounettes"), "1", "1200")]);
+
         neoService.insertNode(lucille);
 
       } catch(e, s) {

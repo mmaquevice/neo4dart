@@ -16,6 +16,12 @@ class Person extends Node {
   @RelationshipVia("lovesVia")
   Love love;
 
+  @Relationship("works with")
+  List<Person> coworkers;
+
+  @RelationshipVia("secretly loves")
+  Set<Love> eternalLovers = new Set();
+
   Person(this.name, this.language, {this.lover}) : super();
 
   Map toJson() {

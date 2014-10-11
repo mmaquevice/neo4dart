@@ -17,7 +17,7 @@ class BatchTokens {
     if (token == null) {
       token = new BatchToken("POST", "/node", node.toJson(), id : _findIdNotUsed());
       batchTokens.add(token);
-      BatchToken tokenForLabel =  new BatchToken("POST", "{${token.id}}/labels", node.labels, id: _findIdNotUsed());
+      BatchToken tokenForLabel = new BatchToken("POST", "{${token.id}}/labels", node.labels, id: _findIdNotUsed());
       batchTokens.add(tokenForLabel);
       _logger.info("Node ${node} has been inserted in batch via token ${token}.");
     } else {
@@ -120,69 +120,78 @@ class BatchTokens {
 
     Set<RelationshipWithNodes> relations = new Set();
 
-    Map<Relationship, Node> nodesByRelationship = _findEntityByAnnotations(node, Relationship);
-    nodesByRelationship.forEach((relationship, toNode) {
-      if (toNode != null) {
-        if(relationship.direction == Direction.OUTGOING) {
-          relations.add(new RelationshipWithNodes(node, relationship, toNode));
-        } else if(relationship.direction == Direction.INGOING) {
-          relations.add(new RelationshipWithNodes(toNode, relationship, node));
-        } else if(relationship.direction == Direction.BOTH) {
-          relations.add(new RelationshipWithNodes(node, relationship, toNode));
-          relations.add(new RelationshipWithNodes(toNode, relationship, node));
+    Map<Relationship, Iterable<Node>> nodesByRelationship = _findEntityByAnnotations(node, Relationship);
+    nodesByRelationship.forEach((relationship, toNodes) {
+      toNodes.forEach((toNode) {
+        if (toNode != null) {
+          if (relationship.direction == Direction.OUTGOING) {
+            relations.add(new RelationshipWithNodes(node, relationship, toNode));
+          } else if (relationship.direction == Direction.INGOING) {
+            relations.add(new RelationshipWithNodes(toNode, relationship, node));
+          } else if (relationship.direction == Direction.BOTH) {
+            relations.add(new RelationshipWithNodes(node, relationship, toNode));
+            relations.add(new RelationshipWithNodes(toNode, relationship, node));
+          }
         }
-      }
+      });
     });
 
     return relations;
   }
 
-    Set<BatchToken> addNodeAndRelationsViaToBatch(Node node) {
+  Set<BatchToken> addNodeAndRelationsViaToBatch(Node node) {
 
-      _logger.info("Converting node ${node} to token...");
-      Set<BatchToken> tokens = new Set();
-      Set<RelationshipWithNodes> relations = _findRelationshipViaNodes(node);
-      relations.forEach((relation) {
-        _logger.info("Converting relation ${relation} to token...");
-        tokens.addAll(_convertRelationToBatchTokens(relation));
-        if (node != relation.startNode && !nodesWithRelationsViaConverted.contains(relation.startNode)) {
-          nodesWithRelationsViaConverted.add(relation.startNode);
-          tokens.addAll(addNodeAndRelationsViaToBatch(relation.startNode));
-        }
-        if (node != relation.endNode && !nodesWithRelationsViaConverted.contains(relation.endNode)) {
-          nodesWithRelationsViaConverted.add(relation.endNode);
-          tokens.addAll(addNodeAndRelationsViaToBatch(relation.endNode));
-        }
-        nodesWithRelationsViaConverted.add(node);
-      });
-      return tokens;
-    }
+    _logger.info("Converting node ${node} to token...");
+    Set<BatchToken> tokens = new Set();
+    Set<RelationshipWithNodes> relations = _findRelationshipViaNodes(node);
+    relations.forEach((relation) {
+      _logger.info("Converting relation ${relation} to token...");
+      tokens.addAll(_convertRelationToBatchTokens(relation));
+      if (node != relation.startNode && !nodesWithRelationsViaConverted.contains(relation.startNode)) {
+        nodesWithRelationsViaConverted.add(relation.startNode);
+        tokens.addAll(addNodeAndRelationsViaToBatch(relation.startNode));
+      }
+      if (node != relation.endNode && !nodesWithRelationsViaConverted.contains(relation.endNode)) {
+        nodesWithRelationsViaConverted.add(relation.endNode);
+        tokens.addAll(addNodeAndRelationsViaToBatch(relation.endNode));
+      }
+      nodesWithRelationsViaConverted.add(node);
+    });
+    return tokens;
+  }
 
   Set<RelationshipWithNodes> _findRelationshipViaNodes(Node node) {
 
-    Set<RelationshipWithNodes> relations = new Set();
+    Set<RelationshipWithNodes> relationshipWithNodes = new Set();
 
-    Map<RelationshipVia, Relation> fieldsByRelationship = _findEntityByAnnotations(node, RelationshipVia);
-    fieldsByRelationship.forEach((relationship, relation) {
-      if (relation != null) {
-        Node startNode = _findNodesAnnotatedBy(StartNode, relation).first;
-        Node endNode = _findNodesAnnotatedBy(EndNode, relation).first;
-        relations.add(new RelationshipWithNodes(startNode, new Relationship(relationship.type, data: relation.toJson()), endNode));
-      }
+    Map<RelationshipVia, Iterable<Relation>> fieldsByRelationship = _findEntityByAnnotations(node, RelationshipVia);
+    fieldsByRelationship.forEach((relationship, relations) {
+      relations.forEach((relation) {
+        if (relation != null) {
+          Node startNode = _findNodesAnnotatedBy(StartNode, relation).first;
+          Node endNode = _findNodesAnnotatedBy(EndNode, relation).first;
+          relationshipWithNodes.add(new RelationshipWithNodes(startNode, new Relationship(relationship.type, data: relation.toJson()), endNode));
+        }
+      });
     });
 
-    return relations;
+    return relationshipWithNodes;
   }
 
   Map _findEntityByAnnotations(Object objectAnnotated, Type type) {
 
-    var fieldsByRelationship = {};
+    var fieldsByRelationship = {
+    };
 
     InstanceMirror instanceMirror = reflect(objectAnnotated);
     instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror value) {
       value.metadata.forEach((InstanceMirror value) {
         if (value.reflectee.runtimeType == type) {
-          fieldsByRelationship[value.reflectee] = instanceMirror.getField(key).reflectee;
+          if (instanceMirror.getField(key).reflectee is Iterable) {
+            fieldsByRelationship[value.reflectee] = instanceMirror.getField(key).reflectee;
+          } else {
+            fieldsByRelationship[value.reflectee] = [instanceMirror.getField(key).reflectee];
+          }
         }
       });
     });
