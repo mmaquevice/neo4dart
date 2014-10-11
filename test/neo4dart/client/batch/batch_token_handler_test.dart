@@ -13,6 +13,9 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'dart:convert';
 
+import 'package:neo4dart/testing/person.dart';
+import 'package:neo4dart/testing/love.dart';
+
 main() {
 
   Logger.root.level = Level.ALL;
@@ -20,15 +23,20 @@ main() {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 
-  final _logger = new Logger("neo4dart.batch_token_handler_test");
+  final _logger = new Logger("neo4dart.client.batch.batch_token_handler_test");
 
-  group('batch_token toJson', () {
+  group('addNodeToBatch', () {
 
-    test('- json is well formated', () {
+    test('ok', () {
       try {
-        BatchToken batchToken = new BatchToken("POST", "/node", {"name" : "bob"});
-        var json = new JsonEncoder().convert(batchToken);
-        expect(json, '{"id":0,"method":"POST","to":"/node","body":{"name":"bob"}}');
+        Node node = new Person("Claude", city: "Gagny");
+
+        BatchTokenHandler handler = new BatchTokenHandler();
+        BatchToken token = handler.addNodeToBatch(node);
+
+        BatchToken expected = new BatchToken("POST", "/node", {"name" : "Claude", "city" : "Gagny"});
+
+        return expect(token, equals(expected));
       } catch(e, s) {
         _logger.severe(e);
         _logger.severe(s);

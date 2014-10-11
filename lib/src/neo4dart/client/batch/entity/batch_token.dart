@@ -21,6 +21,9 @@ class BatchToken {
     return map;
   }
 
+  bool operator ==(o) => o is BatchToken && o.method == method && o.to == to && '${o.body}' == '$body';
+  int get hashCode => hash2(method.hashCode, to.hashCode);
+
   String toString() {
     return '${toJson()}';
   }

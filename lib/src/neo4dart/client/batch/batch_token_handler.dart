@@ -26,7 +26,6 @@ class BatchTokenHandler {
     return token;
   }
 
-
   BatchToken _findTokenFromNode(Node node) {
     if (node == null) {
       return null;

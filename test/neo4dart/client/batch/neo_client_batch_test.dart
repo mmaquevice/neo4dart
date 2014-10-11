@@ -20,11 +20,11 @@ main() {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 
-  final _logger = new Logger("neo4dart.neo_client_test");
+  final _logger = new Logger("neo4dart.client.batch.neo_client_batch_test");
 
-  group('neo client executes batch', () {
+  group('executeBatch', () {
 
-    test('- if code 200 then true', () {
+    test('ok', () {
       try {
         BatchToken batchToken = new BatchToken("POST", "/node", {"name" : "bob"});
 
@@ -42,7 +42,7 @@ main() {
       }
     });
 
-    test('- if code 500 then false', () {
+    test('if code 500 then false', () {
       try {
         BatchToken batchToken = new BatchToken("POST", "/node", {"name" : "bob"});
 
