@@ -31,7 +31,7 @@ class NeoClientGet extends NeoClient {
     String label = _convertTypeToLabel(type);
 
     if(properties.isEmpty) {
-      throw new StateError('Properties are empty');
+      throw new StateError("Properties are empty");
     }
 
     String propertyKey = properties.keys.first;

@@ -28,7 +28,6 @@ main() {
   group('findByType', () {
 
     test('ok', () {
-      try {
         var client200 = new MockClient((request) {
           var responseBody = new File('json/findNodesByType_200.json').readAsStringSync();
           return new http.Response(responseBody, 200);
@@ -46,24 +45,14 @@ main() {
         expectedList.add(idefix);
 
         return neoClient.findNodesByType(Person).then((nodes) => expect(nodes, unorderedEquals(expectedList)));
-
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
     });
 
     test('if [500 from neo4j server] then [exception]', () {
-      try {
         var client500 = new MockClient((request) {
           return new http.Response('', 500);
         });
         NeoClientGet neoClient = new NeoClientGet.withClient(client500);
         expect(neoClient.findNodesByType(Person), throwsA(new isInstanceOf<String>()));
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
     });
 
   });
@@ -71,7 +60,6 @@ main() {
   group('findByTypeAndProperties', () {
 
     test('ok', () {
-      try {
         var client200 = new MockClient((request) {
           var responseBody = new File('json/findNodesByTypeAndProperties_200.json').readAsStringSync();
           return new http.Response(responseBody, 200);
@@ -82,37 +70,23 @@ main() {
         expectedList.add(new Person("Asterix", city:"Gaule"));
 
         return neoClient.findNodesByTypeAndProperties(Person, {"name":"Asterix"}).then((nodes) => expect(nodes, unorderedEquals(expectedList)));
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
     });
 
     test('if [500 from neo4j server] then [exception]', () {
-      try {
         var client500 = new MockClient((request) {
           return new http.Response('', 500);
         });
         NeoClientGet neoClient = new NeoClientGet.withClient(client500);
         expect(neoClient.findNodesByTypeAndProperties(Person, {"name":"Asterix"}), throwsA(new isInstanceOf<String>()));
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
     });
 
     test('if [properties are empty] then [exception]', () {
-      try {
         NeoClientGet neoClient = new NeoClientGet.withClient(null);
 
         List expectedList = new List();
         expectedList.add(new Person("Asterix", city:"Gaule"));
 
         expect(neoClient.findNodesByTypeAndProperties(Person, {}), throwsA(new isInstanceOf<StateError>()));
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
     });
 
   });
