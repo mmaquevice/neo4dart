@@ -81,12 +81,13 @@ main() {
     });
 
     test('if [properties are empty] then [exception]', () {
-        NeoClientGet neoClient = new NeoClientGet.withClient(null);
-
-        List expectedList = new List();
-        expectedList.add(new Person("Asterix", city:"Gaule"));
-
-        expect(neoClient.findNodesByTypeAndProperties(Person, {}), throwsA(new isInstanceOf<StateError>()));
+        try {
+          new NeoClientGet().findNodesByTypeAndProperties(Person, {});
+        } on StateError catch(e) {
+          expect(e.message, 'Properties are empty');
+          return;
+        }
+        throw "Expected StateError";
     });
 
   });
