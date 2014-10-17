@@ -67,7 +67,10 @@ main() {
 
         lucille.eternalLovers.addAll([new Love(lucille, new Person("Roméo", city:"Roma"), "A lot", "1985"), new Love(lucille, new Person("Toto", city:"Madrid"), "Muchos", "1984")]);
 
-        neoService.insertNode(lucille);
+        return neoService.insertNode(lucille).then((_) {
+          _logger.info(lucille);
+          expect(lucille.id, isNotNull);
+        });
 
       } catch(e, s) {
         _logger.severe(e);

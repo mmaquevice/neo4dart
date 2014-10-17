@@ -1,6 +1,6 @@
 part of neo4dart;
 
-class Relation {
+class Relation extends NeoEntity {
 
   Map toJson();
 }

@@ -15,7 +15,7 @@ class BatchTokenHandler {
 
     BatchToken token = _findTokenFromNode(node);
     if (token == null) {
-      token = new BatchToken("POST", "/node", node.toJson(), id : _findIdNotUsed());
+      token = new BatchToken("POST", "/node", node.toJson(), id : _findIdNotUsed(), neoEntity: node);
       batchTokens.add(token);
       BatchToken tokenForLabel = new BatchToken("POST", "{${token.id}}/labels", node.labels, id: _findIdNotUsed());
       batchTokens.add(tokenForLabel);
@@ -106,8 +106,8 @@ class BatchTokenHandler {
     }
 
     var token = new BatchToken("POST", "{${startToken.id}}/relationships", {
-        'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
-    });
+        'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'}, id : _findIdNotUsed(), neoEntity: relation.initialRelationship
+    );
     batchTokens.add(token);
 
     tokens.add(token);
@@ -169,7 +169,7 @@ class BatchTokenHandler {
         if (relation != null) {
           Node startNode = _findNodesAnnotatedBy(StartNode, relation).first;
           Node endNode = _findNodesAnnotatedBy(EndNode, relation).first;
-          relationshipWithNodes.add(new RelationshipWithNodes(startNode, new Relationship(relationship.type, data: relation.toJson()), endNode));
+          relationshipWithNodes.add(new RelationshipWithNodes(startNode, new Relationship(relationship.type, data: relation.toJson()), endNode, initialRelationship: relation));
         }
       });
     });

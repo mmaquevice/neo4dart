@@ -7,8 +7,9 @@ class BatchToken {
   String to;
   Map body = {
   };
+  NeoEntity neoEntity;
 
-  BatchToken(this.method, this.to, this.body, {this.id});
+  BatchToken(this.method, this.to, this.body, {this.id, this.neoEntity});
 
   Map toJson() {
     Map map = new Map();

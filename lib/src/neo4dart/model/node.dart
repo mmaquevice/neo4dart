@@ -1,10 +1,10 @@
 part of neo4dart;
 
-class Node {
-  Map toJson();
+class Node extends NeoEntity {
 
-  int id;
   Set<String> labels = [];
+
+  Map toJson();
 
   Node() {
     ClassMirror classMirror = reflectClass(this.runtimeType);
