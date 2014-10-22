@@ -1,0 +1,100 @@
+[{"id":0,"location":"http://localhost:7474/db/data/node/88","body":{
+    "extensions" : {
+    },
+    "paged_traverse" : "http://localhost:7474/db/data/node/88/paged/traverse/{returnType}{?pageSize,leaseTime}",
+    "labels" : "http://localhost:7474/db/data/node/88/labels",
+    "outgoing_relationships" : "http://localhost:7474/db/data/node/88/relationships/out",
+    "traverse" : "http://localhost:7474/db/data/node/88/traverse/{returnType}",
+    "all_typed_relationships" : "http://localhost:7474/db/data/node/88/relationships/all/{-list|&|types}",
+    "property" : "http://localhost:7474/db/data/node/88/properties/{key}",
+    "all_relationships" : "http://localhost:7474/db/data/node/88/relationships/all",
+    "self" : "http://localhost:7474/db/data/node/88",
+    "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/88/relationships/out/{-list|&|types}",
+    "properties" : "http://localhost:7474/db/data/node/88/properties",
+    "incoming_relationships" : "http://localhost:7474/db/data/node/88/relationships/in",
+    "incoming_typed_relationships" : "http://localhost:7474/db/data/node/88/relationships/in/{-list|&|types}",
+    "create_relationship" : "http://localhost:7474/db/data/node/88/relationships",
+    "data" : {
+        "name" : "Lucille",
+        "city" : "Paris"
+    }
+},"from":"/node"},{"id":1,"from":"http://localhost:7474/db/data/node/88/labels"},{"id":2,"location":"http://localhost:7474/db/data/node/89","body":{
+    "extensions" : {
+    },
+    "paged_traverse" : "http://localhost:7474/db/data/node/89/paged/traverse/{returnType}{?pageSize,leaseTime}",
+    "labels" : "http://localhost:7474/db/data/node/89/labels",
+    "outgoing_relationships" : "http://localhost:7474/db/data/node/89/relationships/out",
+    "traverse" : "http://localhost:7474/db/data/node/89/traverse/{returnType}",
+    "all_typed_relationships" : "http://localhost:7474/db/data/node/89/relationships/all/{-list|&|types}",
+    "property" : "http://localhost:7474/db/data/node/89/properties/{key}",
+    "all_relationships" : "http://localhost:7474/db/data/node/89/relationships/all",
+    "self" : "http://localhost:7474/db/data/node/89",
+    "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/89/relationships/out/{-list|&|types}",
+    "properties" : "http://localhost:7474/db/data/node/89/properties",
+    "incoming_relationships" : "http://localhost:7474/db/data/node/89/relationships/in",
+    "incoming_typed_relationships" : "http://localhost:7474/db/data/node/89/relationships/in/{-list|&|types}",
+    "create_relationship" : "http://localhost:7474/db/data/node/89/relationships",
+    "data" : {
+        "name" : "Matthieu",
+        "city" : "Paris"
+    }
+},"from":"/node"},{"id":3,"from":"http://localhost:7474/db/data/node/89/labels"},{"id":4,"location":"http://localhost:7474/db/data/relationship/90","body":{
+    "extensions" : {
+    },
+    "start" : "http://localhost:7474/db/data/node/88",
+    "property" : "http://localhost:7474/db/data/relationship/90/properties/{key}",
+    "self" : "http://localhost:7474/db/data/relationship/90",
+    "properties" : "http://localhost:7474/db/data/relationship/90/properties",
+    "type" : "loves",
+    "end" : "http://localhost:7474/db/data/node/89",
+    "data" : {
+        "with" : "passion",
+        "since" : "2010"
+    }
+},"from":"http://localhost:7474/db/data/node/88/relationships"},{"id":5,"location":"http://localhost:7474/db/data/node/90","body":{
+    "extensions" : {
+    },
+    "paged_traverse" : "http://localhost:7474/db/data/node/90/paged/traverse/{returnType}{?pageSize,leaseTime}",
+    "labels" : "http://localhost:7474/db/data/node/90/labels",
+    "outgoing_relationships" : "http://localhost:7474/db/data/node/90/relationships/out",
+    "traverse" : "http://localhost:7474/db/data/node/90/traverse/{returnType}",
+    "all_typed_relationships" : "http://localhost:7474/db/data/node/90/relationships/all/{-list|&|types}",
+    "property" : "http://localhost:7474/db/data/node/90/properties/{key}",
+    "all_relationships" : "http://localhost:7474/db/data/node/90/relationships/all",
+    "self" : "http://localhost:7474/db/data/node/90",
+    "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/90/relationships/out/{-list|&|types}",
+    "properties" : "http://localhost:7474/db/data/node/90/properties",
+    "incoming_relationships" : "http://localhost:7474/db/data/node/90/relationships/in",
+    "incoming_typed_relationships" : "http://localhost:7474/db/data/node/90/relationships/in/{-list|&|types}",
+    "create_relationship" : "http://localhost:7474/db/data/node/90/relationships",
+    "data" : {
+        "name" : "Gérard",
+        "city" : "Paris"
+    }
+},"from":"/node"},{"id":6,"from":"http://localhost:7474/db/data/node/90/labels"},{"id":7,"location":"http://localhost:7474/db/data/relationship/4","body":{
+    "extensions" : {
+    },
+    "start" : "http://localhost:7474/db/data/node/89",
+    "property" : "http://localhost:7474/db/data/relationship/4/properties/{key}",
+    "self" : "http://localhost:7474/db/data/relationship/4",
+    "properties" : "http://localhost:7474/db/data/relationship/4/properties",
+    "type" : "loves",
+    "end" : "http://localhost:7474/db/data/node/90",
+    "data" : {
+        "with" : "passion",
+        "since" : "2010"
+    }
+},"from":"http://localhost:7474/db/data/node/89/relationships"},{"id":8,"location":"http://localhost:7474/db/data/relationship/26","body":{
+    "extensions" : {
+    },
+    "start" : "http://localhost:7474/db/data/node/90",
+    "property" : "http://localhost:7474/db/data/relationship/26/properties/{key}",
+    "self" : "http://localhost:7474/db/data/relationship/26",
+    "properties" : "http://localhost:7474/db/data/relationship/26/properties",
+    "type" : "loves",
+    "end" : "http://localhost:7474/db/data/node/88",
+    "data" : {
+        "with" : "passion",
+        "since" : "2010"
+    }
+},"from":"http://localhost:7474/db/data/node/90/relationships"}]

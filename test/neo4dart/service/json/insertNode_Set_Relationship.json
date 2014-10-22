@@ -1,0 +1,83 @@
+[{"id":0,"location":"http://localhost:7474/db/data/node/4","body":{
+    "extensions" : {
+    },
+    "paged_traverse" : "http://localhost:7474/db/data/node/4/paged/traverse/{returnType}{?pageSize,leaseTime}",
+    "labels" : "http://localhost:7474/db/data/node/4/labels",
+    "outgoing_relationships" : "http://localhost:7474/db/data/node/4/relationships/out",
+    "traverse" : "http://localhost:7474/db/data/node/4/traverse/{returnType}",
+    "all_typed_relationships" : "http://localhost:7474/db/data/node/4/relationships/all/{-list|&|types}",
+    "property" : "http://localhost:7474/db/data/node/4/properties/{key}",
+    "all_relationships" : "http://localhost:7474/db/data/node/4/relationships/all",
+    "self" : "http://localhost:7474/db/data/node/4",
+    "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/4/relationships/out/{-list|&|types}",
+    "properties" : "http://localhost:7474/db/data/node/4/properties",
+    "incoming_relationships" : "http://localhost:7474/db/data/node/4/relationships/in",
+    "incoming_typed_relationships" : "http://localhost:7474/db/data/node/4/relationships/in/{-list|&|types}",
+    "create_relationship" : "http://localhost:7474/db/data/node/4/relationships",
+    "data" : {
+        "name" : "Matthieu",
+        "city" : "Paris"
+    }
+},"from":"/node"},{"id":1,"from":"http://localhost:7474/db/data/node/4/labels"},{"id":2,"location":"http://localhost:7474/db/data/node/5","body":{
+    "extensions" : {
+    },
+    "paged_traverse" : "http://localhost:7474/db/data/node/5/paged/traverse/{returnType}{?pageSize,leaseTime}",
+    "labels" : "http://localhost:7474/db/data/node/5/labels",
+    "outgoing_relationships" : "http://localhost:7474/db/data/node/5/relationships/out",
+    "traverse" : "http://localhost:7474/db/data/node/5/traverse/{returnType}",
+    "all_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/all/{-list|&|types}",
+    "property" : "http://localhost:7474/db/data/node/5/properties/{key}",
+    "all_relationships" : "http://localhost:7474/db/data/node/5/relationships/all",
+    "self" : "http://localhost:7474/db/data/node/5",
+    "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/out/{-list|&|types}",
+    "properties" : "http://localhost:7474/db/data/node/5/properties",
+    "incoming_relationships" : "http://localhost:7474/db/data/node/5/relationships/in",
+    "incoming_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/in/{-list|&|types}",
+    "create_relationship" : "http://localhost:7474/db/data/node/5/relationships",
+    "data" : {
+        "name" : "Mikael",
+        "city" : "Budapest"
+    }
+},"from":"/node"},{"id":3,"from":"http://localhost:7474/db/data/node/5/labels"},{"id":4,"location":"http://localhost:7474/db/data/relationship/29","body":{
+    "extensions" : {
+    },
+    "start" : "http://localhost:7474/db/data/node/4",
+    "property" : "http://localhost:7474/db/data/relationship/29/properties/{key}",
+    "self" : "http://localhost:7474/db/data/relationship/29",
+    "properties" : "http://localhost:7474/db/data/relationship/29/properties",
+    "type" : "works with",
+    "end" : "http://localhost:7474/db/data/node/5",
+    "data" : {
+    }
+},"from":"http://localhost:7474/db/data/node/4/relationships"},{"id":5,"location":"http://localhost:7474/db/data/node/7","body":{
+    "extensions" : {
+    },
+    "paged_traverse" : "http://localhost:7474/db/data/node/7/paged/traverse/{returnType}{?pageSize,leaseTime}",
+    "labels" : "http://localhost:7474/db/data/node/7/labels",
+    "outgoing_relationships" : "http://localhost:7474/db/data/node/7/relationships/out",
+    "traverse" : "http://localhost:7474/db/data/node/7/traverse/{returnType}",
+    "all_typed_relationships" : "http://localhost:7474/db/data/node/7/relationships/all/{-list|&|types}",
+    "property" : "http://localhost:7474/db/data/node/7/properties/{key}",
+    "all_relationships" : "http://localhost:7474/db/data/node/7/relationships/all",
+    "self" : "http://localhost:7474/db/data/node/7",
+    "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/7/relationships/out/{-list|&|types}",
+    "properties" : "http://localhost:7474/db/data/node/7/properties",
+    "incoming_relationships" : "http://localhost:7474/db/data/node/7/relationships/in",
+    "incoming_typed_relationships" : "http://localhost:7474/db/data/node/7/relationships/in/{-list|&|types}",
+    "create_relationship" : "http://localhost:7474/db/data/node/7/relationships",
+    "data" : {
+        "name" : "Quentin",
+        "city" : "England"
+    }
+},"from":"/node"},{"id":6,"from":"http://localhost:7474/db/data/node/7/labels"},{"id":7,"location":"http://localhost:7474/db/data/relationship/91","body":{
+    "extensions" : {
+    },
+    "start" : "http://localhost:7474/db/data/node/4",
+    "property" : "http://localhost:7474/db/data/relationship/91/properties/{key}",
+    "self" : "http://localhost:7474/db/data/relationship/91",
+    "properties" : "http://localhost:7474/db/data/relationship/91/properties",
+    "type" : "works with",
+    "end" : "http://localhost:7474/db/data/node/7",
+    "data" : {
+    }
+},"from":"http://localhost:7474/db/data/node/4/relationships"}]
