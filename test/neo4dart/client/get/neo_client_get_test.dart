@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'dart:convert';
 
+import '../../util/util.dart' as util;
+
 import 'package:neo4dart/testing/person.dart';
 import 'package:neo4dart/testing/love.dart';
 
@@ -29,7 +31,8 @@ main() {
 
     test('ok', () {
         var client200 = new MockClient((request) {
-          var responseBody = new File('json/findNodesByType_200.json').readAsStringSync();
+
+          var responseBody = util.readFile('neo4dart/client/get/json/findNodesByType_200.json');
           return new http.Response(responseBody, 200);
         });
         NeoClientGet neoClient = new NeoClientGet.withClient(client200);
@@ -61,7 +64,8 @@ main() {
 
     test('ok', () {
         var client200 = new MockClient((request) {
-          var responseBody = new File('json/findNodesByTypeAndProperties_200.json').readAsStringSync();
+
+          var responseBody = util.readFile('neo4dart/client/get/json/findNodesByTypeAndProperties_200.json');
           return new http.Response(responseBody, 200);
         });
         NeoClientGet neoClient = new NeoClientGet.withClient(client200);
