@@ -52,7 +52,7 @@ main() {
                                      new BatchToken("POST", "/node", {"name" : "Haddock", "city": "Boat"}, id: 2),
                                      new BatchToken("POST", "{0}/relationships", {'to': '{2}', 'data': null, 'type': 'works with'}),
                                      new BatchToken("POST", "/node", {"name" : "Tournesol", "city": "Laboratory"}, id: 4),
-                                     new BatchToken("POST", "{0}/relationships", {'to': '{4}', 'data': null, 'type': 'works with'})];
+                                     new BatchToken("POST", "{0}/relationships", {'to': '{5}', 'data': null, 'type': 'works with'})];
 
         expect(tokens, unorderedEquals(expected));
     });
@@ -76,7 +76,7 @@ main() {
                                    new BatchToken("POST", "/node", {"name" : "Julieta", "city": "Venizia"}, id: 2),
                                    new BatchToken("POST", "{0}/relationships", {'to': '{2}', 'data': {'howMuch': 'so so', 'since': 1345}, 'type': 'secretly loves'}),
                                    new BatchToken("POST", "/node", {"name" : "Liliana", "city": "Friul"}, id: 4),
-                                   new BatchToken("POST", "{0}/relationships", {'to': '{4}', 'data': {'howMuch': 'so so so', 'since': 1346}, 'type': 'secretly loves'}),];
+                                   new BatchToken("POST", "{0}/relationships", {'to': '{5}', 'data': {'howMuch': 'so so so', 'since': 1346}, 'type': 'secretly loves'}),];
 
       expect(tokens, unorderedEquals(expected));
     });

@@ -6,12 +6,17 @@ import 'package:unittest/unittest.dart';
 import 'package:neo4dart/neo4dart.dart';
 import 'package:mock/mock.dart';
 import 'dart:async';
+import 'package:path/path.dart' as path;
+
+import '../../util/util.dart' as util;
 
 import 'package:logging/logging.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'dart:convert';
+
+import 'package:neo4dart/testing/person.dart';
 
 main() {
 
@@ -26,16 +31,23 @@ main() {
 
     test('ok', () {
       try {
-        BatchToken batchToken = new BatchToken("POST", "/node", {"name" : "bob"});
+
+        Person justin = new Person("Justin", city: 'Moscow');
+        BatchToken batchToken = new BatchToken("POST", "/node", justin.toJson(), id: 0, neoEntity: justin);
 
         var client200 = new MockClient((request) {
-          return new http.Response("", 200);
+          var responseBody = util.readFile('neo4dart/client/batch/json/executeBatch.json');
+          return new http.Response(responseBody, 200);
         });
         NeoClientBatch neoClient = new NeoClientBatch.withClient(client200);
+
         Set batchTokens = new Set();
         batchTokens.add(batchToken);
 
-        return neoClient.executeBatch(batchTokens).then((ok) => expect(ok, equals(true)));
+        return neoClient.executeBatch(batchTokens).then((ok) {
+          expect(justin.id, equals(87));
+          expect(ok, equals(true));
+        });
       } catch(e, s) {
         _logger.severe(e);
         _logger.severe(s);
@@ -53,7 +65,8 @@ main() {
         Set batchTokens = new Set();
         batchTokens.add(batchToken);
 
-        return neoClient.executeBatch(batchTokens).then((ok) => expect(ok, equals(false)));
+        expect(neoClient.executeBatch(batchTokens), throwsA(new isInstanceOf<String>()));
+
       } catch(e, s) {
         _logger.severe(e);
         _logger.severe(s);
