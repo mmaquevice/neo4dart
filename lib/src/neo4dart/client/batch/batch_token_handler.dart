@@ -67,7 +67,7 @@ class BatchTokenHandler {
     return max + 1;
   }
 
-  Set<BatchToken> addNodeAndRelationsToBatch(Node node) {
+  Set<BatchToken> addNodeAndRelationsToBatch(Node node, bool inDepth) {
 
     _logger.info("Converting node ${node} to token...");
 
@@ -76,16 +76,20 @@ class BatchTokenHandler {
     relations.forEach((relation) {
       _logger.info("Converting relation ${relation} to token...");
       tokens.addAll(_convertRelationToBatchTokens(relation));
-      if (node != relation.startNode && !nodesWithRelationsConverted.contains(relation.startNode)) {
-        nodesWithRelationsConverted.add(relation.startNode);
-        tokens.addAll(addNodeAndRelationsToBatch(relation.startNode));
+
+      if (inDepth) {
+        if (node != relation.startNode && !nodesWithRelationsConverted.contains(relation.startNode)) {
+          nodesWithRelationsConverted.add(relation.startNode);
+          tokens.addAll(addNodeAndRelationsToBatch(relation.startNode, inDepth));
+        }
+        if (node != relation.endNode && !nodesWithRelationsConverted.contains(relation.endNode)) {
+          nodesWithRelationsConverted.add(relation.endNode);
+          tokens.addAll(addNodeAndRelationsToBatch(relation.endNode, inDepth));
+        }
       }
-      if (node != relation.endNode && !nodesWithRelationsConverted.contains(relation.endNode)) {
-        nodesWithRelationsConverted.add(relation.endNode);
-        tokens.addAll(addNodeAndRelationsToBatch(relation.endNode));
-      }
-      nodesWithRelationsConverted.add(node);
     });
+
+    nodesWithRelationsConverted.add(node);
     return tokens;
   }
 
@@ -106,8 +110,8 @@ class BatchTokenHandler {
     }
 
     var token = new BatchToken("POST", "{${startToken.id}}/relationships", {
-        'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'}, id : _findIdNotUsed(), neoEntity: relation.initialRelationship
-    );
+        'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
+    }, id : _findIdNotUsed(), neoEntity: relation.initialRelationship);
     batchTokens.add(token);
 
     tokens.add(token);
@@ -138,7 +142,7 @@ class BatchTokenHandler {
     return relations;
   }
 
-  Set<BatchToken> addNodeAndRelationsViaToBatch(Node node) {
+  Set<BatchToken> addNodeAndRelationsViaToBatch(Node node, bool inDepth) {
 
     _logger.info("Converting node ${node} to token...");
     Set<BatchToken> tokens = new Set();
@@ -146,16 +150,20 @@ class BatchTokenHandler {
     relations.forEach((relation) {
       _logger.info("Converting relation ${relation} to token...");
       tokens.addAll(_convertRelationToBatchTokens(relation));
-      if (node != relation.startNode && !nodesWithRelationsViaConverted.contains(relation.startNode)) {
-        nodesWithRelationsViaConverted.add(relation.startNode);
-        tokens.addAll(addNodeAndRelationsViaToBatch(relation.startNode));
+
+      if (inDepth) {
+        if (node != relation.startNode && !nodesWithRelationsViaConverted.contains(relation.startNode)) {
+          nodesWithRelationsViaConverted.add(relation.startNode);
+          tokens.addAll(addNodeAndRelationsViaToBatch(relation.startNode, inDepth));
+        }
+        if (node != relation.endNode && !nodesWithRelationsViaConverted.contains(relation.endNode)) {
+          nodesWithRelationsViaConverted.add(relation.endNode);
+          tokens.addAll(addNodeAndRelationsViaToBatch(relation.endNode, inDepth));
+        }
       }
-      if (node != relation.endNode && !nodesWithRelationsViaConverted.contains(relation.endNode)) {
-        nodesWithRelationsViaConverted.add(relation.endNode);
-        tokens.addAll(addNodeAndRelationsViaToBatch(relation.endNode));
-      }
-      nodesWithRelationsViaConverted.add(node);
     });
+
+    nodesWithRelationsViaConverted.add(node);
     return tokens;
   }
 

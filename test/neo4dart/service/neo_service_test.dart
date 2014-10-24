@@ -32,7 +32,6 @@ main() {
   group('insertNode', () {
 
     test('ok - with @Relationship', () {
-      try {
 
         NeoService neoService = new NeoService();
 
@@ -56,15 +55,9 @@ main() {
           expect(matthieu.id, equals(89));
           expect(gerard.id, equals(90));
         });
-
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
     });
 
     test('ok - with Set of @Relationship', () {
-      try {
 
         NeoService neoService = new NeoService();
 
@@ -86,15 +79,9 @@ main() {
           expect(mikael.id, equals(5));
           expect(quentin.id, equals(7));
         });
-
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
     });
 
     test('ok - with @RelationshipVia', () {
-      try {
 
         NeoService neoService = new NeoService();
 
@@ -120,11 +107,6 @@ main() {
           expect(lucille.eternalLovers.first.id, equals(27));
           expect(lucille.eternalLovers.last.id, equals(28));
         });
-
-      } catch(e, s) {
-        _logger.severe(e);
-        _logger.severe(s);
-      }
     });
   });
 }

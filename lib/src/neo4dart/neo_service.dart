@@ -11,10 +11,20 @@ class NeoService {
 
     BatchTokenHandler batchHandler = new BatchTokenHandler();
     batchHandler.addNodeToBatch(node);
-    batchHandler.addNodeAndRelationsToBatch(node);
-    batchHandler.addNodeAndRelationsViaToBatch(node);
+    batchHandler.addNodeAndRelationsToBatch(node, true);
+    batchHandler.addNodeAndRelationsViaToBatch(node, true);
 
     return neoClientBatch.executeBatch(batchHandler.batchTokens);
+  }
+
+  Future insertNodes(Iterable<Node> nodes) {
+
+    return null;
+  }
+
+  Future insertAllConnectedNodes(Iterable<Node> nodes) {
+
+    return null;
   }
 
   Future findNodesByType(Type type) {
