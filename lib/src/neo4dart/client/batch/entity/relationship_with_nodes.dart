@@ -9,6 +9,4 @@ class RelationshipWithNodes {
   Relation initialRelationship;
 
   RelationshipWithNodes(this.startNode, this.relationship, this.endNode, {this.initialRelationship});
-
-  Map toJson();
 }

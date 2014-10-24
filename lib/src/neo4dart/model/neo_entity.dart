@@ -1,6 +1,6 @@
 part of neo4dart;
 
-class NeoEntity {
+abstract class NeoEntity {
 
   int id;
 }

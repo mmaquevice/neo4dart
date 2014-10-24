@@ -1,20 +1,13 @@
 library neo4dart.client.batch.neo_client_batch_test;
 
-import 'dart:io';
-
 import 'package:unittest/unittest.dart';
 import 'package:neo4dart/neo4dart.dart';
-import 'package:mock/mock.dart';
-import 'dart:async';
-import 'package:path/path.dart' as path;
 
 import '../../util/util.dart' as util;
 
 import 'package:logging/logging.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'dart:convert';
 
 import 'package:neo4dart/testing/person.dart';
 

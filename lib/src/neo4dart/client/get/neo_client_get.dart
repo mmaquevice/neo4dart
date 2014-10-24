@@ -106,7 +106,7 @@ class NeoClientGet extends NeoClient {
 
   Map<Symbol, dynamic> _getDataValuesFromParameters(List parameters, Map data) {
 
-    Map<String, String> valueByParameter = new Map();
+    Map<Symbol, dynamic> valueByParameter = new Map();
 
     parameters.forEach((parameter) {
       if (data.containsKey(parameter)) {

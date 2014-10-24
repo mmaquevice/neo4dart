@@ -1,8 +1,8 @@
 part of neo4dart;
 
-class Node extends NeoEntity {
+abstract class Node extends NeoEntity {
 
-  Set<String> labels = [];
+  List<String> labels = new List();
 
   Map toJson();
 

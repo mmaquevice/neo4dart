@@ -11,7 +11,7 @@ class BatchTokenHandler {
 
   Set<BatchToken> addNodesToBatch(Iterable<Node> nodes) {
 
-    Set<BatchToken> tokens = [];
+    Set<BatchToken> tokens = new Set();
     nodes.forEach((node) {
       tokens.add(addNodeToBatch(node));
     });

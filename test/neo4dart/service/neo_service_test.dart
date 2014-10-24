@@ -1,24 +1,17 @@
 library neo4dart.service.neo_service_test;
 
-import 'dart:core';
-import 'dart:io';
-
 import 'package:unittest/unittest.dart';
 import 'package:neo4dart/neo4dart.dart';
-import 'package:mock/mock.dart';
-import 'dart:async';
 
 import 'package:logging/logging.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'dart:convert';
 
 import '../util/util.dart' as util;
 
 import 'package:neo4dart/testing/person.dart';
 import 'package:neo4dart/testing/love.dart';
-import 'dart:mirrors';
 
 main() {
 

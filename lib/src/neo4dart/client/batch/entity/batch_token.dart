@@ -5,7 +5,7 @@ class BatchToken {
   int id;
   String method;
   String to;
-  Map body = {
+  Object body = {
   };
   NeoEntity neoEntity;
 
