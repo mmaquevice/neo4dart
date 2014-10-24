@@ -46,6 +46,22 @@ main() {
 
       expect(tokens, unorderedEquals(expected));
     });
+
+    test('ok - if [node.id is set] then [node is not converted into token]', () {
+      Set<Node> nodes = new Set();
+      nodes.add(new Person("Claude", city: "Gagny"));
+
+      Node eduardo = new Person("Eduardo", city: "Gagny");
+      eduardo.id = 100;
+      nodes.add(eduardo);
+
+      BatchTokenHandler handler = new BatchTokenHandler();
+      Set<BatchToken> tokens = handler.addNodesToBatch(nodes);
+
+      List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Claude", "city": "Gagny"}, id: 2)];
+
+      expect(tokens, unorderedEquals(expected));
+    });
   });
 
   group('addNodeAndRelationsToBatch', () {
@@ -164,6 +180,24 @@ main() {
                                    new BatchToken("POST", "{0}/relationships", {'to': '{2}', 'data': {'howMuch': 'so so', 'since': 1345}, 'type': 'secretly loves'}),
                                    new BatchToken("POST", "/node", {"name" : "Liliana", "city": "Friul"}, id: 4),
                                    new BatchToken("POST", "{0}/relationships", {'to': '{5}', 'data': {'howMuch': 'so so so', 'since': 1346}, 'type': 'secretly loves'})];
+
+      expect(tokens, unorderedEquals(expected));
+    });
+
+    test('ok - if [relation.id is set] then [relation is not converted into token]', () {
+      Person romeo = new Person("Romeo", city: "Roma");
+      Person julieta = new Person("Julieta", city: "Venizia");
+      Person liliana = new Person("Liliana", city: "Friul");
+
+      Love love = new Love(romeo, julieta, "so so", "1345");
+      love.id = 100;
+      romeo.eternalLovers.add(love);
+
+      BatchTokenHandler handler = new BatchTokenHandler();
+      Set<BatchToken> tokens = handler.addNodeAndRelationsViaToBatch(romeo, false);
+
+      List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Romeo", "city": "Roma"}, id: 0),
+                                   new BatchToken("POST", "/node", {"name" : "Julieta", "city": "Venizia"}, id: 2)];
 
       expect(tokens, unorderedEquals(expected));
     });

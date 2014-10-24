@@ -13,7 +13,10 @@ class BatchTokenHandler {
 
     Set<BatchToken> tokens = new Set();
     nodes.forEach((node) {
-      tokens.add(addNodeToBatch(node));
+      BatchToken token = addNodeToBatch(node);
+      if(token != null) {
+        tokens.add(addNodeToBatch(node));
+      }
     });
     return tokens;
   }
@@ -23,7 +26,7 @@ class BatchTokenHandler {
     _logger.info("Converting node ${node} to token...");
 
     BatchToken token = _findTokenFromNode(node);
-    if (token == null) {
+    if (token == null && node.id == null) {
       token = new BatchToken("POST", "/node", node.toJson(), id : _findIdNotUsed(), neoEntity: node);
       batchTokens.add(token);
       BatchToken tokenForLabel = new BatchToken("POST", "{${token.id}}/labels", node.labels, id: _findIdNotUsed());
@@ -81,6 +84,7 @@ class BatchTokenHandler {
     nodes.forEach((node) {
       tokens.addAll(addNodeAndRelationsToBatch(node, inDepth));
     });
+    tokens.removeWhere((token) => token == null);
     return tokens;
   }
 
@@ -126,12 +130,14 @@ class BatchTokenHandler {
       tokens.add(endToken);
     }
 
-    var token = new BatchToken("POST", "{${startToken.id}}/relationships", {
-        'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
-    }, id : _findIdNotUsed(), neoEntity: relation.initialRelationship);
-    batchTokens.add(token);
+    if(relation.initialRelationship == null || relation.initialRelationship.id == null) {
+      var token = new BatchToken("POST", "{${startToken.id}}/relationships", {
+          'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
+      }, id : _findIdNotUsed(), neoEntity: relation.initialRelationship);
+      batchTokens.add(token);
 
-    tokens.add(token);
+      tokens.add(token);
+    }
 
     return tokens;
   }
