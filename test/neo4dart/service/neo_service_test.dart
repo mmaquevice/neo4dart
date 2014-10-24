@@ -53,7 +53,7 @@ main() {
           _logger.info(lucille);
           expect(lucille.id, equals(88));
           expect(matthieu.id, equals(89));
-          expect(gerard.id, equals(90));
+          expect(gerard.id, isNull);
         });
     });
 
@@ -96,7 +96,7 @@ main() {
         Person antonio = new Person("Antonio", city:"Madrid");
 
         lucille.eternalLovers.addAll([new Love(lucille, romeo, "A lot", "1985"),
-        new Love(lucille, antonio, "Muchos", "1984")]);
+                                      new Love(lucille, antonio, "Muchos", "1984")]);
 
         return neoService.insertNode(lucille).then((_) {
           _logger.info(lucille);
@@ -107,6 +107,35 @@ main() {
           expect(lucille.eternalLovers.first.id, equals(27));
           expect(lucille.eternalLovers.last.id, equals(28));
         });
+    });
+  });
+
+  group('insertNodeInDepth', () {
+
+    test('ok', () {
+
+      NeoService neoService = new NeoService();
+
+      var client200 = new MockClient((request) {
+
+        var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Relationship.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
+
+      Person lucille = new Person("Lucille", city:"Paris");
+      Person matthieu = new Person("Matthieu", city:"Paris");
+      Person gerard = new Person("Gérard", city:"Paris");
+      lucille.lover = matthieu;
+      matthieu.lover = gerard;
+      gerard.lover = lucille;
+
+      return neoService.insertNodeInDepth(lucille).then((_) {
+        _logger.info(lucille);
+        expect(lucille.id, equals(88));
+        expect(matthieu.id, equals(89));
+        expect(gerard.id, equals(90));
+      });
     });
   });
 }

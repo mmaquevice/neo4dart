@@ -9,6 +9,15 @@ class BatchTokenHandler {
   Set<Node> nodesWithRelationsConverted = new Set();
   Set<Node> nodesWithRelationsViaConverted = new Set();
 
+  Set<BatchToken> addNodesToBatch(Iterable<Node> nodes) {
+
+    Set<BatchToken> tokens = [];
+    nodes.forEach((node) {
+      tokens.add(addNodeToBatch(node));
+    });
+    return tokens;
+  }
+
   BatchToken addNodeToBatch(Node node) {
 
     _logger.info("Converting node ${node} to token...");
@@ -65,6 +74,14 @@ class BatchTokenHandler {
       }
     });
     return max + 1;
+  }
+
+  Set<BatchToken> addNodesAndRelationsToBatch(Iterable<Node> nodes, bool inDepth) {
+    Set<BatchToken> tokens = new Set();
+    nodes.forEach((node) {
+      tokens.addAll(addNodeAndRelationsToBatch(node, inDepth));
+    });
+    return tokens;
   }
 
   Set<BatchToken> addNodeAndRelationsToBatch(Node node, bool inDepth) {
@@ -140,6 +157,14 @@ class BatchTokenHandler {
     });
 
     return relations;
+  }
+
+  Set<BatchToken> addNodesAndRelationsViaToBatch(Iterable<Node> nodes, bool inDepth) {
+    Set<BatchToken> tokens = new Set();
+    nodes.forEach((node) {
+      tokens.addAll(addNodeAndRelationsViaToBatch(node, inDepth));
+    });
+    return tokens;
   }
 
   Set<BatchToken> addNodeAndRelationsViaToBatch(Node node, bool inDepth) {
