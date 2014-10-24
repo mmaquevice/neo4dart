@@ -7,20 +7,43 @@ import 'package:path/path.dart' as path;
 
 final _logger = new Logger("neo4dart.util");
 
-String readFile(String relativePathFromTestDirectory) {
+// TODO mma - workaround til dart offers a proper way to retrieve the root project directory
+String readFile(String relativePathFromRootProjectDirectory) {
+
+  Directory rootDirectory = _findRootDirectory();
+
+  String absolutePath = path.join(rootDirectory.path, relativePathFromRootProjectDirectory);
+  return new File(absolutePath).readAsStringSync();
+}
+
+Directory _findRootDirectory() {
 
   int i = 0;
   Directory current = Directory.current;
-  while (!current.path.endsWith("test")) {
+
+  while (!_isRootDirectory(current)) {
     if (i == 10) {
       throw 'Cannot read file.';
     }
+
     current = current.parent;
     i++;
   }
 
-  String absolutePath = path.join(current.path, relativePathFromTestDirectory);
-  return new File(absolutePath).readAsStringSync();
+  return current;
 }
+
+bool _isRootDirectory(Directory directory) {
+
+  bool isRoot = false;
+  directory.listSync().forEach((FileSystemEntity file) {
+    if(file.path.endsWith("pubspec.yaml")) {
+      isRoot=true;
+    }
+  });
+
+  return isRoot;
+}
+
 
 

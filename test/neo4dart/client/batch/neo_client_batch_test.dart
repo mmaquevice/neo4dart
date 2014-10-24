@@ -36,7 +36,7 @@ main() {
         BatchToken batchToken = new BatchToken("POST", "/node", justin.toJson(), id: 0, neoEntity: justin);
 
         var client200 = new MockClient((request) {
-          var responseBody = util.readFile('neo4dart/client/batch/json/executeBatch.json');
+          var responseBody = util.readFile('test/neo4dart/client/batch/json/executeBatch.json');
           return new http.Response(responseBody, 200);
         });
         NeoClientBatch neoClient = new NeoClientBatch.withClient(client200);

@@ -32,7 +32,7 @@ main() {
     test('ok', () {
         var client200 = new MockClient((request) {
 
-          var responseBody = util.readFile('neo4dart/client/get/json/findNodesByType_200.json');
+          var responseBody = util.readFile('test/neo4dart/client/get/json/findNodesByType_200.json');
           return new http.Response(responseBody, 200);
         });
         NeoClientGet neoClient = new NeoClientGet.withClient(client200);
@@ -65,7 +65,7 @@ main() {
     test('ok', () {
         var client200 = new MockClient((request) {
 
-          var responseBody = util.readFile('neo4dart/client/get/json/findNodesByTypeAndProperties_200.json');
+          var responseBody = util.readFile('test/neo4dart/client/get/json/findNodesByTypeAndProperties_200.json');
           return new http.Response(responseBody, 200);
         });
         NeoClientGet neoClient = new NeoClientGet.withClient(client200);

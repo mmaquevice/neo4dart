@@ -38,7 +38,7 @@ main() {
 
         var client200 = new MockClient((request) {
 
-          var responseBody = util.readFile('neo4dart/service/json/insertNode_Relationship.json');
+          var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Relationship.json');
           return new http.Response(responseBody, 200);
         });
         neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
@@ -69,7 +69,7 @@ main() {
         NeoService neoService = new NeoService();
 
         var client200 = new MockClient((request) {
-          var responseBody = util.readFile('neo4dart/service/json/insertNode_Set_Relationship.json');
+          var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Set_Relationship.json');
           return new http.Response(responseBody, 200);
         });
         neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
@@ -99,7 +99,7 @@ main() {
         NeoService neoService = new NeoService();
 
         var client200 = new MockClient((request) {
-          var responseBody = util.readFile('neo4dart/service/json/insertNode_RelationshipVia.json');
+          var responseBody = util.readFile('test/neo4dart/service/json/insertNode_RelationshipVia.json');
           return new http.Response(responseBody, 200);
         });
         neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
