@@ -121,13 +121,17 @@ class BatchTokenHandler {
     BatchToken startToken = findTokenFromNode(relation.startNode);
     if (startToken == null) {
       startToken = addNodeToBatch(relation.startNode);
-      tokens.add(startToken);
+      if(startToken != null) {
+        tokens.add(startToken);
+      }
     }
 
     BatchToken endToken = findTokenFromNode(relation.endNode);
     if (endToken == null) {
       endToken = addNodeToBatch(relation.endNode);
-      tokens.add(endToken);
+      if(endToken != null) {
+        tokens.add(endToken);
+      }
     }
 
     if(relation.initialRelationship == null || relation.initialRelationship.id == null) {

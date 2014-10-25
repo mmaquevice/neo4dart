@@ -18,6 +18,7 @@ class NeoService {
   Future _insertNode(Node node, bool inDepth) {
 
     BatchTokenHandler batchHandler = new BatchTokenHandler();
+    batchHandler.addNodeToBatch(node);
     batchHandler.addNodeAndRelationsToBatch(node, inDepth);
     batchHandler.addNodeAndRelationsViaToBatch(node, inDepth);
 
@@ -35,6 +36,7 @@ class NeoService {
   Future _insertNodes(Iterable<Node> nodes, bool inDepth) {
 
     BatchTokenHandler batchHandler = new BatchTokenHandler();
+    batchHandler.addNodesToBatch(nodes);
     batchHandler.addNodesAndRelationsToBatch(nodes, inDepth);
     batchHandler.addNodesAndRelationsViaToBatch(nodes, inDepth);
 

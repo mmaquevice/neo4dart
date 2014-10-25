@@ -14,6 +14,7 @@ import 'package:neo4dart/testing/person.dart';
 main() {
 
   Logger.root.level = Level.ALL;
+  Logger.root.clearListeners();
   Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });

@@ -36,7 +36,7 @@ class BatchToken {
     };
     if (endToken == null) {
       body = {
-          'to' : '/node/{${relation.endNode.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
+          'to' : '/node/${relation.endNode.id}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
       };
     } else {
       body = {

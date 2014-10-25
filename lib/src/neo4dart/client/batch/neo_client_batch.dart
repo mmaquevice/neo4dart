@@ -58,6 +58,7 @@ class NeoClientBatch extends NeoClient {
       }
       return responseEntities;
     } else {
+      _logger.severe('Error requesting neo4j : status ${response.statusCode} - ${response.body}');
       throw "Error requesting neo4j : status ${response.statusCode}";
     }
   }

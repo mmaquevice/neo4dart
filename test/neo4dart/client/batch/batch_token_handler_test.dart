@@ -11,6 +11,7 @@ import 'package:neo4dart/testing/love.dart';
 main() {
 
   Logger.root.level = Level.ALL;
+  Logger.root.clearListeners();
   Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
@@ -106,6 +107,24 @@ main() {
                                   new BatchToken("POST", "{0}/relationships", {'to': '{5}', 'data': null, 'type': 'works with'})];
 
      expect(tokens, unorderedEquals(expected));
+    });
+
+    test('ok - if [nodes exist] then [relation token refers to their ids]', () {
+      Person tintin = new Person("Tintin", city: "Tibet");
+      tintin.id = 1;
+      var milou = new Person("Milou", city: "BoneLand");
+      milou.id = 2;
+      var haddock = new Person("Haddock", city: "Boat");
+      tintin.coworkers = [milou, haddock];
+
+      BatchTokenHandler handler = new BatchTokenHandler();
+      Set<BatchToken> tokens = handler.addNodeAndRelationsToBatch(tintin, false);
+
+      List<BatchToken> expected = [new BatchToken("POST", "/node/${tintin.id}/relationships", {'to': '/node/${milou.id}', 'data': null, 'type': 'works with'}),
+                                   new BatchToken("POST", "/node", {"name" : "Haddock", "city": "Boat"}, id: 1),
+                                   new BatchToken("POST", "/node/${tintin.id}/relationships", {'to': '{1}', 'data': null, 'type': 'works with'})];
+
+      expect(tokens, unorderedEquals(expected));
     });
   });
 
