@@ -25,11 +25,11 @@ class BatchTokenHandler {
 
     _logger.info("Converting node ${node} to token...");
 
-    BatchToken token = _findTokenFromNode(node);
+    BatchToken token = findTokenFromNode(node);
     if (token == null && node.id == null) {
-      token = new BatchToken("POST", "/node", node.toJson(), id : _findIdNotUsed(), neoEntity: node);
+      token = new BatchToken.createNodeToken(node, id: _findIdNotUsed());
       batchTokens.add(token);
-      BatchToken tokenForLabel = new BatchToken("POST", "{${token.id}}/labels", node.labels, id: _findIdNotUsed());
+      BatchToken tokenForLabel = new BatchToken.createLabelToken(node, token.id, id: _findIdNotUsed());
       batchTokens.add(tokenForLabel);
       _logger.info("Node ${node} has been inserted in batch via token ${token}.");
     } else {
@@ -38,7 +38,7 @@ class BatchTokenHandler {
     return token;
   }
 
-  BatchToken _findTokenFromNode(Node node) {
+  BatchToken findTokenFromNode(Node node) {
     if (node == null) {
       return null;
     }
@@ -118,22 +118,21 @@ class BatchTokenHandler {
 
     Set<BatchToken> tokens = new Set();
 
-    BatchToken startToken = _findTokenFromNode(relation.startNode);
+    BatchToken startToken = findTokenFromNode(relation.startNode);
     if (startToken == null) {
       startToken = addNodeToBatch(relation.startNode);
       tokens.add(startToken);
     }
 
-    BatchToken endToken = _findTokenFromNode(relation.endNode);
+    BatchToken endToken = findTokenFromNode(relation.endNode);
     if (endToken == null) {
       endToken = addNodeToBatch(relation.endNode);
       tokens.add(endToken);
     }
 
     if(relation.initialRelationship == null || relation.initialRelationship.id == null) {
-      var token = new BatchToken("POST", "{${startToken.id}}/relationships", {
-          'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
-      }, id : _findIdNotUsed(), neoEntity: relation.initialRelationship);
+
+      var token = new BatchToken.createRelationToken(relation, startToken, endToken, id: _findIdNotUsed());
       batchTokens.add(token);
 
       tokens.add(token);

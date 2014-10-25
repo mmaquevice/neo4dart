@@ -11,9 +11,45 @@ class BatchToken {
 
   BatchToken(this.method, this.to, this.body, {this.id, this.neoEntity});
 
+  factory BatchToken.createNodeToken(Node node, {int id}) {
+    return new BatchToken("POST", "/node", node.toJson(), id : id, neoEntity: node);
+  }
+
+  factory BatchToken.createLabelToken(Node node, int nodeTokenId, {int id}) {
+    return new BatchToken("POST", "{${nodeTokenId}}/labels", node.labels, id: id);
+  }
+
+  factory BatchToken.createRelationToken(RelationshipWithNodes relation, BatchToken startToken, BatchToken endToken, {int id}) {
+
+    if ((startToken == null && relation.startNode.id == null) || (endToken == null && relation.endNode.id == null)) {
+      throw "Batch token cannot be created.";
+    }
+
+    var to = "";
+    if (startToken == null) {
+      to = "/node/${relation.startNode.id}/relationships";
+    } else {
+      to = "{${startToken.id}}/relationships";
+    }
+
+    var body = {
+    };
+    if (endToken == null) {
+      body = {
+          'to' : '/node/{${relation.endNode.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
+      };
+    } else {
+      body = {
+          'to' : '{${endToken.id}}', 'data' : relation.relationship.data, 'type' : '${relation.relationship.type}'
+      };
+    }
+
+    return new BatchToken("POST", to, body, id : id, neoEntity: relation.initialRelationship);
+  }
+
   Map toJson() {
     Map map = new Map();
-    if(this.id != null) {
+    if (this.id != null) {
       map["id"] = id;
     }
     map["method"] = method;
@@ -23,6 +59,7 @@ class BatchToken {
   }
 
   bool operator ==(o) => o is BatchToken && o.method == method && o.to == to && '${o.body}' == '$body';
+
   int get hashCode => hash2(method.hashCode, to.hashCode);
 
   String toString() {
