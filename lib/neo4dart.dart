@@ -28,4 +28,7 @@ part 'src/neo4dart/annotations/relationship_via.dart';
 part 'src/neo4dart/annotations/start_node.dart';
 part 'src/neo4dart/annotations/end_node.dart';
 
+part 'src/neo4dart/client/batch/neo_client_batch_find.dart';
+part 'src/neo4dart/client/batch/batch_find_token_handler.dart';
+
 

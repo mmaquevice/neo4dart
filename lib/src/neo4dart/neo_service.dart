@@ -7,6 +7,8 @@ class NeoService {
   NeoClientGet neoClientGet = new NeoClientGet();
   NeoClientBatch neoClientBatch = new NeoClientBatch();
 
+  NeoClientBatchFind neoClientBatchFind = new NeoClientBatchFind();
+
   Future insertNode(Node node) {
     return _insertNode(node, false);
   }
@@ -43,13 +45,20 @@ class NeoService {
     return neoClientBatch.executeBatch(batchHandler.batchTokens);
   }
 
-  Future findNodesByType(Type type) {
-    return neoClientGet.findNodesByType(type);
-  }
+  Future findNodes(Type type, {Map properties}) {
 
-  Future findNodesByTypeAndProperties(Type type, Map properties) {
+    if(properties == null || properties.length == 0) {
+      return neoClientGet.findNodesByType(type);
+    }
+
     return neoClientGet.findNodesByTypeAndProperties(type, properties);
   }
+
+  Future findNodeById(int id) {
+
+    return neoClientBatchFind.findNodeById(id);
+  }
+
 
 }
 

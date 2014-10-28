@@ -83,7 +83,7 @@ main() {
         try {
           new NeoClientGet().findNodesByTypeAndProperties(Person, {});
         } on StateError catch(e) {
-          expect(e.message, 'Properties are empty');
+          expect(e.message, 'Properties are empty.');
           return;
         }
         throw "Expected StateError";
