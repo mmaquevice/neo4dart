@@ -142,7 +142,7 @@ main() {
         var responseBody = util.readFile('test/neo4dart/service/json/findNodeById_ok.json');
         return new http.Response(responseBody, 200);
       });
-      neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
+      neoService.tokenFindExecutor = new TokenFindExecutor.withClient(client200);
 
       return neoService.findNodeById(9, Person).then((node) {
         expect(node, equals(new Person("Antonio", city: "Madrid")));
@@ -160,7 +160,7 @@ main() {
         var responseBody = util.readFile('test/neo4dart/service/json/findNodesByIds_ok.json');
         return new http.Response(responseBody, 200);
       });
-      neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
+      neoService.tokenFindExecutor = new TokenFindExecutor.withClient(client200);
 
       return neoService.findNodesByIds([9, 11], Person).then((nodes) {
         expect(nodes, unorderedEquals([new Person("Antonio", city: "Madrid"), new Person("Lucille", city: "Paris")]));
