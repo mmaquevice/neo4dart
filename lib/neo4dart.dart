@@ -32,4 +32,6 @@ part 'src/neo4dart/annotations/end_node.dart';
 part 'src/neo4dart/client/batch/token_find_executor.dart';
 part 'src/neo4dart/client/batch/token_find_builder.dart';
 
+part 'src/neo4dart/util/reflection_util.dart';
+
 

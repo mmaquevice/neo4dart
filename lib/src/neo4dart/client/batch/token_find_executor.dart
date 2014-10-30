@@ -27,12 +27,14 @@ class TokenFindExecutor extends NeoClient {
     }).toList();
   }
 
-  Future findNodeById(int id) {
+  Future findNodeById(int id, Type type) {
 
-    return executeBatch(new TokenFindBuilder().addNodeToBatch(id)).then((response) => _convertResponse(response));
+    return executeBatch(new TokenFindBuilder().addNodeToBatch(id)).then((response) => _convertResponse(response, type));
   }
 
-  Node _convertResponse(response) {
+  Set<Node> _convertResponse(var response, Type type) {
+
+    Set<Node> nodes = new Set();
 
     List<ResponseEntity> responseEntities = _convertResponseToNodes(response);
 
@@ -41,8 +43,28 @@ class TokenFindExecutor extends NeoClient {
       responsesById.add(r.neoId, r);
     });
 
-    return null;
+    responsesById.forEachKey((k, v) {
+      Map<NeoType, ResponseEntity> dataByType = new Map.fromIterable(v, key: (k) => k.type, value: (v) => v);
 
+      List<String> labels = dataByType[NeoType.LABEL].data;
+
+      if(labels.length == 0) {
+        throw "Node <$k> is not labelled.";
+      }
+      if(labels.length > 1) {
+        throw "Node <$k> has multiple labels, this is not currently supported.";
+      }
+      if(!type.toString().endsWith(labels.first)) {
+        throw "Node <$k> has a label <${labels.first}> not matching its type <${type.toString()}>.";
+      }
+
+      Node node = convertToNode(type, dataByType[NeoType.NODE]);
+      _logger.info(node);
+
+      nodes.add(node);
+    });
+
+    return nodes;
   }
 
   // TODO mma - to factorize with batch

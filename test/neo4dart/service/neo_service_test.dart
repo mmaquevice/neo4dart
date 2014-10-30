@@ -135,12 +135,14 @@ main() {
 
   group('findNodeById', () {
 
-    test('ok', () {
+    solo_test('ok', () {
 
       NeoService neoService = new NeoService();
 
-      return neoService.findNodeById(9).then((_) {
-        _logger.info("toto");
+      return neoService.findNodeById(9, Person).then((nodes) {
+        _logger.info(nodes);
+
+        expect(nodes.length, equals(1));
       });
     });
   });
