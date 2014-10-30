@@ -132,4 +132,16 @@ main() {
       });
     });
   });
+
+  group('findNodeById', () {
+
+    test('ok', () {
+
+      NeoService neoService = new NeoService();
+
+      return neoService.findNodeById(9).then((_) {
+        _logger.info("toto");
+      });
+    });
+  });
 }

@@ -5,7 +5,7 @@ class ResponseEntity {
   int id;
   int neoId;
   NeoType type;
-  Map data;
+  Object data;
 
   ResponseEntity(this.id, this.neoId, this.type, this.data);
 }

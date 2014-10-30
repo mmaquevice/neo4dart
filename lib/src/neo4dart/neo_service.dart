@@ -7,7 +7,7 @@ class NeoService {
   NeoClientGet neoClientGet = new NeoClientGet();
   NeoClientBatch neoClientBatch = new NeoClientBatch();
 
-  NeoClientBatchFind neoClientBatchFind = new NeoClientBatchFind();
+  TokenFindExecutor tokenFindExecutor = new TokenFindExecutor();
 
   Future insertNode(Node node) {
     return _insertNode(node, false);
@@ -56,10 +56,8 @@ class NeoService {
 
   Future findNodeById(int id) {
 
-    return neoClientBatchFind.findNodeById(id);
+    return tokenFindExecutor.findNodeById(id);
   }
-
-
 }
 
 

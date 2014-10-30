@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:logging/logging.dart';
 import 'package:quiver/core.dart';
+import 'package:quiver/collection.dart';
 
 import 'dart:mirrors';
 
@@ -28,7 +29,7 @@ part 'src/neo4dart/annotations/relationship_via.dart';
 part 'src/neo4dart/annotations/start_node.dart';
 part 'src/neo4dart/annotations/end_node.dart';
 
-part 'src/neo4dart/client/batch/neo_client_batch_find.dart';
-part 'src/neo4dart/client/batch/batch_find_token_handler.dart';
+part 'src/neo4dart/client/batch/token_find_executor.dart';
+part 'src/neo4dart/client/batch/token_find_builder.dart';
 
 
