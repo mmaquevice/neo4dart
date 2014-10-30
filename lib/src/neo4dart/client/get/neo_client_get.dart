@@ -72,17 +72,17 @@ class NeoClientGet extends NeoClient {
     List<String> optionalParameters = _getConstructorParameters(type, true);
     Map<Symbol, dynamic> optionalValuesByParameter = _getDataValuesFromParameters(optionalParameters, nodeJson['data']);
 
-    InstanceMirror instanceMirror = classMirror.newInstance(new Symbol(''), valuesByParameter.values, optionalValuesByParameter);
+    InstanceMirror instanceMirror = classMirror.newInstance(new Symbol(''), new List.from(valuesByParameter.values), optionalValuesByParameter);
     instanceMirror.setField(new Symbol('id'), _extractNodeId( nodeJson['self']));
     return instanceMirror.reflectee;
   }
 
-  String _extractNodeId(String self) {
+  int _extractNodeId(String self) {
     String idNode = self.split('/').last;
     if (idNode.isEmpty) {
       throw "Node id cannot be retrieved from : ${self}.";
     }
-    return idNode;
+    return int.parse(idNode);
   }
 
   List<String> _getConstructorParameters(Type type, bool optional) {
