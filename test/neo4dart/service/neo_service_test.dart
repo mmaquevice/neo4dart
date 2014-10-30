@@ -111,7 +111,6 @@ main() {
       NeoService neoService = new NeoService();
 
       var client200 = new MockClient((request) {
-
         var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Relationship.json');
         return new http.Response(responseBody, 200);
       });
@@ -135,14 +134,36 @@ main() {
 
   group('findNodeById', () {
 
-    solo_test('ok', () {
+    test('ok', () {
 
       NeoService neoService = new NeoService();
 
-      return neoService.findNodeById(9, Person).then((nodes) {
-        _logger.info(nodes);
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/json/findNodeById_ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
 
-        expect(nodes.length, equals(1));
+      return neoService.findNodeById(9, Person).then((node) {
+        expect(node, equals(new Person("Antonio", city: "Madrid")));
+      });
+    });
+  });
+
+  group('findNodesByIds', () {
+
+    test('ok', () {
+
+      NeoService neoService = new NeoService();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/json/findNodesByIds_ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
+
+      return neoService.findNodesByIds([9, 11], Person).then((nodes) {
+        expect(nodes, unorderedEquals([new Person("Antonio", city: "Madrid"), new Person("Lucille", city: "Paris")]));
       });
     });
   });

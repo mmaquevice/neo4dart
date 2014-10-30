@@ -55,8 +55,11 @@ class NeoService {
   }
 
   Future findNodeById(int id, Type type) {
-
     return tokenFindExecutor.findNodeById(id, type);
+  }
+
+  Future findNodesByIds(Iterable<int> ids, Type type) {
+    return tokenFindExecutor.findNodesByIds(ids, type);
   }
 }
 

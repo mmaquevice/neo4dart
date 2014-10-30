@@ -28,15 +28,33 @@ class TokenFindExecutor extends NeoClient {
   }
 
   Future findNodeById(int id, Type type) {
-
-    return executeBatch(new TokenFindBuilder().addNodeToBatch(id)).then((response) => _convertResponse(response, type));
+    return executeBatch(new TokenFindBuilder().addNodeToBatch(id)).then((response) => _convertResponseToNode(response, type));
   }
 
-  Set<Node> _convertResponse(var response, Type type) {
+  Future findNodesByIds(Iterable<int> ids, Type type) {
+    return executeBatch(new TokenFindBuilder().addNodesToBatch(ids)).then((response) => _convertResponseToNodes(response, type));
+  }
+
+  Node _convertResponseToNode(var response, Type type) {
+
+    Set<Node> nodes = _convertResponseToNodes(response, type);
+
+    if(nodes.isEmpty) {
+      return null;
+    }
+
+    if(nodes.length > 1) {
+      throw "Response contains more than one node : $nodes.";
+    }
+
+    return nodes.first;
+  }
+
+  Set<Node> _convertResponseToNodes(var response, Type type) {
 
     Set<Node> nodes = new Set();
 
-    List<ResponseEntity> responseEntities = _convertResponseToNodes(response);
+    List<ResponseEntity> responseEntities = _convertResponseToEntities(response);
 
     Multimap responsesById = new Multimap();
     responseEntities.forEach((r) {
@@ -59,97 +77,9 @@ class TokenFindExecutor extends NeoClient {
       }
 
       Node node = convertToNode(type, dataByType[NeoType.NODE]);
-      _logger.info(node);
-
       nodes.add(node);
     });
 
     return nodes;
   }
-
-  // TODO mma - to factorize with batch
-  List<ResponseEntity> _convertResponseToNodes(var response) {
-    _logger.info("Response status : ${response.statusCode}");
-
-    if (response.statusCode == 200) {
-      _logger.info("Response body : ${response.body}");
-
-      var jsonArray = new JsonDecoder().convert(response.body);
-      List<ResponseEntity> responseEntities = new List();
-      for (var json in jsonArray) {
-        responseEntities.add(_convertToResponseEntity(json));
-      }
-      return responseEntities;
-    } else {
-      _logger.severe('Error requesting neo4j : status ${response.statusCode} - ${response.body}');
-      throw "Error requesting neo4j : status ${response.statusCode}";
-    }
-  }
-
-  // TODO mma - to factorize with batch
-  ResponseEntity _convertToResponseEntity(Map json) {
-
-    if(json['body'] is Map) {
-      return _convertResponseWithBodyMap(json);
-    }
-
-    if (json['body'] is List) {
-      return _convertResponseWithBodyList(json);
-    }
-
-    throw "Neo response cannot be handled.";
-  }
-
-  ResponseEntity _convertResponseWithBodyMap(Map json) {
-    int id = json['id'];
-
-    NeoType neoType;
-    int neoId;
-    Map data;
-    Map body = json['body'];
-
-    if (body.containsKey('self')) {
-      String self = body['self'];
-      neoId = self != null ? int.parse(self.split('/').last) : null;
-      neoType = self != null ? _extractNeoType(self) : null;
-    }
-
-    if (body.containsKey('data')) {
-      data = body['data'];
-    }
-
-    return new ResponseEntity(id, neoId, neoType, data);
-  }
-
-  ResponseEntity _convertResponseWithBodyList(Map json) {
-    int id = json['id'];
-
-    String from = json['from'];
-    List<String> split = from.split('/');
-    int neoId = int.parse(split[split.length-2]);
-
-    NeoType neoType = NeoType.LABEL;
-
-    List body = json['body'];
-
-    return new ResponseEntity(id, neoId, neoType, json['body']);
-  }
-
-  NeoType _extractNeoType(String self) {
-
-    List<String> split = self.split('/');
-    String type = split[split.length - 2];
-
-    switch (type) {
-      case 'node' :
-        return NeoType.NODE;
-      case 'relationships' :
-        return NeoType.RELATIONSHIP;
-      case 'labels' :
-        return NeoType.LABEL;
-      default:
-        throw 'Response type unknown : $type.';
-    }
-  }
-
 }

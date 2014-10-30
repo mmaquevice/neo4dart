@@ -17,7 +17,7 @@ class NeoClientGet extends NeoClient {
     String label = _convertTypeToLabel(type);
     String url = "http://localhost:7474/db/data/label/${label}/nodes";
 
-    return _client.get(url).then((response) => _convertResponseToNodes(response, type));
+    return _client.get(url).then((response) => _convertResponseToEntities(response, type));
   }
 
   String _convertTypeToLabel(Type type) {
@@ -43,10 +43,10 @@ class NeoClientGet extends NeoClient {
 
     String url = "http://localhost:7474/db/data/label/${label}/nodes?${propertyKey}=${propertyValue}";
 
-    return _client.get(url).then((response) => _convertResponseToNodes(response, type));
+    return _client.get(url).then((response) => _convertResponseToEntities(response, type));
   }
 
-  List<Node> _convertResponseToNodes(var response, Type typeToConvertInto) {
+  List<Node> _convertResponseToEntities(var response, Type typeToConvertInto) {
     _logger.info("Response status : ${response.statusCode}");
 
     if (response.statusCode == 200) {

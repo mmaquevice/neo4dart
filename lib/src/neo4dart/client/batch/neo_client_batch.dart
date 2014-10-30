@@ -29,7 +29,7 @@ class NeoClientBatch extends NeoClient {
 
   _addIdToNeoEntities(var response, Set<BatchToken> batchTokens) {
 
-    List<ResponseEntity> responseEntities = _convertResponseToNodes(response);
+    List<ResponseEntity> responseEntities = _convertResponseToEntities(response);
     Map<int, ResponseEntity> responsesById = new Map.fromIterable(responseEntities, key: (k) => k.id, value: (v) => v);
 
     batchTokens.forEach((token) {
@@ -43,57 +43,5 @@ class NeoClientBatch extends NeoClient {
     });
 
     return true;
-  }
-
-  List<ResponseEntity> _convertResponseToNodes(var response) {
-    _logger.info("Response status : ${response.statusCode}");
-
-    if (response.statusCode == 200) {
-      _logger.info("Response body : ${response.body}");
-
-      var jsonArray = new JsonDecoder().convert(response.body);
-      List<ResponseEntity> responseEntities = new List();
-      for (var json in jsonArray) {
-        responseEntities.add(_convertToResponseEntity(json));
-      }
-      return responseEntities;
-    } else {
-      _logger.severe('Error requesting neo4j : status ${response.statusCode} - ${response.body}');
-      throw "Error requesting neo4j : status ${response.statusCode}";
-    }
-  }
-
-  ResponseEntity _convertToResponseEntity(Map json) {
-
-    int id = json['id'];
-
-    String from = json['from'];
-    String typeFromResponse = from != null ? from.split('/').last : null;
-    NeoType neoType;
-    switch (typeFromResponse) {
-      case 'node' :
-        neoType = NeoType.NODE;
-        break;
-      case 'relationships' :
-        neoType = NeoType.RELATIONSHIP;
-        break;
-      case 'labels' :
-        neoType = NeoType.LABEL;
-        break;
-      default:
-        throw 'Response type unknown : $typeFromResponse.';
-    }
-
-    int neoId;
-    Map data;
-    Map body = json['body'];
-    if(body != null) {
-      String self = body['self'];
-      neoId = self != null ? int.parse(self.split('/').last) : null;
-
-      data = body['data'];
-    }
-
-    return new ResponseEntity(id, neoId, neoType, data);
   }
 }
