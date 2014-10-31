@@ -22,11 +22,11 @@ class TokenFindExecutor extends NeoClient {
 
     Set<Node> nodes = _convertResponseToNodes(response, type);
 
-    if(nodes.isEmpty) {
+    if (nodes.isEmpty) {
       return null;
     }
 
-    if(nodes.length > 1) {
+    if (nodes.length > 1) {
       throw "Response contains more than one node : $nodes.";
     }
 
@@ -37,32 +37,55 @@ class TokenFindExecutor extends NeoClient {
 
     Set<Node> nodes = new Set();
 
-    List<ResponseEntity> responseEntities = _convertResponseToEntities(response);
+    List<AroundNodeResponse> aroundNodes = _convertResponse(response);
 
-    Multimap responsesById = new Multimap();
-    responseEntities.forEach((r) {
-      responsesById.add(r.neoId, r);
-    });
+    aroundNodes.forEach((aroundNode) {
 
-    responsesById.forEachKey((k, v) {
-      Map<NeoType, ResponseEntity> dataByType = new Map.fromIterable(v, key: (k) => k.type, value: (v) => v);
+      LabelResponse labelResponse = aroundNode.label;
+      List<String> labels = labelResponse.labels;
 
-      List<String> labels = dataByType[NeoType.LABEL].data;
-
-      if(labels.length == 0) {
-        throw "Node <$k> is not labelled.";
+      if (labels.length == 0) {
+        throw "Node <${aroundNode.node.idNode}> is not labelled.";
       }
-      if(labels.length > 1) {
-        throw "Node <$k> has multiple labels, this is not currently supported.";
+      if (labels.length > 1) {
+        throw "Node <${aroundNode.node.idNode}> has multiple labels, this is not currently supported.";
       }
-      if(!type.toString().endsWith(labels.first)) {
-        throw "Node <$k> has a label <${labels.first}> not matching its type <${type.toString()}>.";
+      if (!type.toString().endsWith(labels.first)) {
+        throw "Node <${aroundNode.node.idNode}> has a label <${labels.first}> not matching its type <${type.toString()}>.";
       }
 
-      Node node = convertToNode(type, dataByType[NeoType.NODE]);
+      NodeResponse nodeResponse = aroundNode.node;
+      Node node = convertToNode(type, nodeResponse);
       nodes.add(node);
     });
 
     return nodes;
   }
+
+//  Future findNodeAndRelationsById(int id, Type type) {
+//    executeBatch(new TokenFindBuilder().addNodeToBatch(id)).then((response) {
+//
+//      _convertResponseToNode(response, type);
+//
+//
+//    });
+//
+//
+//    return null;
+//  }
+//
+//  Node _convertResponseToNodeWithRelations(var response, Type type) {
+//
+//    Set<Node> nodes = _convertResponseToNodes(response, type);
+//
+//    if (nodes.isEmpty) {
+//      return null;
+//    }
+//
+//    if (nodes.length > 1) {
+//      throw "Response contains more than one node : $nodes.";
+//    }
+//
+//    return nodes.first;
+//  }
 }

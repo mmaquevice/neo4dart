@@ -22,6 +22,11 @@ part 'src/neo4dart/model/relation.dart';
 part 'src/neo4dart/model/neo_entity.dart';
 part 'src/neo4dart/model/neo_type.dart';
 part 'src/neo4dart/model/response_entity.dart';
+part 'src/neo4dart/model/response/neo_response.dart';
+part 'src/neo4dart/model/response/label_response.dart';
+part 'src/neo4dart/model/response/node_response.dart';
+part 'src/neo4dart/model/response/relation_response.dart';
+part 'src/neo4dart/model/response/around_node_response.dart';
 part 'src/neo4dart/client/batch/entity/relationship_with_nodes.dart';
 part 'src/neo4dart/annotations/direction.dart';
 part 'src/neo4dart/annotations/relationship.dart';
@@ -33,5 +38,3 @@ part 'src/neo4dart/client/batch/token_find_executor.dart';
 part 'src/neo4dart/client/batch/token_find_builder.dart';
 
 part 'src/neo4dart/util/reflection_util.dart';
-
-

@@ -1,17 +1,17 @@
 part of neo4dart;
 
 
-Node convertToNode(Type type, ResponseEntity response) {
+Node convertToNode(Type type, NodeResponse nodeResponse) {
 
   ClassMirror classMirror = reflectClass(type);
   List<String> parameters = _getConstructorParameters(type, false);
-  Map<Symbol, dynamic> valuesByParameter = _getDataValuesFromParameters(parameters, response.data);
+  Map<Symbol, dynamic> valuesByParameter = _getDataValuesFromParameters(parameters, nodeResponse.data);
 
   List<String> optionalParameters = _getConstructorParameters(type, true);
-  Map<Symbol, dynamic> optionalValuesByParameter = _getDataValuesFromParameters(optionalParameters, response.data);
+  Map<Symbol, dynamic> optionalValuesByParameter = _getDataValuesFromParameters(optionalParameters, nodeResponse.data);
 
   InstanceMirror instanceMirror = classMirror.newInstance(new Symbol(''), new List.from(valuesByParameter.values), optionalValuesByParameter);
-  instanceMirror.setField(new Symbol('id'), response.neoId);
+  instanceMirror.setField(new Symbol('id'), nodeResponse.idNode);
   return instanceMirror.reflectee;
 }
 

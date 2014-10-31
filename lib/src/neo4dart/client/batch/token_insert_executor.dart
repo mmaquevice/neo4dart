@@ -30,14 +30,25 @@ class TokenInsertExecutor extends NeoClient {
 
   _addIdToNeoEntities(var response, Set<BatchToken> batchTokens) {
 
-    List<ResponseEntity> responseEntities = _convertResponseToEntities(response);
-    Map<int, ResponseEntity> responsesById = new Map.fromIterable(responseEntities, key: (k) => k.id, value: (v) => v);
+    List<AroundNodeResponse> aroundNodeResponses = _convertResponse(response);
+
+    Map<int, int> neoIdByRequestId = new Map();
+    aroundNodeResponses.forEach((r) {
+      if(r.node != null) {
+        neoIdByRequestId[r.node.requestId] = r.node.idNode;
+      }
+
+      if(r.relations != null) {
+        r.relations.forEach((rel) {
+          neoIdByRequestId[rel.requestId] = rel.idRelation;
+        });
+      }
+    });
 
     batchTokens.forEach((token) {
-      if (responsesById.containsKey(token.id)) {
+      if (neoIdByRequestId.containsKey(token.id)) {
         if (token.neoEntity != null) {
-          _logger.info(token.neoEntity);
-          token.neoEntity.id = responsesById[token.id].neoId;
+          token.neoEntity.id = neoIdByRequestId[token.id];
           _logger.info('Matching ${token.id} to ${token.neoEntity.id}.');
         }
       }
