@@ -101,7 +101,7 @@ class NeoClient {
       if (json['body'] is Map) {
         return _convertResponseWithBodyMap(json);
       }
-
+      // TODO mma - to iterate on List
       if (json['body'] is List) {
         return _convertResponseWithBodyList(json);
       }
@@ -142,6 +142,7 @@ class NeoClient {
       int requestId = json['id'];
 
       String from = json['from'];
+
       List<String> split = from.split('/');
       int neoId = int.parse(split[split.length - 2]);
 

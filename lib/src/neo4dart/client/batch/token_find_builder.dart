@@ -14,4 +14,8 @@ class TokenFindBuilder {
     nodeIds.forEach((id) => tokens.addAll(addNodeToBatch(id)));
     return tokens;
   }
+
+  BatchToken addRelationsToBatch(int nodeId) {
+    return new BatchToken("GET", "/node/${nodeId}/relationships/all", null);
+  }
 }
