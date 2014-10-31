@@ -12,9 +12,9 @@ import 'package:quiver/collection.dart';
 import 'dart:mirrors';
 
 part 'src/neo4dart/client/batch/entity/batch_token.dart';
-part 'src/neo4dart/client/batch/batch_token_handler.dart';
+part 'src/neo4dart/client/batch/token_insert_builder.dart';
 part 'src/neo4dart/client/neo_client.dart';
-part 'src/neo4dart/client/batch/neo_client_batch.dart';
+part 'src/neo4dart/client/batch/token_insert_executor.dart';
 part 'src/neo4dart/client/get/neo_client_get.dart';
 part 'src/neo4dart/neo_service.dart';
 part 'src/neo4dart/model/node.dart';

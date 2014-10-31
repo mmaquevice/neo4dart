@@ -34,7 +34,7 @@ main() {
           var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Relationship.json');
           return new http.Response(responseBody, 200);
         });
-        neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
+        neoService.tokenInsertExecutor = new TokenInsertExecutor.withClient(client200);
 
         Person lucille = new Person("Lucille", city:"Paris");
         Person matthieu = new Person("Matthieu", city:"Paris");
@@ -59,7 +59,7 @@ main() {
           var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Set_Relationship.json');
           return new http.Response(responseBody, 200);
         });
-        neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
+        neoService.tokenInsertExecutor = new TokenInsertExecutor.withClient(client200);
 
         Person matthieu = new Person("Matthieu", city:"Paris");
         Person mikael = new Person("Mikael", city:"Budapest");
@@ -83,7 +83,7 @@ main() {
           var responseBody = util.readFile('test/neo4dart/service/json/insertNode_RelationshipVia.json');
           return new http.Response(responseBody, 200);
         });
-        neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
+        neoService.tokenInsertExecutor = new TokenInsertExecutor.withClient(client200);
 
         Person lucille = new Person("Lucille", city:"Paris");
         Person romeo = new Person("Roméo", city:"Roma");
@@ -114,7 +114,7 @@ main() {
         var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Relationship.json');
         return new http.Response(responseBody, 200);
       });
-      neoService.neoClientBatch = new NeoClientBatch.withClient(client200);
+      neoService.tokenInsertExecutor = new TokenInsertExecutor.withClient(client200);
 
       Person lucille = new Person("Lucille", city:"Paris");
       Person matthieu = new Person("Matthieu", city:"Paris");

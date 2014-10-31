@@ -4,28 +4,11 @@ class TokenFindExecutor extends NeoClient {
 
   final _logger = new Logger("TokenFindExecutor");
 
-  http.Client _client;
-
   TokenFindExecutor() {
-    _client = new http.Client();
+    client = new http.Client();
   }
 
-  TokenFindExecutor.withClient(this._client);
-
-  Future executeBatch(Set<BatchToken> batchTokens) {
-
-    List data = _convertBatchTokensToJsonArray(batchTokens);
-    _logger.info(data);
-
-    return _client.post("http://localhost:7474/db/data/batch", body : '${data}');
-  }
-
-  List _convertBatchTokensToJsonArray(Set<BatchToken> batchTokens) {
-    return batchTokens.map((batchToken) {
-      _logger.info(batchToken.body);
-      return new JsonEncoder().convert(batchToken);
-    }).toList();
-  }
+  TokenFindExecutor.withClient(client) : super.withClient(client);
 
   Future findNodeById(int id, Type type) {
     return executeBatch(new TokenFindBuilder().addNodeToBatch(id)).then((response) => _convertResponseToNode(response, type));

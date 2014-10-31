@@ -1,4 +1,4 @@
-library neo4dart.client.batch.batch_token_handler_test;
+library neo4dart.client.batch.token_insert_builder_test;
 
 import 'package:unittest/unittest.dart';
 import 'package:neo4dart/neo4dart.dart';
@@ -16,14 +16,14 @@ main() {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 
-  final _logger = new Logger("neo4dart.client.batch.batch_token_handler_test");
+  final _logger = new Logger("neo4dart.client.batch.token_insert_builder_test");
 
   group('addNodeToBatch', () {
 
     test('ok', () {
         Node node = new Person("Claude", city: "Gagny");
 
-        BatchTokenHandler handler = new BatchTokenHandler();
+        TokenInsertBuilder handler = new TokenInsertBuilder();
         BatchToken token = handler.addNodeToBatch(node);
 
         BatchToken expected = new BatchToken("POST", "/node", {"name" : "Claude", "city" : "Gagny"});
@@ -39,7 +39,7 @@ main() {
       nodes.add(new Person("Claude", city: "Gagny"));
       nodes.add(new Person("Liliane", city: "Gagny"));
 
-      BatchTokenHandler handler = new BatchTokenHandler();
+      TokenInsertBuilder handler = new TokenInsertBuilder();
       Set<BatchToken> tokens = handler.addNodesToBatch(nodes);
 
       List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Claude", "city" : "Gagny"}),
@@ -56,7 +56,7 @@ main() {
       eduardo.id = 100;
       nodes.add(eduardo);
 
-      BatchTokenHandler handler = new BatchTokenHandler();
+      TokenInsertBuilder handler = new TokenInsertBuilder();
       Set<BatchToken> tokens = handler.addNodesToBatch(nodes);
 
       List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Claude", "city": "Gagny"}, id: 2)];
@@ -75,7 +75,7 @@ main() {
         var tournesol = new Person("Tournesol", city: "Laboratory");
         haddock.coworkers = [tournesol];
 
-        BatchTokenHandler handler = new BatchTokenHandler();
+        TokenInsertBuilder handler = new TokenInsertBuilder();
         Set<BatchToken> tokens = handler.addNodeAndRelationsToBatch(tintin, true);
 
         List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Tintin", "city": "Tibet"}, id: 0),
@@ -97,7 +97,7 @@ main() {
      var tournesol = new Person("Tournesol", city: "Laboratory");
      haddock.coworkers = [tournesol];
 
-     BatchTokenHandler handler = new BatchTokenHandler();
+     TokenInsertBuilder handler = new TokenInsertBuilder();
      Set<BatchToken> tokens = handler.addNodeAndRelationsToBatch(tintin, false);
 
      List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Tintin", "city": "Tibet"}, id: 0),
@@ -117,7 +117,7 @@ main() {
       var haddock = new Person("Haddock", city: "Boat");
       tintin.coworkers = [milou, haddock];
 
-      BatchTokenHandler handler = new BatchTokenHandler();
+      TokenInsertBuilder handler = new TokenInsertBuilder();
       Set<BatchToken> tokens = handler.addNodeAndRelationsToBatch(tintin, false);
 
       List<BatchToken> expected = [new BatchToken("POST", "/node/${tintin.id}/relationships", {'to': '/node/${milou.id}', 'data': null, 'type': 'works with'}),
@@ -139,7 +139,7 @@ main() {
       Person tournesol = new Person("Tournesol", city: "Laboratory");
       haddock.coworkers = [tournesol];
 
-      BatchTokenHandler handler = new BatchTokenHandler();
+      TokenInsertBuilder handler = new TokenInsertBuilder();
       Set<BatchToken> tokens = handler.addNodesAndRelationsToBatch([tintin, haddock], true);
 
       List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Tintin", "city": "Tibet"}, id: 0),
@@ -166,7 +166,7 @@ main() {
       Person eduardo = new Person("Eduardo", city: "Moscow");
       liliana.eternalLovers.add(new Love(liliana, eduardo, "so so so so", "1919"));
 
-      BatchTokenHandler handler = new BatchTokenHandler();
+      TokenInsertBuilder handler = new TokenInsertBuilder();
       Set<BatchToken> tokens = handler.addNodeAndRelationsViaToBatch(romeo, true);
 
       List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Romeo", "city": "Roma"}, id: 0),
@@ -191,7 +191,7 @@ main() {
       Person eduardo = new Person("Eduardo", city: "Moscow");
       liliana.eternalLovers.add(new Love(liliana, eduardo, "so so so so", "1919"));
 
-      BatchTokenHandler handler = new BatchTokenHandler();
+      TokenInsertBuilder handler = new TokenInsertBuilder();
       Set<BatchToken> tokens = handler.addNodeAndRelationsViaToBatch(romeo, false);
 
       List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Romeo", "city": "Roma"}, id: 0),
@@ -212,7 +212,7 @@ main() {
       love.id = 100;
       romeo.eternalLovers.add(love);
 
-      BatchTokenHandler handler = new BatchTokenHandler();
+      TokenInsertBuilder handler = new TokenInsertBuilder();
       Set<BatchToken> tokens = handler.addNodeAndRelationsViaToBatch(romeo, false);
 
       List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Romeo", "city": "Roma"}, id: 0),
@@ -233,7 +233,7 @@ main() {
       Person eduardo = new Person("Eduardo", city: "Moscow");
       liliana.eternalLovers.add(new Love(liliana, eduardo, "so so so so", "1919"));
 
-      BatchTokenHandler handler = new BatchTokenHandler();
+      TokenInsertBuilder handler = new TokenInsertBuilder();
       Set<BatchToken> tokens = handler.addNodesAndRelationsViaToBatch([romeo, liliana], true);
 
       List<BatchToken> expected = [new BatchToken("POST", "/node", {"name" : "Romeo", "city": "Roma"}, id: 0),

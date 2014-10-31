@@ -4,6 +4,29 @@ class NeoClient {
 
   final _logger = new Logger("NeoClient");
 
+  http.Client client;
+
+  NeoClient() {
+    client = new http.Client();
+  }
+
+  NeoClient.withClient(this.client);
+
+  Future executeBatch(Set<BatchToken> batchTokens) {
+
+    List data = _convertBatchTokensToJsonArray(batchTokens);
+    _logger.info(data);
+
+    return client.post("http://localhost:7474/db/data/batch", body : '${data}');
+  }
+
+  List _convertBatchTokensToJsonArray(Set<BatchToken> batchTokens) {
+    return batchTokens.map((batchToken) {
+      _logger.info(batchToken.body);
+      return new JsonEncoder().convert(batchToken);
+    }).toList();
+  }
+
   List<ResponseEntity> _convertResponseToEntities(var response) {
     _logger.info("Response status : ${response.statusCode}");
 
