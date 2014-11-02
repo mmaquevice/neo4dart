@@ -82,7 +82,7 @@ class NeoClient {
         var jsonArray = new JsonDecoder().convert(response.body);
         List<NeoResponse> responseEntities = new List();
         for (var json in jsonArray) {
-          responseEntities.add(_convertToResponseEntity(json));
+          responseEntities.addAll(_convertToResponseEntity(json));
         }
         return responseEntities;
       } else {
@@ -91,29 +91,38 @@ class NeoClient {
       }
     }
 
-    NeoResponse _convertToResponseEntity(Map json) {
+    List<NeoResponse> _convertToResponseEntity(Map json) {
 
       if (!json.containsKey('body')) {
-        // TODO mma - to build
-        return new LabelResponse(null, null, requestId: json['id']);
+        return [];
       }
 
-      if (json['body'] is Map) {
-        return _convertResponseWithBodyMap(json);
-      }
-      // TODO mma - to iterate on List
-      if (json['body'] is List) {
-        return _convertResponseWithBodyList(json);
+      List<NeoResponse> responses = new List();
+
+      var body = json['body'];
+      if (body is List) {
+        body.forEach((bodyElement) {
+          if(bodyElement is Map) {
+            responses.add(_convertResponseWithBodyMap(bodyElement, json['id']));
+          } else if(bodyElement is String) {
+
+            String from = json['from'];
+            List<String> split = from.split('/');
+            int neoId = int.parse(split[split.length - 2]);
+            responses.add(new LabelResponse(neoId, [bodyElement], requestId: json['id']));
+          }
+        });
+      } else if (body is Map) {
+        responses.add(_convertResponseWithBodyMap(body, json['id']));
+      } else {
+        throw "Neo response cannot be handled.";
       }
 
-      throw "Neo response cannot be handled.";
+      return responses;
     }
 
-    NeoResponse _convertResponseWithBodyMap(Map json) {
+    NeoResponse _convertResponseWithBodyMap(Map body, int requestId) {
 
-      int requestId = json['id'];
-
-      Map body = json['body'];
       String self = body['self'];
       NeoType neoType = _extractNeoType(self);
       int neoId = int.parse(self.split('/').last);
@@ -136,21 +145,6 @@ class NeoClient {
       }
 
       throw "Neo response cannot be handled.";
-    }
-
-    NeoResponse _convertResponseWithBodyList(Map json) {
-      int requestId = json['id'];
-
-      String from = json['from'];
-
-      List<String> split = from.split('/');
-      int neoId = int.parse(split[split.length - 2]);
-
-      NeoType neoType = NeoType.LABEL;
-
-      List body = json['body'];
-
-      return new LabelResponse(neoId, body, requestId: requestId);
     }
 
     NeoType _extractNeoType(String self) {

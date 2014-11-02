@@ -174,7 +174,7 @@ main() {
 //
 //      NeoService neoService = new NeoService();
 //
-//      return neoService.findNodeAndRelationsById(180, Person).then((nodes) {
+//      return neoService.findNodeAndRelationsById(11, Person).then((nodes) {
 //        expect(nodes, unorderedEquals([new Person("Antonio", city: "Madrid"), new Person("Lucille", city: "Paris")]));
 //      });
 //    });
