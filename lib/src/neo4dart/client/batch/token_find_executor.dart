@@ -4,8 +4,11 @@ class TokenFindExecutor extends NeoClient {
 
   final _logger = new Logger("TokenFindExecutor");
 
-  Map<int, Node> nodesById = {
-  };
+  Map<int, Node> nodesWithRelationsById = {};
+
+  Map<int, Node> nodesWithoutRelationsById = {};
+
+  Map<int, Node> nodesInProgressById = {};
 
   TokenFindExecutor() {
     client = new http.Client();
@@ -81,37 +84,64 @@ class TokenFindExecutor extends NeoClient {
         List<AroundNodeResponse> aroundNodes = _convertResponse(response);
         _logger.info(aroundNodes);
 
-        Node nodeWithRelations = _convertResponsesToNodeWithRelations(id, aroundNodes, type);
+        Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
+        Node nodeWithRelations = _convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type);
         return nodeWithRelations;
       });
     });
   }
 
-  Node _convertResponsesToNodeWithRelations(int id, List<AroundNodeResponse> aroundNodes, Type type) {
+  Node _convertResponsesToNodeWithRelations(int id, Map<int, AroundNodeResponse> aroundNodeById, {Type typeNode}) {
 
-    Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
+    if (nodesWithRelationsById.containsKey(id)) {
+      return nodesWithRelationsById[id];
+    }
+
+    if (nodesInProgressById.containsKey(id)) {
+      return nodesInProgressById[id];
+    }
+
+    if(!aroundNodeById.containsKey(id)) {
+      return null;
+    }
+
     AroundNodeResponse aroundNode = aroundNodeById[id];
-
-    Node node = _convertToNode(type, aroundNode.node.data, aroundNode.node.idNode);
-    nodesById[node.id] = node;
-    InstanceMirror instanceNode = reflect(node);
+    Node node = _retrieveNodeWithAroundNodeResponseData(id, aroundNode, typeNode: typeNode);
+    nodesInProgressById[id] = node;
 
     aroundNode.relations.forEach((relationResponse) {
+      if(aroundNodeById.containsKey(relationResponse.idStartNode) && aroundNodeById.containsKey(relationResponse.idEndNode)) {
+        _bindResponseToNode(node, relationResponse, aroundNodeById[relationResponse.idStartNode], aroundNodeById[relationResponse.idEndNode]);
 
-      VariableMirror nodeFieldForRelation = _findRelationField(type, relationResponse.type);
-      if (nodeFieldForRelation.type.isSubtypeOf(reflectType(Iterable))) {
-
-        if (nodeFieldForRelation.type.isAssignableTo(reflectType(Set)) || nodeFieldForRelation.type.isAssignableTo(reflectType(List))) {
-          // TODO mma : check if typeNeoEntity is really a neo entity
-          Type typeNeoEntity = nodeFieldForRelation.type.typeArguments.map((t) => t.reflectedType).first;
-          NeoEntity neoEntity = _convertToNeoEntity(node, reflectType(typeNeoEntity), relationResponse,  aroundNodeById[relationResponse.idStartNode],  aroundNodeById[relationResponse.idEndNode]);
-          _addNeoEntityToCollectionField(node, nodeFieldForRelation, neoEntity);
+        if(id != relationResponse.idStartNode) {
+          _convertResponsesToNodeWithRelations(relationResponse.idStartNode, aroundNodeById);
         }
-      } else {
-        NeoEntity neoEntity = _convertToNeoEntity(node, nodeFieldForRelation.type, relationResponse,  aroundNodeById[relationResponse.idStartNode],  aroundNodeById[relationResponse.idEndNode]);
-        instanceNode.setField(nodeFieldForRelation.simpleName, neoEntity);
+
+        if(id != relationResponse.idEndNode) {
+          _convertResponsesToNodeWithRelations(relationResponse.idEndNode, aroundNodeById);
+        }
       }
     });
+
+    nodesWithRelationsById[id] = node;
+    return node;
+  }
+
+  Node _bindResponseToNode(Node node, RelationResponse relationResponse, AroundNodeResponse startNode, AroundNodeResponse endNode) {
+
+    VariableMirror nodeFieldForRelation = _findRelationField(reflect(node).type.reflectedType, relationResponse.type);
+    if (nodeFieldForRelation.type.isSubtypeOf(reflectType(Iterable))) {
+
+      if (nodeFieldForRelation.type.isAssignableTo(reflectType(Set)) || nodeFieldForRelation.type.isAssignableTo(reflectType(List))) {
+        // TODO mma : check if typeNeoEntity is really a neo entity
+        Type typeNeoEntity = nodeFieldForRelation.type.typeArguments.map((t) => t.reflectedType).first;
+        NeoEntity neoEntity = _convertToNeoEntity(node, reflectType(typeNeoEntity), relationResponse,  startNode,  endNode);
+        _addNeoEntityToCollectionField(node, nodeFieldForRelation, neoEntity);
+      }
+    } else {
+      NeoEntity neoEntity = _convertToNeoEntity(node, nodeFieldForRelation.type, relationResponse,  startNode,  endNode);
+      reflect(node).setField(nodeFieldForRelation.simpleName, neoEntity);
+    }
 
     return node;
   }
@@ -120,7 +150,7 @@ class TokenFindExecutor extends NeoClient {
     if (typeNeoEntity.isSubtypeOf(reflectType(Node))) {
       // TODO mma : check Direction
       if (node.id != relationResponse.idEndNode) {
-        return _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, typeNeoEntity.reflectedType, endNode);
+        return _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, endNode, typeNode: typeNeoEntity.reflectedType);
       }
     }
 
@@ -152,8 +182,8 @@ class TokenFindExecutor extends NeoClient {
 
     Relation relation = convertToRelation(typeRelation, relationResponse);
 
-    Node startNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idStartNode, _findTypesAnnotatedBy(StartNode, relation).first, startAroundNodeResponse);
-    Node endNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, _findTypesAnnotatedBy(EndNode, relation).first, endAroundNodeResponse);
+    Node startNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idStartNode, startAroundNodeResponse, typeNode : _findTypesAnnotatedBy(StartNode, relation).first);
+    Node endNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, endAroundNodeResponse, typeNode : _findTypesAnnotatedBy(EndNode, relation).first);
 
     InstanceMirror relationMirror = reflect(relation);
     relationMirror.setField(_findSymbolsAnnotatedBy(StartNode, relation).first, startNode);
@@ -162,14 +192,18 @@ class TokenFindExecutor extends NeoClient {
     return relation;
   }
 
-  Node _retrieveNodeWithAroundNodeResponseData(int idNode, Type typeNode, AroundNodeResponse aroundNode) {
+  Node _retrieveNodeWithAroundNodeResponseData(int idNode, AroundNodeResponse aroundNode, {Type typeNode}) {
 
-    if (nodesById.containsKey(idNode)) {
-      return nodesById[idNode];
+    if (nodesWithoutRelationsById.containsKey(idNode)) {
+      return nodesWithoutRelationsById[idNode];
+    }
+
+    if(typeNode == null) {
+      throw 'Node type is  null for node <$idNode>.';
     }
 
     Node node = _convertToNode(typeNode, aroundNode.node.data, aroundNode.node.idNode);
-    nodesById[idNode] = node;
+    nodesWithoutRelationsById[idNode] = node;
     return node;
   }
 
@@ -186,32 +220,5 @@ class TokenFindExecutor extends NeoClient {
     });
 
     return nodeIds;
-  }
-
-  Node _convertResponseToNodeWithRelations(var response, Type type) {
-
-    List<AroundNodeResponse> aroundNodes = _convertResponse(response);
-
-    aroundNodes.forEach((aroundNode) {
-
-      LabelResponse labelResponse = aroundNode.label;
-      List<String> labels = labelResponse.labels;
-
-      if (labels.length == 0) {
-        throw "Node <${aroundNode.node.idNode}> is not labelled.";
-      }
-      if (labels.length > 1) {
-        throw "Node <${aroundNode.node.idNode}> has multiple labels, this is not currently supported.";
-      }
-      if (!type.toString().endsWith(labels.first)) {
-        throw "Node <${aroundNode.node.idNode}> has a label <${labels.first}> not matching its type <${type.toString()}>.";
-      }
-
-      NodeResponse nodeResponse = aroundNode.node;
-      Node node = convertToNode(type, nodeResponse);
-      nodes.add(node);
-    });
-
-    return nodes.first;
   }
 }

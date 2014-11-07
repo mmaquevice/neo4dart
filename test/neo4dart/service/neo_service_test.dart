@@ -202,7 +202,7 @@ main() {
 //
 //      NeoService neoService = new NeoService();
 //
-//      return neoService.findNodeAndRelationsById(24257, Person).then((node) {
+//      return neoService.findNodeAndRelationsById(85, Person).then((node) {
 //
 //        Person lucille = new Person('Lucille', city: 'Paris');
 //        lucille.eternalLovers.add(new Love(lucille, new Person('Antonio', city: 'Madrid'), 'Muchos', '1984'));
