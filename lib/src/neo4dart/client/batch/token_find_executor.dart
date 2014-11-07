@@ -102,62 +102,51 @@ class TokenFindExecutor extends NeoClient {
       if (nodeFieldForRelation.type.isSubtypeOf(reflectType(Iterable))) {
 
         if (nodeFieldForRelation.type.isAssignableTo(reflectType(Set)) || nodeFieldForRelation.type.isAssignableTo(reflectType(List))) {
-          // TODO mma : check if typeRelation is really a relation
-          Type typeRelation = nodeFieldForRelation.type.typeArguments.map((t) => t.reflectedType).first;
-
-          if (reflectType(typeRelation).isSubtypeOf(reflectType(Relation))) {
-            Relation relation = _createRelationWithNodes(typeRelation, relationResponse, aroundNodeById[relationResponse.idStartNode], aroundNodeById[relationResponse.idEndNode]);
-
-            var nodeFieldForRelationInstance = instanceNode.getField(nodeFieldForRelation.simpleName).reflectee;
-            if(nodeFieldForRelationInstance == null) {
-              if(nodeFieldForRelation.type.isAssignableTo(reflectType(Set))) {
-                Set set = new Set.from([relation]);
-                instanceNode.setField(nodeFieldForRelation.simpleName, set);
-              }
-
-              if(nodeFieldForRelation.type.isAssignableTo(reflectType(List))) {
-                instanceNode.setField(nodeFieldForRelation.simpleName, [relation]);
-              }
-            } else {
-              nodeFieldForRelationInstance.add(relation);
-            }
-          } else if (reflectType(typeRelation).isSubtypeOf(reflectType(Node))) {
-            if (node.id != relationResponse.idEndNode) {
-              Node nodeRelated = _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, typeRelation, aroundNodeById[relationResponse.idEndNode]);
-
-              var nodeFieldForRelationInstance = instanceNode.getField(nodeFieldForRelation.simpleName).reflectee;
-              if(nodeFieldForRelationInstance == null) {
-                if(nodeFieldForRelation.type.isAssignableTo(reflectType(Set))) {
-                  Set set = new Set.from([nodeRelated]);
-                  instanceNode.setField(nodeFieldForRelation.simpleName, set);
-                }
-
-                if(nodeFieldForRelation.type.isAssignableTo(reflectType(List))) {
-                  instanceNode.setField(nodeFieldForRelation.simpleName, [nodeRelated]);
-                }
-              } else {
-                nodeFieldForRelationInstance.add(nodeRelated);
-              }
-            }
-          }
-        } else {
-          throw 'Field $nodeFieldForRelation not handled.';
+          // TODO mma : check if typeNeoEntity is really a neo entity
+          Type typeNeoEntity = nodeFieldForRelation.type.typeArguments.map((t) => t.reflectedType).first;
+          NeoEntity neoEntity = _convertToNeoEntity(node, reflectType(typeNeoEntity), relationResponse,  aroundNodeById[relationResponse.idStartNode],  aroundNodeById[relationResponse.idEndNode]);
+          _addNeoEntityToCollectionField(node, nodeFieldForRelation, neoEntity);
         }
-      } else if (nodeFieldForRelation.type.isSubtypeOf(reflectType(Node))) {
-        if (node.id != relationResponse.idEndNode) {
-          Node nodeRelated = _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, nodeFieldForRelation.type.reflectedType, aroundNodeById[relationResponse.idEndNode]);
-          instanceNode.setField(nodeFieldForRelation.simpleName, nodeRelated);
-        }
-      } else if (nodeFieldForRelation.type.isSubtypeOf(reflectType(Relation))) {
-        if (node.id != relationResponse.idEndNode) {
-          Relation relation = _createRelationWithNodes(nodeFieldForRelation.type.reflectedType, relationResponse, aroundNodeById[relationResponse.idStartNode], aroundNodeById[relationResponse.idEndNode]);
-          instanceNode.setField(nodeFieldForRelation.simpleName, relation);
-        }
+      } else {
+        NeoEntity neoEntity = _convertToNeoEntity(node, nodeFieldForRelation.type, relationResponse,  aroundNodeById[relationResponse.idStartNode],  aroundNodeById[relationResponse.idEndNode]);
+        instanceNode.setField(nodeFieldForRelation.simpleName, neoEntity);
       }
     });
 
     return node;
   }
+
+  NeoEntity _convertToNeoEntity(Node node, TypeMirror typeNeoEntity, RelationResponse relationResponse, AroundNodeResponse startNode, AroundNodeResponse endNode) {
+    if (typeNeoEntity.isSubtypeOf(reflectType(Node))) {
+      // TODO mma : check Direction
+      if (node.id != relationResponse.idEndNode) {
+        return _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, typeNeoEntity.reflectedType, endNode);
+      }
+    }
+
+    if (typeNeoEntity.isSubtypeOf(reflectType(Relation))) {
+      return _createRelationWithNodes(typeNeoEntity.reflectedType, relationResponse, startNode, endNode);
+    }
+
+    return null;
+  }
+
+  _addNeoEntityToCollectionField(Node node, VariableMirror field, NeoEntity neoEntity) {
+    var nodeFieldForRelationInstance = reflect(node).getField(field.simpleName).reflectee;
+    if (nodeFieldForRelationInstance == null) {
+      if (field.type.isAssignableTo(reflectType(Set))) {
+        Set set = new Set.from([neoEntity]);
+        reflect(node).setField(field.simpleName, set);
+      }
+
+      if (field.type.isAssignableTo(reflectType(List))) {
+        reflect(node).setField(field.simpleName, [neoEntity]);
+      }
+    } else {
+      nodeFieldForRelationInstance.add(neoEntity);
+    }
+  }
+
 
   Relation _createRelationWithNodes(Type typeRelation, RelationResponse relationResponse, AroundNodeResponse startAroundNodeResponse, AroundNodeResponse endAroundNodeResponse) {
 
