@@ -1,5 +1,7 @@
 library neo4dart.service.neo_service_test;
 
+import 'dart:convert';
+
 import 'package:unittest/unittest.dart';
 import 'package:neo4dart/neo4dart.dart';
 
@@ -173,6 +175,18 @@ main() {
     test('ok', () {
 
       NeoService neoService = new NeoService();
+
+      var client200 = new MockClient((request) {
+        var json = new JsonDecoder().convert(request.body);
+        if(json.length == 1) {
+          var responseBody = util.readFile('test/neo4dart/service/json/findNodeAndRelationsById_relationships.json');
+          return new http.Response(responseBody, 200);
+        }
+
+        var responseBody = util.readFile('test/neo4dart/service/json/findNodeAndRelationsById_ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.tokenFindExecutor = new TokenFindExecutor.withClient(client200);
 
       return neoService.findNodeAndRelationsById(11, Person).then((node) {
         Person lucille = node;
