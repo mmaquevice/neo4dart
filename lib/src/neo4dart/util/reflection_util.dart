@@ -1,6 +1,30 @@
 part of neo4dart;
 
 
+Relation convertToRelation(Type type, RelationResponse relationResponse) {
+
+  ClassMirror classMirror = reflectClass(type);
+  List<String> parameters = _getConstructorParameters(type, false);
+  Map<Symbol, dynamic> valuesByParameter = _getDataValuesFromParameters(parameters, relationResponse.data);
+
+  List<String> optionalParameters = _getConstructorParameters(type, true);
+  Map<Symbol, dynamic> optionalValuesByParameter = _getDataValuesFromParameters(optionalParameters, relationResponse.data);
+
+  List positionalArguments = [];
+  for (String parameter in parameters) {
+    Symbol paramSymbol = new Symbol(parameter);
+    if (valuesByParameter.containsKey(paramSymbol)) {
+      positionalArguments.add(valuesByParameter[paramSymbol]);
+    } else {
+      positionalArguments.add(null);
+    }
+  }
+
+  InstanceMirror instanceMirror = classMirror.newInstance(new Symbol(''), positionalArguments, optionalValuesByParameter);
+  instanceMirror.setField(new Symbol('id'), relationResponse.idRelation);
+  return instanceMirror.reflectee;
+}
+
 Node convertToNode(Type type, NodeResponse nodeResponse) {
 
   ClassMirror classMirror = reflectClass(type);
@@ -99,6 +123,23 @@ Set<Symbol> _findSymbolsAnnotatedBy(Type type, Object instance) {
   });
 
   return symbols;
+}
+
+Set<Type> _findTypesAnnotatedBy(Type type, Object instance) {
+
+  Set<Type> types = new Set();
+
+  InstanceMirror instanceMirror = reflect(instance);
+
+  instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror declaration) {
+    declaration.metadata.forEach((InstanceMirror value) {
+      if (declaration is VariableMirror && value.reflectee.runtimeType == type) {
+        types.add(declaration.type.reflectedType);
+      }
+    });
+  });
+
+  return types;
 }
 
 Set<RelationshipWithNodes> _findRelationshipViaNodes(Node node) {

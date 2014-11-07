@@ -168,15 +168,18 @@ main() {
     });
   });
 
-//  group('findNodeAndRelationsById', () {
-//
-//    solo_test('ok', () {
-//
-//      NeoService neoService = new NeoService();
-//
-//      return neoService.findNodeAndRelationsById(11, Person).then((nodes) {
-//        expect(nodes, unorderedEquals([new Person("Antonio", city: "Madrid"), new Person("Lucille", city: "Paris")]));
-//      });
-//    });
-//  });
+  group('findNodeAndRelationsById', () {
+
+    test('ok', () {
+
+      NeoService neoService = new NeoService();
+
+      return neoService.findNodeAndRelationsById(11, Person).then((node) {
+        Person lucille = node;
+        expect(lucille.name, "Lucille");
+        expect(lucille.city, "Paris");
+        expect(lucille.eternalLovers, hasLength(2));
+      });
+    });
+  });
 }

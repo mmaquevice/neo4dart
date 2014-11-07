@@ -4,6 +4,9 @@ class TokenFindExecutor extends NeoClient {
 
   final _logger = new Logger("TokenFindExecutor");
 
+  Map<int, Node> nodesById = {
+  };
+
   TokenFindExecutor() {
     client = new http.Client();
   }
@@ -77,8 +80,68 @@ class TokenFindExecutor extends NeoClient {
       return executeBatch(tokens).then((response) {
         List<AroundNodeResponse> aroundNodes = _convertResponse(response);
         _logger.info(aroundNodes);
+
+        Node nodeWithRelations = _convertResponsesToNodeWithRelations(id, aroundNodes, type);
+        return nodeWithRelations;
       });
     });
+  }
+
+  Node _convertResponsesToNodeWithRelations(int id, List<AroundNodeResponse> aroundNodes, Type type) {
+
+    Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
+    AroundNodeResponse aroundNode = aroundNodeById[id];
+
+    Node node = _convertToNode(type, aroundNode.node.data, aroundNode.node.idNode);
+    nodesById[node.id] = node;
+    InstanceMirror instanceNode = reflect(node);
+
+    aroundNode.relations.forEach((relationResponse) {
+
+      VariableMirror nodeFieldForRelation = _findRelationField(type, relationResponse.type);
+
+      var nodeFieldForRelationInstance = instanceNode.getField(nodeFieldForRelation.simpleName).reflectee;
+      if (nodeFieldForRelationInstance is Iterable) {
+
+        if (nodeFieldForRelationInstance is Set || nodeFieldForRelationInstance is List) {
+
+          Type typeRelation = nodeFieldForRelation.type.typeArguments.map((t) => t.reflectedType).first;
+          Relation relation = _createRelationWithNodes(typeRelation, relationResponse, aroundNodeById[relationResponse.idStartNode], aroundNodeById[relationResponse.idEndNode]);
+
+          nodeFieldForRelationInstance.add(relation);
+
+        } else {
+          throw 'Field $nodeFieldForRelation not handled.';
+        }
+      }
+    });
+
+    return node;
+  }
+
+  Relation _createRelationWithNodes(Type typeRelation, RelationResponse relationResponse, AroundNodeResponse startAroundNodeResponse, AroundNodeResponse endAroundNodeResponse) {
+
+    Relation relation = convertToRelation(typeRelation, relationResponse);
+
+    Node startNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idStartNode, _findTypesAnnotatedBy(StartNode, relation).first, startAroundNodeResponse);
+    Node endNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, _findTypesAnnotatedBy(EndNode, relation).first, endAroundNodeResponse);
+
+    InstanceMirror relationMirror = reflect(relation);
+    relationMirror.setField(_findSymbolsAnnotatedBy(StartNode, relation).first, startNode);
+    relationMirror.setField(_findSymbolsAnnotatedBy(EndNode, relation).first, endNode);
+
+    return relation;
+  }
+
+  Node _retrieveNodeWithAroundNodeResponseData(int idNode, Type typeNode, AroundNodeResponse aroundNode) {
+
+    if (nodesById.containsKey(idNode)) {
+      return nodesById[idNode];
+    }
+
+    Node node = _convertToNode(typeNode, aroundNode.node.data, aroundNode.node.idNode);
+    nodesById[idNode] = node;
+    return node;
   }
 
   Set<int> _extractNodeIdsFromRelationResponse(var response) {
@@ -95,8 +158,6 @@ class TokenFindExecutor extends NeoClient {
 
     return nodeIds;
   }
-
-
 
   Node _convertResponseToNodeWithRelations(var response, Type type) {
 
