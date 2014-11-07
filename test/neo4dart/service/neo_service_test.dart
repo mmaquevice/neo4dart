@@ -197,5 +197,44 @@ main() {
         expect(node, lucille);
       });
     });
+
+//    solo_test('ok', () {
+//
+//      NeoService neoService = new NeoService();
+//
+//      return neoService.findNodeAndRelationsById(24257, Person).then((node) {
+//
+//        Person lucille = new Person('Lucille', city: 'Paris');
+//        lucille.eternalLovers.add(new Love(lucille, new Person('Antonio', city: 'Madrid'), 'Muchos', '1984'));
+//        lucille.eternalLovers.add(new Love(lucille, new Person('Roméo', city: 'Roma'), 'A lot', '1985'));
+//
+//        expect(node, lucille);
+//      });
+//    });
+
+//    solo_test('ok', () {
+//
+//      NeoService neoService = new NeoService();
+//
+//      Person max = new Person('Max', city: 'New York');
+//
+//      Person antonio = new Person('Antonio', city: 'Madrid');
+//      Person romeo = new Person('Roméo', city: 'Roma');
+//      max.coworkers = [antonio, romeo];
+//
+//      Person pamela = new Person('Pamela', city: 'Lisbon');
+//      max.lover = pamela;
+//
+//      Person fred = new Person('Fred', city: 'London');
+//      max.love = new Love(max, fred, 'A lot', '1986');
+//
+//      Person christina = new Person('Christina', city: 'Zurich');
+//      Person anna = new Person('Anna', city: 'Nantes');
+//      Set<Love> loves = new Set();
+//      loves.addAll([new Love(max, christina, 'enough', '1986'), new Love(max, anna, 'A lot', '1986')]);
+//      max.eternalLovers = loves;
+//
+//      neoService.insertNodeInDepth(max);
+//    });
   });
 }
