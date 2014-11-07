@@ -3,6 +3,8 @@ library neo4dart.testing.love;
 import 'package:neo4dart/neo4dart.dart';
 import 'package:neo4dart/testing/person.dart';
 
+import 'package:quiver/core.dart';
+
 class Love extends Relation {
 
   @StartNode()
@@ -25,4 +27,8 @@ class Love extends Relation {
     }
     return map;
   }
+
+  bool operator ==(o) => o is Love && o.howMuch == howMuch && o.since == since;
+
+  int get hashCode => hash2(howMuch.hashCode, since.hashCode);
 }

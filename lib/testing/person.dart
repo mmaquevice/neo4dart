@@ -3,6 +3,7 @@ library neo4dart.testing.person;
 import 'package:neo4dart/neo4dart.dart';
 import 'package:neo4dart/testing/love.dart';
 
+import 'package:collection/collection.dart';
 import 'package:quiver/core.dart';
 
 class Person extends Node {
@@ -36,9 +37,9 @@ class Person extends Node {
   }
 
   // TODO mma - test client get with id
-  bool operator ==(o) => o is Person && o.name == name && o.city == city;
+  bool operator ==(o) => o is Person && o.name == name && o.city == city && new  IterableEquality().equals(o.eternalLovers, eternalLovers);
 
-  int get hashCode => hash2(name.hashCode, city.hashCode);
+  int get hashCode => hash3(name.hashCode, city.hashCode, eternalLovers.hashCode);
 
   toString() => "Person $name is from $city.";
 

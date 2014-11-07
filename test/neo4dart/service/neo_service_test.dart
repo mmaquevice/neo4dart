@@ -189,10 +189,12 @@ main() {
       neoService.tokenFindExecutor = new TokenFindExecutor.withClient(client200);
 
       return neoService.findNodeAndRelationsById(11, Person).then((node) {
-        Person lucille = node;
-        expect(lucille.name, "Lucille");
-        expect(lucille.city, "Paris");
-        expect(lucille.eternalLovers, hasLength(2));
+
+        Person lucille = new Person('Lucille', city: 'Paris');
+        lucille.eternalLovers.add(new Love(lucille, new Person('Antonio', city: 'Madrid'), 'Muchos', '1984'));
+        lucille.eternalLovers.add(new Love(lucille, new Person('Roméo', city: 'Roma'), 'A lot', '1985'));
+
+        expect(node, lucille);
       });
     });
   });
