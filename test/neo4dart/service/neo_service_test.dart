@@ -202,14 +202,14 @@ main() {
 //
 //      NeoService neoService = new NeoService();
 //
-//      return neoService.findNodeAndRelationsById(85, Person).then((node) {
+//      Person lucille = new Person('Lucille', city: 'Paris');
+//      Person toto = new Person('Toto', city: 'Lisbonne');
+//      Person gerard = new Person('Gerard', city: 'Moscou');
 //
-//        Person lucille = new Person('Lucille', city: 'Paris');
-//        lucille.eternalLovers.add(new Love(lucille, new Person('Antonio', city: 'Madrid'), 'Muchos', '1984'));
-//        lucille.eternalLovers.add(new Love(lucille, new Person('Roméo', city: 'Roma'), 'A lot', '1985'));
+//      lucille.coworkers=[toto];
+//      toto.coworkers = [gerard];
 //
-//        expect(node, lucille);
-//      });
+//      return neoService.insertNodeInDepth(lucille);
 //    });
 
 //    solo_test('ok', () {

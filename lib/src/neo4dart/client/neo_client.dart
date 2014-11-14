@@ -247,4 +247,20 @@ class NeoClient {
 
     return valueByParameter;
   }
+
+  Future executeCypher(String query) {
+
+//    {
+//      "statements" : [ {
+//  "statement" : "MATCH path=(p:Person)-[*..100]->() WHERE ID(p) in [6, 73] RETURN [n in nodes(path) | ID(n)] , [r in  relationships(path) | ID(r)]"
+//  } ]
+//}
+
+//    List data = _convertBatchTokensToJsonArray(batchTokens);
+//    _logger.info(data);
+//
+//    return client.post("http://localhost:7474/db/data/batch", body : '${data}');
+
+    return null;
+  }
 }
