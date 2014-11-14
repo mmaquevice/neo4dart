@@ -1,8 +1,8 @@
 part of neo4dart;
 
-class QueryBuilder {
+class CypherFindBuilder {
 
-  final _logger = new Logger("QueryBuilder");
+  final _logger = new Logger("CypherFindBuilder");
 
   String buildQueryToRetrieveAllRelatedNodeAndRelationshipIds(Iterable<int> nodeIds, Type type) {
 

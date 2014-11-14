@@ -33,22 +33,6 @@ class NeoService {
 
     return neoClientGet.findNodesByTypeAndProperties(type, properties);
   }
-
-  Future findNodeById(int id, Type type) {
-    return tokenFindExecutor.findNodeById(id, type);
-  }
-
-  Future findNodesByIds(Iterable<int> ids, Type type) {
-    return tokenFindExecutor.findNodesByIds(ids, type);
-  }
-
-  Future findNodeAndRelationsById(int id, Type type) {
-    return tokenFindExecutor.findNodeAndRelationsById(id, type);
-  }
-
-  Future findAllNodeAndRelationsById(int id, Type type) {
-    return tokenFindExecutor.findAllNodeAndRelationsById(id, type);
-  }
 }
 
 

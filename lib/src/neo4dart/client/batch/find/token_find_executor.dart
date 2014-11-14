@@ -91,16 +91,11 @@ class TokenFindExecutor extends NeoClient {
     });
   }
 
-  Future findAllNodeAndRelationsById(int id, Type type) {
-
-    return executeCypher(new QueryBuilder().buildQueryToRetrieveAllRelatedNodeAndRelationshipIds([id], type)).then((response) {
-
-      Set<int> nodeIds = _extractNodeIdsFromCypherResponse(response);
-      Set<int> relationshipIds = _extractRelationshipIdsFromCypherResponse(response);
+  Future findAllNodesAndRelations(int originNodeId, Type originType, Iterable<int> nodeIds, Iterable<int> relationshipIds) {
 
       Set<BatchToken> tokens = new Set();
       TokenFindBuilder builder = new TokenFindBuilder();
-      tokens.addAll(builder.addNodeToBatch(id));
+      tokens.addAll(builder.addNodeToBatch(originNodeId));
       tokens.addAll(builder.addRelationsToBatch(relationshipIds));
       tokens.addAll(builder.addNodesToBatch(nodeIds));
 
@@ -109,10 +104,9 @@ class TokenFindExecutor extends NeoClient {
         _logger.info(aroundNodes);
 
         Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
-        Node nodeWithRelations = _convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type);
+        Node nodeWithRelations = _convertResponsesToNodeWithRelations(originNodeId, aroundNodeById, typeNode: originType);
         return nodeWithRelations;
       });
-    });
   }
 
   Node _convertResponsesToNodeWithRelations(int id, Map<int, AroundNodeResponse> aroundNodeById, {Type typeNode}) {

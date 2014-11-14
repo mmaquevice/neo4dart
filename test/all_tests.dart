@@ -6,6 +6,7 @@ import 'neo4dart/client/batch/token_insert_builder_test.dart' as batch_token_han
 import 'neo4dart/client/get/neo_client_get_test.dart' as neo_client_get;
 
 import 'neo4dart/service/neo_service_test.dart' as neo_service;
+import 'neo4dart/service/find/neo_service_find_test.dart' as neo_service_find;
 
 import 'package:logging/logging.dart';
 
@@ -23,4 +24,6 @@ main() {
   neo_client_get.main();
 
   neo_service.main();
+
+  neo_service_find.main();
 }
