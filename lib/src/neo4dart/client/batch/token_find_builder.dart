@@ -15,7 +15,15 @@ class TokenFindBuilder {
     return tokens;
   }
 
-  BatchToken addRelationsToBatch(int nodeId) {
-    return new BatchToken("GET", "/node/${nodeId}/relationships/all", null);
+  Set<BatchToken> addRelationsToBatch(Iterable<int> relationIds) {
+    Set<BatchToken> tokens = new Set();
+    relationIds.forEach((id) => tokens.add(new BatchToken("GET", "/relationship/${id}", null)));
+    return tokens;
+  }
+
+  Set<BatchToken> addRelationsToBatchFromNodes(Iterable<int> nodeIds) {
+    Set<BatchToken> tokens = new Set();
+    nodeIds.forEach((id) => tokens.add(new BatchToken("GET", "/node/${id}/relationships/all", null)));
+    return tokens;
   }
 }

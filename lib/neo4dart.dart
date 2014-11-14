@@ -16,6 +16,7 @@ part 'src/neo4dart/client/batch/token_insert_builder.dart';
 part 'src/neo4dart/client/neo_client.dart';
 part 'src/neo4dart/client/batch/token_insert_executor.dart';
 part 'src/neo4dart/client/get/neo_client_get.dart';
+part 'src/neo4dart/client/cypher/query_builder.dart';
 part 'src/neo4dart/neo_service.dart';
 part 'src/neo4dart/model/node.dart';
 part 'src/neo4dart/model/relation.dart';

@@ -173,15 +173,15 @@ class NeoClient {
       declaration.metadata.forEach((InstanceMirror value) {
         if (value.reflectee.runtimeType == RelationshipVia) {
           RelationshipVia relationshipVia = value.reflectee;
-          if(declaration is VariableMirror && relationshipVia.type == typeRelation) {
+          if (declaration is VariableMirror && relationshipVia.type == typeRelation) {
             _logger.info(declaration.type.reflectedType);
 
             _logger.info(declaration.type.typeArguments.map((t) => t.qualifiedName));
             field = declaration;
           }
-        } else if(value.reflectee.runtimeType == Relationship) {
+        } else if (value.reflectee.runtimeType == Relationship) {
           Relationship relationship = value.reflectee;
-          if(declaration is VariableMirror && relationship.type == typeRelation) {
+          if (declaration is VariableMirror && relationship.type == typeRelation) {
             field = declaration;
           }
         }
@@ -250,17 +250,63 @@ class NeoClient {
 
   Future executeCypher(String query) {
 
-//    {
-//      "statements" : [ {
-//  "statement" : "MATCH path=(p:Person)-[*..100]->() WHERE ID(p) in [6, 73] RETURN [n in nodes(path) | ID(n)] , [r in  relationships(path) | ID(r)]"
-//  } ]
-//}
+    Map map = {
+        "statements" : [{
+            "statement" : query
+        }]
+    };
+    return client.post("http://localhost:7474/db/data/transaction/commit", body : new JsonEncoder().convert(map), headers : {
+        'Content-Type' : 'application/json'
+    });
+  }
 
-//    List data = _convertBatchTokensToJsonArray(batchTokens);
-//    _logger.info(data);
-//
-//    return client.post("http://localhost:7474/db/data/batch", body : '${data}');
+  Set<int> _extractNodeIdsFromCypherResponse(var cypherResponse) {
+    _logger.info("Response status : ${cypherResponse.statusCode}");
 
-    return null;
+    if (cypherResponse.statusCode == 200) {
+      _logger.info("Response body : ${cypherResponse.body}");
+
+      Set<int> nodeIds = new Set();
+
+      var jsonObject = new JsonDecoder().convert(cypherResponse.body);
+      List results = jsonObject['results'];
+      var result = results.first;
+      List data = result['data'];
+
+      for (var json in data) {
+        List nodes = json['row'].first;
+        nodeIds.addAll(nodes);
+      }
+      return nodeIds;
+    } else {
+      _logger.severe('Error requesting neo4j : status ${cypherResponse.statusCode} - ${cypherResponse.body}');
+      throw "Error requesting neo4j : status ${cypherResponse.statusCode}";
+    }
+  }
+
+  Set<int> _extractRelationshipIdsFromCypherResponse(var cypherResponse) {
+
+    _logger.info("Response status : ${cypherResponse.statusCode}");
+
+    if (cypherResponse.statusCode == 200) {
+      _logger.info("Response body : ${cypherResponse.body}");
+
+      Set<int> relationshipIds = new Set();
+
+      var jsonObject = new JsonDecoder().convert(cypherResponse.body);
+      List results = jsonObject['results'];
+      var result = results.first;
+      List data = result['data'];
+
+      for (var json in data) {
+        List rows = json['row'];
+        List nodes = rows.last;
+        relationshipIds.addAll(nodes);
+      }
+      return relationshipIds;
+    } else {
+      _logger.severe('Error requesting neo4j : status ${cypherResponse.statusCode} - ${cypherResponse.body}');
+      throw "Error requesting neo4j : status ${cypherResponse.statusCode}";
+    }
   }
 }

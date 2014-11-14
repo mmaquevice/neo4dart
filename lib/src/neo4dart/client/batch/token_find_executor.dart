@@ -70,14 +70,38 @@ class TokenFindExecutor extends NeoClient {
 
   Future findNodeAndRelationsById(int id, Type type) {
 
-    return executeBatch(new Set.from([new TokenFindBuilder().addRelationsToBatch(id)])).then((response) {
+    return executeBatch(new TokenFindBuilder().addRelationsToBatchFromNodes([id])).then((response) {
 
       Set<int> nodeIds = _extractNodeIdsFromRelationResponse(response);
 
       Set<BatchToken> tokens = new Set();
       TokenFindBuilder builder = new TokenFindBuilder();
       tokens.addAll(builder.addNodeToBatch(id));
-      tokens.add(builder.addRelationsToBatch(id));
+      tokens.addAll(builder.addRelationsToBatchFromNodes([id]));
+      tokens.addAll(builder.addNodesToBatch(nodeIds));
+
+      return executeBatch(tokens).then((response) {
+        List<AroundNodeResponse> aroundNodes = _convertResponse(response);
+        _logger.info(aroundNodes);
+
+        Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
+        Node nodeWithRelations = _convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type);
+        return nodeWithRelations;
+      });
+    });
+  }
+
+  Future findAllNodeAndRelationsById(int id, Type type) {
+
+    return executeCypher(new QueryBuilder().buildQueryToRetrieveAllRelatedNodeAndRelationshipIds([id], type)).then((response) {
+
+      Set<int> nodeIds = _extractNodeIdsFromCypherResponse(response);
+      Set<int> relationshipIds = _extractRelationshipIdsFromCypherResponse(response);
+
+      Set<BatchToken> tokens = new Set();
+      TokenFindBuilder builder = new TokenFindBuilder();
+      tokens.addAll(builder.addNodeToBatch(id));
+      tokens.addAll(builder.addRelationsToBatch(relationshipIds));
       tokens.addAll(builder.addNodesToBatch(nodeIds));
 
       return executeBatch(tokens).then((response) {
@@ -136,7 +160,9 @@ class TokenFindExecutor extends NeoClient {
         // TODO mma : check if typeNeoEntity is really a neo entity
         Type typeNeoEntity = nodeFieldForRelation.type.typeArguments.map((t) => t.reflectedType).first;
         NeoEntity neoEntity = _convertToNeoEntity(node, reflectType(typeNeoEntity), relationResponse,  startNode,  endNode);
-        _addNeoEntityToCollectionField(node, nodeFieldForRelation, neoEntity);
+        if(neoEntity != null) {
+          _addNeoEntityToCollectionField(node, nodeFieldForRelation, neoEntity);
+        }
       }
     } else {
       NeoEntity neoEntity = _convertToNeoEntity(node, nodeFieldForRelation.type, relationResponse,  startNode,  endNode);
