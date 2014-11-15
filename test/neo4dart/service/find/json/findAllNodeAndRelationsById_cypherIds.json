@@ -2,8 +2,8 @@
   "results": [
     {
       "columns": [
-        "[n in nodes(path) | ID(n)]",
-        "[r in  relationships(path) | ID(r)]"
+        "nodeIds",
+        "relationshipIds"
       ],
       "data": [
         {

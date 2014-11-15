@@ -105,6 +105,7 @@ main() {
         }
       });
       neoService.tokenFindExecutor = new BatchFindExecutor.withClient(client200);
+      neoService.cypherFindExecutor = new CypherFindExecutor.withClient(client200);
 
       Person lucille = new Person('Lucille', city: 'Paris');
       Person toto = new Person('Toto', city: 'Lisbonne');
@@ -114,8 +115,8 @@ main() {
       toto.coworkers = [gerard];
       gerard.coworkers = [lucille];
 
-      neoService.findAllNodeAndRelationsById(24267, Person).then((node) {
-        expect(node, gerard);
+      return neoService.findAllNodeAndRelationsById(24267, Person).then((node) {
+        expect(node, equals(gerard));
       });
     });
   });

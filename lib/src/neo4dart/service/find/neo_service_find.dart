@@ -9,6 +9,7 @@ class NeoServiceFind {
   BatchInsertExecutor tokenInsertExecutor = new BatchInsertExecutor();
   BatchFindExecutor tokenFindExecutor = new BatchFindExecutor();
 
+  CypherFindInterpreter cypherFindInterpreter = new CypherFindInterpreter();
   CypherFindExecutor cypherFindExecutor = new CypherFindExecutor();
 
   Future findNodes(Type type, {Map properties}) {
@@ -35,8 +36,9 @@ class NeoServiceFind {
   Future findAllNodeAndRelationsById(int id, Type type) {
     return cypherFindExecutor.findAllNodeAndRelationIds([id], type).then((response) {
 
-      Set<int> nodeIds = new CypherFindInterpreter().extractNodeIdsFromCypherResponse(response);
-      Set<int> relationshipIds = new CypherFindInterpreter().extractRelationshipIdsFromCypherResponse(response);
+      CypherResponse cypherResponse = cypherFindInterpreter.convertResponse(response);
+      Set<int> nodeIds = cypherFindInterpreter.extractNodeIdsFromCypherResponse(cypherResponse);
+      Set<int> relationshipIds = cypherFindInterpreter.extractRelationshipIdsFromCypherResponse(cypherResponse);
 
       return tokenFindExecutor.findAllNodesAndRelations(id, type, nodeIds, relationshipIds);
     });
