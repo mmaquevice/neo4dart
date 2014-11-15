@@ -21,6 +21,8 @@ part 'src/neo4dart/client/neo_client.dart';
 
 part 'src/neo4dart/client/get/neo_client_get.dart';
 
+part 'src/neo4dart/client/batch/batch_executor.dart';
+part 'src/neo4dart/client/batch/batch_interpreter.dart';
 part 'src/neo4dart/client/batch/entity/batch_token.dart';
 part 'src/neo4dart/client/batch/entity/relationship_with_nodes.dart';
 part 'src/neo4dart/client/batch/insert/token_insert_builder.dart';
@@ -28,6 +30,7 @@ part 'src/neo4dart/client/batch/insert/token_insert_executor.dart';
 part 'src/neo4dart/client/batch/find/token_find_executor.dart';
 part 'src/neo4dart/client/batch/find/token_find_builder.dart';
 
+part 'src/neo4dart/client/cypher/cypher_executor.dart';
 part 'src/neo4dart/client/cypher/find/cypher_find_builder.dart';
 part 'src/neo4dart/client/cypher/find/cypher_find_executor.dart';
 part 'src/neo4dart/client/cypher/find/cypher_find_interpreter.dart';

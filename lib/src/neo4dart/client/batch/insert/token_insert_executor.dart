@@ -1,8 +1,10 @@
 part of neo4dart;
 
-class TokenInsertExecutor extends NeoClient {
+class TokenInsertExecutor extends BatchExecutor {
 
   final _logger = new Logger("TokenInsertExecutor");
+
+  BatchInterpreter _interpreter = new BatchInterpreter();
 
   TokenInsertExecutor() {
     client = new http.Client();
@@ -30,7 +32,7 @@ class TokenInsertExecutor extends NeoClient {
 
   _addIdToNeoEntities(var response, Set<BatchToken> batchTokens) {
 
-    List<AroundNodeResponse> aroundNodeResponses = _convertResponse(response);
+    List<AroundNodeResponse> aroundNodeResponses = _interpreter.convertResponse(response);
 
     Map<int, int> neoIdByRequestId = new Map();
     aroundNodeResponses.forEach((r) {

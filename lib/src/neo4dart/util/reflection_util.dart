@@ -182,3 +182,48 @@ Set<RelationshipWithNodes> _findRelationshipNodes(Node node) {
 
   return relations;
 }
+
+VariableMirror _findRelationField(Type typeNode, String typeRelation) {
+
+  ClassMirror mirror = reflectClass(typeNode);
+
+  VariableMirror field = null;
+  mirror.declarations.forEach((Symbol key, DeclarationMirror declaration) {
+    declaration.metadata.forEach((InstanceMirror value) {
+      if (value.reflectee.runtimeType == RelationshipVia) {
+        RelationshipVia relationshipVia = value.reflectee;
+        if (declaration is VariableMirror && relationshipVia.type == typeRelation) {
+          field = declaration;
+        }
+      } else if (value.reflectee.runtimeType == Relationship) {
+        Relationship relationship = value.reflectee;
+        if (declaration is VariableMirror && relationship.type == typeRelation) {
+          field = declaration;
+        }
+      }
+    });
+  });
+  return field;
+}
+
+Node _convertToNode(Type type, Map dataNode, int idNode) {
+
+  ClassMirror classMirror = reflectClass(type);
+  List<String> parameters = _getConstructorParameters(type, false);
+  Map<Symbol, dynamic> valuesByParameter = _getDataValuesFromParameters(parameters, dataNode);
+
+  List<String> optionalParameters = _getConstructorParameters(type, true);
+  Map<Symbol, dynamic> optionalValuesByParameter = _getDataValuesFromParameters(optionalParameters, dataNode);
+
+  InstanceMirror instanceMirror = classMirror.newInstance(new Symbol(''), new List.from(valuesByParameter.values), optionalValuesByParameter);
+  instanceMirror.setField(new Symbol('id'), idNode);
+  return instanceMirror.reflectee;
+}
+
+int _extractNodeId(String self) {
+  String idNode = self.split('/').last;
+  if (idNode.isEmpty) {
+    throw "Node id cannot be retrieved from : ${self}.";
+  }
+  return int.parse(idNode);
+}

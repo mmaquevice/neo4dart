@@ -1,6 +1,6 @@
 part of neo4dart;
 
-class CypherFindExecutor extends NeoClient {
+class CypherFindExecutor extends CypherExecutor {
 
   final _logger = new Logger("CypherFindExecutor");
 

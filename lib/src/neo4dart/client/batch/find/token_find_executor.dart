@@ -1,6 +1,6 @@
 part of neo4dart;
 
-class TokenFindExecutor extends NeoClient {
+class TokenFindExecutor extends BatchExecutor {
 
   final _logger = new Logger("TokenFindExecutor");
 
@@ -9,6 +9,8 @@ class TokenFindExecutor extends NeoClient {
   Map<int, Node> nodesWithoutRelationsById = {};
 
   Map<int, Node> nodesInProgressById = {};
+
+  BatchInterpreter _interpreter = new BatchInterpreter();
 
   TokenFindExecutor() {
     client = new http.Client();
@@ -43,7 +45,7 @@ class TokenFindExecutor extends NeoClient {
 
     Set<Node> nodes = new Set();
 
-    List<AroundNodeResponse> aroundNodes = _convertResponse(response);
+    List<AroundNodeResponse> aroundNodes = _interpreter.convertResponse(response);
 
     aroundNodes.forEach((aroundNode) {
 
@@ -81,7 +83,7 @@ class TokenFindExecutor extends NeoClient {
       tokens.addAll(builder.addNodesToBatch(nodeIds));
 
       return executeBatch(tokens).then((response) {
-        List<AroundNodeResponse> aroundNodes = _convertResponse(response);
+        List<AroundNodeResponse> aroundNodes = _interpreter.convertResponse(response);
         _logger.info(aroundNodes);
 
         Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
@@ -100,7 +102,7 @@ class TokenFindExecutor extends NeoClient {
       tokens.addAll(builder.addNodesToBatch(nodeIds));
 
       return executeBatch(tokens).then((response) {
-        List<AroundNodeResponse> aroundNodes = _convertResponse(response);
+        List<AroundNodeResponse> aroundNodes = _interpreter.convertResponse(response);
         _logger.info(aroundNodes);
 
         Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
@@ -230,7 +232,7 @@ class TokenFindExecutor extends NeoClient {
   Set<int> _extractNodeIdsFromRelationResponse(var response) {
 
     Set<int> nodeIds = new Set();
-    List<AroundNodeResponse> aroundNodes = _convertResponse(response);
+    List<AroundNodeResponse> aroundNodes = _interpreter.convertResponse(response);
 
     aroundNodes.forEach((aroundNode) {
       aroundNode.relations.forEach((relation) {
