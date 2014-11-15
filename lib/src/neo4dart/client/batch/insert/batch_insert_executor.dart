@@ -1,20 +1,20 @@
 part of neo4dart;
 
-class TokenInsertExecutor extends BatchExecutor {
+class BatchInsertExecutor extends BatchExecutor {
 
   final _logger = new Logger("TokenInsertExecutor");
 
   BatchInterpreter _interpreter = new BatchInterpreter();
 
-  TokenInsertExecutor() {
+  BatchInsertExecutor() {
     client = new http.Client();
   }
 
-  TokenInsertExecutor.withClient(client) : super.withClient(client);
+  BatchInsertExecutor.withClient(client) : super.withClient(client);
 
   Future insertNode(Node node, bool inDepth) {
 
-    TokenInsertBuilder tokenInsertBuilder = new TokenInsertBuilder();
+    BatchInsertBuilder tokenInsertBuilder = new BatchInsertBuilder();
     tokenInsertBuilder.addNodeToBatch(node);
     tokenInsertBuilder.addNodeAndRelationsToBatch(node, inDepth);
     tokenInsertBuilder.addNodeAndRelationsViaToBatch(node, inDepth);
@@ -23,7 +23,7 @@ class TokenInsertExecutor extends BatchExecutor {
 
   Future insertNodes(Iterable<Node> nodes, bool inDepth) {
 
-    TokenInsertBuilder tokenInsertBuilder = new TokenInsertBuilder();
+    BatchInsertBuilder tokenInsertBuilder = new BatchInsertBuilder();
     tokenInsertBuilder.addNodesToBatch(nodes);
     tokenInsertBuilder.addNodesAndRelationsToBatch(nodes, inDepth);
     tokenInsertBuilder.addNodesAndRelationsViaToBatch(nodes, inDepth);

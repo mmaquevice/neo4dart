@@ -1,6 +1,6 @@
 part of neo4dart;
 
-class TokenFindExecutor extends BatchExecutor {
+class BatchFindExecutor extends BatchExecutor {
 
   final _logger = new Logger("TokenFindExecutor");
 
@@ -12,18 +12,18 @@ class TokenFindExecutor extends BatchExecutor {
 
   BatchInterpreter _interpreter = new BatchInterpreter();
 
-  TokenFindExecutor() {
+  BatchFindExecutor() {
     client = new http.Client();
   }
 
-  TokenFindExecutor.withClient(client) : super.withClient(client);
+  BatchFindExecutor.withClient(client) : super.withClient(client);
 
   Future findNodeById(int id, Type type) {
-    return executeBatch(new TokenFindBuilder().addNodeToBatch(id)).then((response) => _convertResponseToNode(response, type));
+    return executeBatch(new BatchFindBuilder().addNodeToBatch(id)).then((response) => _convertResponseToNode(response, type));
   }
 
   Future findNodesByIds(Iterable<int> ids, Type type) {
-    return executeBatch(new TokenFindBuilder().addNodesToBatch(ids)).then((response) => _convertResponseToNodes(response, type));
+    return executeBatch(new BatchFindBuilder().addNodesToBatch(ids)).then((response) => _convertResponseToNodes(response, type));
   }
 
   Node _convertResponseToNode(var response, Type type) {
@@ -72,12 +72,12 @@ class TokenFindExecutor extends BatchExecutor {
 
   Future findNodeAndRelationsById(int id, Type type) {
 
-    return executeBatch(new TokenFindBuilder().addRelationsToBatchFromNodes([id])).then((response) {
+    return executeBatch(new BatchFindBuilder().addRelationsToBatchFromNodes([id])).then((response) {
 
       Set<int> nodeIds = _extractNodeIdsFromRelationResponse(response);
 
       Set<BatchToken> tokens = new Set();
-      TokenFindBuilder builder = new TokenFindBuilder();
+      BatchFindBuilder builder = new BatchFindBuilder();
       tokens.addAll(builder.addNodeToBatch(id));
       tokens.addAll(builder.addRelationsToBatchFromNodes([id]));
       tokens.addAll(builder.addNodesToBatch(nodeIds));
@@ -96,7 +96,7 @@ class TokenFindExecutor extends BatchExecutor {
   Future findAllNodesAndRelations(int originNodeId, Type originType, Iterable<int> nodeIds, Iterable<int> relationshipIds) {
 
       Set<BatchToken> tokens = new Set();
-      TokenFindBuilder builder = new TokenFindBuilder();
+      BatchFindBuilder builder = new BatchFindBuilder();
       tokens.addAll(builder.addNodeToBatch(originNodeId));
       tokens.addAll(builder.addRelationsToBatch(relationshipIds));
       tokens.addAll(builder.addNodesToBatch(nodeIds));

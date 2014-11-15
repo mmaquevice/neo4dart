@@ -1,6 +1,6 @@
 part of neo4dart;
 
-class TokenFindBuilder {
+class BatchFindBuilder {
 
   final _logger = new Logger("TokenFindBuilder");
 

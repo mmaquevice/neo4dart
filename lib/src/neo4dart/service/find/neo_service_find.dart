@@ -6,8 +6,8 @@ class NeoServiceFind {
 
   NeoClientGet neoClientGet = new NeoClientGet();
 
-  TokenInsertExecutor tokenInsertExecutor = new TokenInsertExecutor();
-  TokenFindExecutor tokenFindExecutor = new TokenFindExecutor();
+  BatchInsertExecutor tokenInsertExecutor = new BatchInsertExecutor();
+  BatchFindExecutor tokenFindExecutor = new BatchFindExecutor();
 
   CypherFindExecutor cypherFindExecutor = new CypherFindExecutor();
 

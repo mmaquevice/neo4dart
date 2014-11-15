@@ -4,8 +4,8 @@ class NeoServiceInsert {
 
   final _logger = new Logger("NeoServiceInsert");
 
-  TokenInsertExecutor tokenInsertExecutor = new TokenInsertExecutor();
-  TokenFindExecutor tokenFindExecutor = new TokenFindExecutor();
+  BatchInsertExecutor tokenInsertExecutor = new BatchInsertExecutor();
+  BatchFindExecutor tokenFindExecutor = new BatchFindExecutor();
 
   Future insertNode(Node node) {
     return tokenInsertExecutor.insertNode(node, false);

@@ -1,6 +1,6 @@
 part of neo4dart;
 
-class TokenInsertBuilder {
+class BatchInsertBuilder {
 
   final _logger = new Logger("TokenInsertBuilder");
 
