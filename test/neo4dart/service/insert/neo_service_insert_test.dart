@@ -1,7 +1,5 @@
 library neo4dart.service.neo_service_test;
 
-import 'dart:convert';
-
 import 'package:unittest/unittest.dart';
 import 'package:neo4dart/neo4dart.dart';
 
@@ -10,7 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
-import '../util/util.dart' as util;
+import '../../util/util.dart' as util;
 
 import 'package:neo4dart/testing/person.dart';
 import 'package:neo4dart/testing/love.dart';
@@ -29,11 +27,11 @@ main() {
 
     test('ok - with @Relationship', () {
 
-      NeoService neoService = new NeoService();
+      NeoServiceInsert neoService = new NeoServiceInsert();
 
       var client200 = new MockClient((request) {
 
-        var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Relationship.json');
+        var responseBody = util.readFile('test/neo4dart/service/insert/json/insertNode_Relationship.json');
         return new http.Response(responseBody, 200);
       });
       neoService.tokenInsertExecutor = new TokenInsertExecutor.withClient(client200);
@@ -55,10 +53,10 @@ main() {
 
     test('ok - with Set of @Relationship', () {
 
-      NeoService neoService = new NeoService();
+      NeoServiceInsert neoService = new NeoServiceInsert();
 
       var client200 = new MockClient((request) {
-        var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Set_Relationship.json');
+        var responseBody = util.readFile('test/neo4dart/service/insert/json/insertNode_Set_Relationship.json');
         return new http.Response(responseBody, 200);
       });
       neoService.tokenInsertExecutor = new TokenInsertExecutor.withClient(client200);
@@ -79,10 +77,10 @@ main() {
 
     test('ok - with @RelationshipVia', () {
 
-      NeoService neoService = new NeoService();
+      NeoServiceInsert neoService = new NeoServiceInsert();
 
       var client200 = new MockClient((request) {
-        var responseBody = util.readFile('test/neo4dart/service/json/insertNode_RelationshipVia.json');
+        var responseBody = util.readFile('test/neo4dart/service/insert/json/insertNode_RelationshipVia.json');
         return new http.Response(responseBody, 200);
       });
       neoService.tokenInsertExecutor = new TokenInsertExecutor.withClient(client200);
@@ -110,10 +108,10 @@ main() {
 
     test('ok', () {
 
-      NeoService neoService = new NeoService();
+      NeoServiceInsert neoService = new NeoServiceInsert();
 
       var client200 = new MockClient((request) {
-        var responseBody = util.readFile('test/neo4dart/service/json/insertNode_Relationship.json');
+        var responseBody = util.readFile('test/neo4dart/service/insert/json/insertNode_Relationship.json');
         return new http.Response(responseBody, 200);
       });
       neoService.tokenInsertExecutor = new TokenInsertExecutor.withClient(client200);

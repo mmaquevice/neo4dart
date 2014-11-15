@@ -11,16 +11,30 @@ import 'package:quiver/collection.dart';
 
 import 'dart:mirrors';
 
-part 'src/neo4dart/client/batch/entity/batch_token.dart';
-part 'src/neo4dart/client/batch/insert/token_insert_builder.dart';
+part 'src/neo4dart/annotations/direction.dart';
+part 'src/neo4dart/annotations/relationship.dart';
+part 'src/neo4dart/annotations/relationship_via.dart';
+part 'src/neo4dart/annotations/start_node.dart';
+part 'src/neo4dart/annotations/end_node.dart';
+
 part 'src/neo4dart/client/neo_client.dart';
-part 'src/neo4dart/client/batch/insert/token_insert_executor.dart';
+
 part 'src/neo4dart/client/get/neo_client_get.dart';
+
+part 'src/neo4dart/client/batch/entity/batch_token.dart';
+part 'src/neo4dart/client/batch/entity/relationship_with_nodes.dart';
+part 'src/neo4dart/client/batch/insert/token_insert_builder.dart';
+part 'src/neo4dart/client/batch/insert/token_insert_executor.dart';
+part 'src/neo4dart/client/batch/find/token_find_executor.dart';
+part 'src/neo4dart/client/batch/find/token_find_builder.dart';
+
 part 'src/neo4dart/client/cypher/find/cypher_find_builder.dart';
 part 'src/neo4dart/client/cypher/find/cypher_find_executor.dart';
 part 'src/neo4dart/client/cypher/find/cypher_find_interpreter.dart';
-part 'src/neo4dart/neo_service.dart';
+
+part 'src/neo4dart/service/insert/neo_service_insert.dart';
 part 'src/neo4dart/service/find/neo_service_find.dart';
+
 part 'src/neo4dart/model/node.dart';
 part 'src/neo4dart/model/relation.dart';
 part 'src/neo4dart/model/neo_entity.dart';
@@ -31,14 +45,5 @@ part 'src/neo4dart/model/response/label_response.dart';
 part 'src/neo4dart/model/response/node_response.dart';
 part 'src/neo4dart/model/response/relation_response.dart';
 part 'src/neo4dart/model/response/around_node_response.dart';
-part 'src/neo4dart/client/batch/entity/relationship_with_nodes.dart';
-part 'src/neo4dart/annotations/direction.dart';
-part 'src/neo4dart/annotations/relationship.dart';
-part 'src/neo4dart/annotations/relationship_via.dart';
-part 'src/neo4dart/annotations/start_node.dart';
-part 'src/neo4dart/annotations/end_node.dart';
-
-part 'src/neo4dart/client/batch/find/token_find_executor.dart';
-part 'src/neo4dart/client/batch/find/token_find_builder.dart';
 
 part 'src/neo4dart/util/reflection_util.dart';

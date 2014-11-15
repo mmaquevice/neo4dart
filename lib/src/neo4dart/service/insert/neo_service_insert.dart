@@ -1,10 +1,8 @@
 part of neo4dart;
 
-class NeoService {
+class NeoServiceInsert {
 
-  final _logger = new Logger("NeoService");
-
-  NeoClientGet neoClientGet = new NeoClientGet();
+  final _logger = new Logger("NeoServiceInsert");
 
   TokenInsertExecutor tokenInsertExecutor = new TokenInsertExecutor();
   TokenFindExecutor tokenFindExecutor = new TokenFindExecutor();
@@ -23,15 +21,6 @@ class NeoService {
 
   Future insertNodesInDepth(Iterable<Node> nodes) {
     return tokenInsertExecutor.insertNodes(nodes, true);
-  }
-
-  Future findNodes(Type type, {Map properties}) {
-
-    if(properties == null || properties.length == 0) {
-      return neoClientGet.findNodesByType(type);
-    }
-
-    return neoClientGet.findNodesByTypeAndProperties(type, properties);
   }
 }
 
