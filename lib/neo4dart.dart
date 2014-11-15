@@ -34,6 +34,7 @@ part 'src/neo4dart/client/cypher/cypher_executor.dart';
 part 'src/neo4dart/client/cypher/find/cypher_find_builder.dart';
 part 'src/neo4dart/client/cypher/find/cypher_find_executor.dart';
 part 'src/neo4dart/client/cypher/find/cypher_find_interpreter.dart';
+part 'src/neo4dart/client/cypher/entity/cypher_response.dart';
 
 part 'src/neo4dart/service/insert/neo_service_insert.dart';
 part 'src/neo4dart/service/find/neo_service_find.dart';
