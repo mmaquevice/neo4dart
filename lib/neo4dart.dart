@@ -11,11 +11,11 @@ import 'package:quiver/collection.dart';
 
 import 'dart:mirrors';
 
-part 'src/neo4dart/annotations/direction.dart';
-part 'src/neo4dart/annotations/relationship.dart';
-part 'src/neo4dart/annotations/relationship_via.dart';
-part 'src/neo4dart/annotations/start_node.dart';
-part 'src/neo4dart/annotations/end_node.dart';
+part 'src/neo4dart/model/annotations/direction.dart';
+part 'src/neo4dart/model/annotations/relationship.dart';
+part 'src/neo4dart/model/annotations/relationship_via.dart';
+part 'src/neo4dart/model/annotations/start_node.dart';
+part 'src/neo4dart/model/annotations/end_node.dart';
 
 part 'src/neo4dart/client/neo_client.dart';
 
