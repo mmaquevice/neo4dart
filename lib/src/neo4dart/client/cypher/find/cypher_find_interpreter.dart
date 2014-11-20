@@ -63,4 +63,9 @@ class CypherFindInterpreter {
     return extractColumnFromResponse(cypherResponse, 'relationshipIds');
   }
 
+  List<AroundNodeResponse> convertCypherResponse(CypherResponse cypherResponse) {
+
+
+    return null;
+  }
 }

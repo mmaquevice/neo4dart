@@ -44,14 +44,15 @@ class NeoServiceFind {
     });
   }
 
-//  Future findAllNodesAndRelationsById(int id, Type type) {
-//    return cypherFindExecutor.findAllNodesAndRelations([id], type).then((response) {
-//
-//      CypherResponse cypherResponse = cypherFindInterpreter.convertResponse(response);
-//      Set<int> nodeIds = cypherFindInterpreter.extractNodeIdsFromCypherResponse(cypherResponse);
-//      Set<int> relationshipIds = cypherFindInterpreter.extractRelationshipIdsFromCypherResponse(cypherResponse);
-//
-//      return tokenFindExecutor.findAllNodesAndRelations(id, type, nodeIds, relationshipIds);
-//    });
-//  }
+  Future findAllNodesAndRelationsById(int id, Type type) {
+    return cypherFindExecutor.findAllNodesAndRelations([id], type).then((response) {
+
+      CypherResponse cypherResponse = cypherFindInterpreter.convertResponse(response);
+      List<AroundNodeResponse> aroundNodes = cypherFindInterpreter.convertCypherResponse(cypherResponse);
+
+      Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
+      Node nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type);
+      return nodeWithRelations;
+    });
+  }
 }
