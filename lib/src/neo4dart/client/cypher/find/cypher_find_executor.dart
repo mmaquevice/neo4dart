@@ -14,4 +14,8 @@ class CypherFindExecutor extends CypherExecutor {
     return executeCypher(new CypherFindBuilder().buildQueryToRetrieveAllRelatedNodeAndRelationshipIds(ids, type));
   }
 
+  Future findAllNodesAndRelations(Iterable<int> ids, Type type) {
+    return executeCypher(new CypherFindBuilder().buildQueryToRetrieveAllRelatedNodesAndRelationships(ids, type));
+  }
+
 }

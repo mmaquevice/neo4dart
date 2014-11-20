@@ -49,5 +49,6 @@ part 'src/neo4dart/model/response/label_response.dart';
 part 'src/neo4dart/model/response/node_response.dart';
 part 'src/neo4dart/model/response/relation_response.dart';
 part 'src/neo4dart/model/response/around_node_response.dart';
+part 'src/neo4dart/model/response/response_converter.dart';
 
 part 'src/neo4dart/util/reflection_util.dart';
