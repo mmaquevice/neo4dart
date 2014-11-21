@@ -61,19 +61,19 @@ main() {
     });
   });
 
-  group('findNodeAndRelationsById', () {
+  group('findNodeWithRelationsById', () {
 
     test('ok', () {
 
       NeoServiceFind neoService = new NeoServiceFind();
 
       var client200 = new MockClient((request) {
-        var responseBody = util.readFile('test/neo4dart/service/find/json/findNodeAndRelationsById_ok.json');
+        var responseBody = util.readFile('test/neo4dart/service/find/json/findNodeWithRelationsById_ok.json');
         return new http.Response(responseBody, 200);
       });
       neoService.cypherFindExecutor = new CypherFindExecutor.withClient(client200);
 
-      return neoService.findNodeAndRelationsById(24260, Person).then((node) {
+      return neoService.findNodeWithRelationsById(24260, Person).then((node) {
 
         Person gerard = new Person('Gerard', city: 'Moscou');
         Person lucille = new Person('Lucille', city: 'Paris');
@@ -87,13 +87,13 @@ main() {
     });
   });
 
-  group('findAllNodesAndRelationsById', () {
+  group('findNodeWithAllRelationsById', () {
     test('ok', () {
 
       NeoServiceFind neoService = new NeoServiceFind();
 
       var client200 = new MockClient((request) {
-          var responseBody = util.readFile('test/neo4dart/service/find/json/findAllNodesAndRelationsById.json');
+          var responseBody = util.readFile('test/neo4dart/service/find/json/findNodeWithAllRelationsById_ok.json');
           return new http.Response(responseBody, 200);
       });
       neoService.cypherFindExecutor = new CypherFindExecutor.withClient(client200);
@@ -109,7 +109,7 @@ main() {
       Person josette = new Person('Josette', city: 'Berlin');
       gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
 
-      return neoService.findAllNodesAndRelationsById(24260, Person).then((node) {
+      return neoService.findNodeWithAllRelationsById(24260, Person).then((node) {
         expect(node, equals(gerard));
       });
     });

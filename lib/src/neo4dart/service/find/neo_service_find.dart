@@ -29,15 +29,15 @@ class NeoServiceFind {
     return tokenFindExecutor.findNodesByIds(ids, type);
   }
 
-  Future findNodesAndRelationsById(int id, Type type, int length) {
-    return cypherFindExecutor.findNodesAndRelations([id], type, length).then((response) => _convertCypherResponseToNode(response, id, type));
+  Future findNodeWithNRelationsById(int id, Type type, int nbRelations) {
+    return cypherFindExecutor.findNodesAndRelations([id], type, nbRelations).then((response) => _convertCypherResponseToNode(response, id, type));
   }
 
-  Future findNodeAndRelationsById(int id, Type type) {
+  Future findNodeWithRelationsById(int id, Type type) {
     return cypherFindExecutor.findNodesAndRelations([id], type, 1).then((response) => _convertCypherResponseToNode(response, id, type));
   }
 
-  Future findAllNodesAndRelationsById(int id, Type type) {
+  Future findNodeWithAllRelationsById(int id, Type type) {
     return cypherFindExecutor.findAllNodesAndRelations([id], type).then((response) => _convertCypherResponseToNode(response, id, type));
   }
 
