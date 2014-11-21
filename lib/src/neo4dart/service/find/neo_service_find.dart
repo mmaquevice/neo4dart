@@ -50,4 +50,32 @@ class NeoServiceFind {
     Node nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(nodeId, aroundNodeById, typeNode: type);
     return nodeWithRelations;
   }
+
+  Future findNodesWithNRelationsByIds(Iterable<int> ids, Type type, int nbRelations) {
+    return cypherFindExecutor.findNodesAndRelations(ids, type, nbRelations).then((response) => _convertCypherResponseToNodes(response, ids, type));
+  }
+
+  Future findNodesWithRelationsByIds(Iterable<int> ids, Type type) {
+    return cypherFindExecutor.findNodesAndRelations(ids, type, 1).then((response) => _convertCypherResponseToNodes(response, ids, type));
+  }
+
+  Future findNodesWithAllRelationsByIds(Iterable<int> ids, Type type) {
+    return cypherFindExecutor.findAllNodesAndRelations(ids, type).then((response) => _convertCypherResponseToNodes(response, ids, type));
+  }
+
+  List<Node> _convertCypherResponseToNodes(var response, Iterable<int> ids, Type type) {
+
+    List<Node> nodes = new List();
+
+    CypherResponse cypherResponse = cypherFindInterpreter.convertResponse(response);
+    List<AroundNodeResponse> aroundNodes = cypherFindInterpreter.convertCypherResponse(cypherResponse);
+
+    Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
+
+    ResponseConverter responseConverter = new ResponseConverter();
+    for(int id in ids) {
+      nodes.add(responseConverter.convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type));
+    }
+    return nodes;
+  }
 }

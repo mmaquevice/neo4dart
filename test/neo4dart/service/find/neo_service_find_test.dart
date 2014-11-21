@@ -114,4 +114,32 @@ main() {
       });
     });
   });
+
+  group('findNodesWithAllRelationsByIds', () {
+    test('ok', () {
+
+      NeoServiceFind neoService = new NeoServiceFind();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/find/json/findNodesWithAllRelationsByIds_ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherFindExecutor = new CypherFindExecutor.withClient(client200);
+
+      Person lucille = new Person('Lucille', city: 'Paris');
+      Person toto = new Person('Toto', city: 'Lisbonne');
+      Person gerard = new Person('Gerard', city: 'Moscou');
+
+      lucille.coworkers = [toto];
+      toto.coworkers = [gerard];
+      gerard.coworkers = [lucille];
+
+      Person josette = new Person('Josette', city: 'Berlin');
+      gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
+
+      return neoService.findNodesWithAllRelationsByIds([24260, 24262], Person).then((nodes) {
+        expect(nodes, unorderedEquals([gerard,toto]));
+      });
+    });
+  });
 }

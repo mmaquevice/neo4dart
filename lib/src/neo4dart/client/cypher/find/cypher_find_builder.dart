@@ -4,7 +4,7 @@ class CypherFindBuilder {
 
   final _logger = new Logger("CypherFindBuilder");
 
-  String buildQueryToRetrieveAllRelatedNodesAndRelationships(Iterable<int> nodeIds, Type type, {int maxLength : 100, int limit : 100}) {
+  String buildQuery(Iterable<int> nodeIds, Type type, {int maxLength : 100, int limit : 100}) {
 
     if(nodeIds == null || nodeIds.isEmpty) {
       throw 'Query cannot be built : NodeIds is empty.';
