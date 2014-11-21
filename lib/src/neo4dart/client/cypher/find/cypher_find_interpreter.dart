@@ -36,20 +36,16 @@ class CypherFindInterpreter {
     }
   }
 
-  Set<int> extractNodeIdsFromCypherResponse(CypherResponse cypherResponse) {
-    return extractColumnFromResponse(cypherResponse, 'nodeIds');
-  }
-
   Set<dynamic> extractColumnFromResponse(CypherResponse cypherResponse, String column) {
 
     Set<dynamic> values = new Set();
 
     for (Map<String, dynamic> row in cypherResponse.rows) {
-      if(row[column] == null) {
+      if (row[column] == null) {
         throw 'Cypher response - row does not contain column <$column>';
       }
 
-      if(row[column] is Iterable) {
+      if (row[column] is Iterable) {
         values.addAll(row[column]);
       } else {
         values.add(row[column]);
@@ -59,13 +55,55 @@ class CypherFindInterpreter {
     return values;
   }
 
-  Set<int> extractRelationshipIdsFromCypherResponse(CypherResponse cypherResponse) {
-    return extractColumnFromResponse(cypherResponse, 'relationshipIds');
+  List<AroundNodeResponse> convertCypherResponse(CypherResponse cypherResponse) {
+    Map<int, AroundNodeResponse> nodesById = extractAroundNodesFromCypherResponse(cypherResponse);
+    return new List.from(nodesById.values);
   }
 
-  List<AroundNodeResponse> convertCypherResponse(CypherResponse cypherResponse) {
+  Map<int, AroundNodeResponse> extractAroundNodesFromCypherResponse(CypherResponse cypherResponse) {
 
+    Map<int, AroundNodeResponse> aroundNodesById = new Map();
 
-    return null;
+    for (Map<String, dynamic> row in cypherResponse.rows) {
+      List nodeIds = row["nodeIds"];
+      List nodes = row["nodes"];
+      var labels = row["labels"];
+
+      var relationshipIds = row["relationshipIds"];
+      var relationshipTypes = row["relationshipTypes"];
+      var relationships = row["relationships"];
+
+      int nodeIdIndex = 0;
+      for (int nodeId in nodeIds) {
+
+        if (!aroundNodesById.containsKey(nodeId)) {
+          NodeResponse nodeResponse = new NodeResponse(nodeId, nodes.asMap()[nodeIdIndex]);
+          var labelList = labels.asMap()[nodeIdIndex];
+          LabelResponse labelResponse = new LabelResponse(nodeId, labelList);
+          aroundNodesById[nodeId] = new AroundNodeResponse(labelResponse, nodeResponse, new List());
+        }
+
+        if (nodeIdIndex < nodeIds.length - 1) {
+          AroundNodeResponse aroundNode = aroundNodesById[nodeId];
+          int idRelation = relationshipIds[nodeIdIndex];
+
+          Map relationsById = new Map.fromIterable(aroundNode.relations, key : (k) => k.idRelation, value: (v) => v);
+          if (!relationsById.containsKey(idRelation)) {
+            int startNode = nodeId;
+            int endNode = nodeIds.asMap()[nodeIdIndex + 1];
+            String typeRelation = relationshipTypes.asMap()[nodeIdIndex];
+            var dataRelation = relationships.asMap()[nodeIdIndex];
+            RelationResponse relationResponse = new RelationResponse(idRelation, startNode, endNode, typeRelation, dataRelation);
+
+            aroundNode.relations.add(relationResponse);
+          }
+        }
+
+        nodeIdIndex++;
+      }
+    }
+
+    return aroundNodesById;
+
   }
 }

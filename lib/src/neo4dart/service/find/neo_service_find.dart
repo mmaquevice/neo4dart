@@ -33,17 +33,6 @@ class NeoServiceFind {
     return tokenFindExecutor.findNodeAndRelationsById(id, type);
   }
 
-  Future findAllNodeAndRelationsById(int id, Type type) {
-    return cypherFindExecutor.findAllNodeAndRelationIds([id], type).then((response) {
-
-      CypherResponse cypherResponse = cypherFindInterpreter.convertResponse(response);
-      Set<int> nodeIds = cypherFindInterpreter.extractNodeIdsFromCypherResponse(cypherResponse);
-      Set<int> relationshipIds = cypherFindInterpreter.extractRelationshipIdsFromCypherResponse(cypherResponse);
-
-      return tokenFindExecutor.findAllNodesAndRelations(id, type, nodeIds, relationshipIds);
-    });
-  }
-
   Future findAllNodesAndRelationsById(int id, Type type) {
     return cypherFindExecutor.findAllNodesAndRelations([id], type).then((response) {
 
