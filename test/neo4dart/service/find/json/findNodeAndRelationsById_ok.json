@@ -1,119 +1,72 @@
-[
-  {
-    "body": {
-      "extensions": {
-      },
-      "labels": "http://localhost:7474/db/data/node/11/labels",
-      "outgoing_relationships": "http://localhost:7474/db/data/node/11/relationships/out",
-      "traverse": "http://localhost:7474/db/data/node/11/traverse/{returnType}",
-      "all_typed_relationships": "http://localhost:7474/db/data/node/11/relationships/all/{-list|&|types}",
-      "self": "http://localhost:7474/db/data/node/11",
-      "property": "http://localhost:7474/db/data/node/11/properties/{key}",
-      "outgoing_typed_relationships": "http://localhost:7474/db/data/node/11/relationships/out/{-list|&|types}",
-      "properties": "http://localhost:7474/db/data/node/11/properties",
-      "incoming_relationships": "http://localhost:7474/db/data/node/11/relationships/in",
-      "create_relationship": "http://localhost:7474/db/data/node/11/relationships",
-      "paged_traverse": "http://localhost:7474/db/data/node/11/paged/traverse/{returnType}{?pageSize,leaseTime}",
-      "all_relationships": "http://localhost:7474/db/data/node/11/relationships/all",
-      "incoming_typed_relationships": "http://localhost:7474/db/data/node/11/relationships/in/{-list|&|types}",
-      "data": {
-        "name": "Lucille",
-        "city": "Paris"
-      }
-    },
-    "from": "/node/11"
-  },
-  {
-    "body": ["Person"],
-    "from": "/node/11/labels"
-  },
-  {
-    "body": [
-      {
-        "start": "http://localhost:7474/db/data/node/11",
-        "data": {
-          "howMuch": "Muchos",
-          "since": "1984"
+{
+  "results": [
+    {
+      "columns": [
+        "nodeIds",
+        "nodes",
+        "labels",
+        "relationshipIds",
+        "relationshipTypes",
+        "relationships"
+      ],
+      "data": [
+        {
+          "row": [
+            [
+              24260,
+              24263
+            ],
+            [
+              {
+                "name": "Gerard",
+                "city": "Moscou"
+              },
+              {
+                "name": "Josette",
+                "city": "Berlin"
+              }
+            ],
+            [
+              ["Person"],
+              ["Person"]
+            ],
+            [180],
+            ["secretly loves"],
+            [
+              {
+                "since": "2 hours ago",
+                "howMuch": "a lot"
+              }
+            ]
+          ]
         },
-        "self": "http://localhost:7474/db/data/relationship/113",
-        "property": "http://localhost:7474/db/data/relationship/113/properties/{key}",
-        "properties": "http://localhost:7474/db/data/relationship/113/properties",
-        "type": "secretly loves",
-        "extensions": {
-        },
-        "end": "http://localhost:7474/db/data/node/22"
-      },
-      {
-        "start": "http://localhost:7474/db/data/node/11",
-        "data": {
-          "howMuch": "A lot",
-          "since": "1985"
-        },
-        "self": "http://localhost:7474/db/data/relationship/112",
-        "property": "http://localhost:7474/db/data/relationship/112/properties/{key}",
-        "properties": "http://localhost:7474/db/data/relationship/112/properties",
-        "type": "secretly loves",
-        "extensions": {
-        },
-        "end": "http://localhost:7474/db/data/node/21"
-      }
-    ],
-    "from": "/node/11/relationships/all"
-  },
-  {
-    "body": {
-      "extensions": {
-      },
-      "labels": "http://localhost:7474/db/data/node/22/labels",
-      "outgoing_relationships": "http://localhost:7474/db/data/node/22/relationships/out",
-      "traverse": "http://localhost:7474/db/data/node/22/traverse/{returnType}",
-      "all_typed_relationships": "http://localhost:7474/db/data/node/22/relationships/all/{-list|&|types}",
-      "self": "http://localhost:7474/db/data/node/22",
-      "property": "http://localhost:7474/db/data/node/22/properties/{key}",
-      "outgoing_typed_relationships": "http://localhost:7474/db/data/node/22/relationships/out/{-list|&|types}",
-      "properties": "http://localhost:7474/db/data/node/22/properties",
-      "incoming_relationships": "http://localhost:7474/db/data/node/22/relationships/in",
-      "create_relationship": "http://localhost:7474/db/data/node/22/relationships",
-      "paged_traverse": "http://localhost:7474/db/data/node/22/paged/traverse/{returnType}{?pageSize,leaseTime}",
-      "all_relationships": "http://localhost:7474/db/data/node/22/relationships/all",
-      "incoming_typed_relationships": "http://localhost:7474/db/data/node/22/relationships/in/{-list|&|types}",
-      "data": {
-        "name": "Antonio",
-        "city": "Madrid"
-      }
-    },
-    "from": "/node/22"
-  },
-  {
-    "body": ["Person"],
-    "from": "/node/22/labels"
-  },
-  {
-    "body": {
-      "extensions": {
-      },
-      "labels": "http://localhost:7474/db/data/node/21/labels",
-      "outgoing_relationships": "http://localhost:7474/db/data/node/21/relationships/out",
-      "traverse": "http://localhost:7474/db/data/node/21/traverse/{returnType}",
-      "all_typed_relationships": "http://localhost:7474/db/data/node/21/relationships/all/{-list|&|types}",
-      "self": "http://localhost:7474/db/data/node/21",
-      "property": "http://localhost:7474/db/data/node/21/properties/{key}",
-      "outgoing_typed_relationships": "http://localhost:7474/db/data/node/21/relationships/out/{-list|&|types}",
-      "properties": "http://localhost:7474/db/data/node/21/properties",
-      "incoming_relationships": "http://localhost:7474/db/data/node/21/relationships/in",
-      "create_relationship": "http://localhost:7474/db/data/node/21/relationships",
-      "paged_traverse": "http://localhost:7474/db/data/node/21/paged/traverse/{returnType}{?pageSize,leaseTime}",
-      "all_relationships": "http://localhost:7474/db/data/node/21/relationships/all",
-      "incoming_typed_relationships": "http://localhost:7474/db/data/node/21/relationships/in/{-list|&|types}",
-      "data": {
-        "name": "Roméo",
-        "city": "Roma"
-      }
-    },
-    "from": "/node/21"
-  },
-  {
-    "body": ["Person"],
-    "from": "/node/21/labels"
-  }
-]
+        {
+          "row": [
+            [
+              24260,
+              24261
+            ],
+            [
+              {
+                "name": "Gerard",
+                "city": "Moscou"
+              },
+              {
+                "name": "Lucille",
+                "city": "Paris"
+              }
+            ],
+            [
+              ["Person"],
+              ["Person"]
+            ],
+            [47250],
+            ["works with"],
+            [{}]
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -10,12 +10,11 @@ class CypherFindExecutor extends CypherExecutor {
 
   CypherFindExecutor.withClient(client) : super.withClient(client);
 
-  Future findAllNodeAndRelationIds(Iterable<int> ids, Type type) {
-    return executeCypher(new CypherFindBuilder().buildQueryToRetrieveAllRelatedNodeAndRelationshipIds(ids, type));
+  Future findNodesAndRelations(Iterable<int> ids, Type type, int length) {
+    return executeCypher(new CypherFindBuilder().buildQueryToRetrieveAllRelatedNodesAndRelationships(ids, type, maxLength: length));
   }
-
   Future findAllNodesAndRelations(Iterable<int> ids, Type type) {
-    return executeCypher(new CypherFindBuilder().buildQueryToRetrieveAllRelatedNodesAndRelationships(ids, type));
+    return executeCypher(new CypherFindBuilder().buildQueryToRetrieveAllRelatedNodesAndRelationships(ids, type, limit: 1));
   }
 
 }

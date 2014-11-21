@@ -68,24 +68,21 @@ main() {
       NeoServiceFind neoService = new NeoServiceFind();
 
       var client200 = new MockClient((request) {
-        var json = new JsonDecoder().convert(request.body);
-        if (json.length == 1) {
-          var responseBody = util.readFile('test/neo4dart/service/find/json/findNodeAndRelationsById_relationships.json');
-          return new http.Response(responseBody, 200);
-        }
-
         var responseBody = util.readFile('test/neo4dart/service/find/json/findNodeAndRelationsById_ok.json');
         return new http.Response(responseBody, 200);
       });
-      neoService.tokenFindExecutor = new BatchFindExecutor.withClient(client200);
+      neoService.cypherFindExecutor = new CypherFindExecutor.withClient(client200);
 
-      return neoService.findNodeAndRelationsById(11, Person).then((node) {
+      return neoService.findNodeAndRelationsById(24260, Person).then((node) {
 
+        Person gerard = new Person('Gerard', city: 'Moscou');
         Person lucille = new Person('Lucille', city: 'Paris');
-        lucille.eternalLovers.add(new Love(lucille, new Person('Antonio', city: 'Madrid'), 'Muchos', '1984'));
-        lucille.eternalLovers.add(new Love(lucille, new Person('Roméo', city: 'Roma'), 'A lot', '1985'));
+        gerard.coworkers = [lucille];
 
-        expect(node, lucille);
+        Person josette = new Person('Josette', city: 'Berlin');
+        gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
+
+        expect(node, gerard);
       });
     });
   });
