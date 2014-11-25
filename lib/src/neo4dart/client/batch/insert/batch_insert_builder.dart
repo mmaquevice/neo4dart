@@ -55,8 +55,7 @@ class BatchInsertBuilder {
     BatchToken found;
     batchTokens.forEach((batchToken) {
       if (batchToken != null) {
-        // TODO mma - find a way to correctly verify equality
-        if ('${batchToken.body}' == '${body}') {
+        if (new DeepCollectionEquality.unordered().equals(batchToken.body, body)) {
           found = batchToken;
         }
       }

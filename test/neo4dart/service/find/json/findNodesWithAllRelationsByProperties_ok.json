@@ -1,0 +1,69 @@
+{
+  "results": [
+    {
+      "columns": [
+        "nodeIds",
+        "nodes",
+        "labels",
+        "relationshipIds",
+        "relationshipTypes",
+        "relationships"
+      ],
+      "data": [
+        {
+          "row": [
+            [
+              11,
+              12,
+              10,
+              13
+            ],
+            [
+              {
+                "name": "Lucille",
+                "city": "Paris"
+              },
+              {
+                "name": "Toto",
+                "city": "Lisbonne"
+              },
+              {
+                "name": "Gerard",
+                "city": "Moscou"
+              },
+              {
+                "name": "Josette",
+                "city": "Berlin"
+              }
+            ],
+            [
+              ["Person"],
+              ["Person"],
+              ["Person"],
+              ["Person"]
+            ],
+            [
+              28,
+              29,
+              75
+            ],
+            [
+              "works with",
+              "works with",
+              "secretly loves"
+            ],
+            [
+              {},
+              {},
+              {
+                "since": "2 hours ago",
+                "howMuch": "a lot"
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

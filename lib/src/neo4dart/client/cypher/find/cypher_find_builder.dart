@@ -6,9 +6,16 @@ class CypherFindBuilder {
 
   String buildQueryToFindNodesAndRelations(Type type, {Map properties, int maxLength : 100, int limit : 100}) {
 
+    List<String> propertiesInline = new List();
+    if (properties != null && !properties.isEmpty) {
+      for (String key in properties.keys) {
+        propertiesInline.add("$key: {$key}");
+      }
+    }
+
     String query =
-    '''
-    MATCH path=(p:$type ${(properties == null || properties.isEmpty) ? "" : "{props}"})-[*..$maxLength]->()
+      '''
+    MATCH path=(p:$type ${propertiesInline.isEmpty ? '': "{${propertiesInline.join(', ')}}"})-[*..$maxLength]->()
     WITH DISTINCT(path) as path
     RETURN [n in nodes(path) | ID(n)] as nodeIds,
            [n in nodes(path)] as nodes,
@@ -25,7 +32,7 @@ class CypherFindBuilder {
 
   String buildQueryToFindNodesAndRelationsByIds(Iterable<int> nodeIds, Type type, {int maxLength : 100, int limit : 100}) {
 
-    if(nodeIds == null || nodeIds.isEmpty) {
+    if (nodeIds == null || nodeIds.isEmpty) {
       throw 'Query cannot be built : NodeIds is empty.';
     }
 

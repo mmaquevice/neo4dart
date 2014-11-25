@@ -100,22 +100,39 @@ class NeoServiceFind {
 
     Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
 
-    List<int> ids = aroundNodes.where((aroundNode) {
+    Set<int> ids = new Set();
+
+    for(AroundNodeResponse aroundNode in aroundNodes) {
       if(aroundNode.label.labels.contains("$type")) {
         if(properties == null || properties.isEmpty) {
-          return true;
+          ids.add(aroundNode.node.idNode);
+        } else {
+          if(_arePropertiesMatching(properties, aroundNode.node.data)) {
+            ids.add(aroundNode.node.idNode);
+          }
         }
-        if(properties == aroundNode.node.data) {
-          return true;
-        }
-        return false;
       }
-    }).map((aroundNode) => aroundNode.node.idNode).toList();
+    }
 
     ResponseConverter responseConverter = new ResponseConverter();
     for(int id in ids) {
       nodes.add(responseConverter.convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type));
     }
     return nodes;
+  }
+
+  bool _arePropertiesMatching(Map requestProperties, Map nodeProperties) {
+
+    for(String key in requestProperties.keys) {
+      if(nodeProperties.containsKey(key)) {
+        if(nodeProperties[key] != requestProperties[key]) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

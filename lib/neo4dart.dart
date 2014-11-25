@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:quiver/core.dart';
 import 'package:quiver/collection.dart';
+import 'package:collection/equality.dart';
 
 import 'dart:mirrors';
 
