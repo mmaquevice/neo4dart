@@ -10,18 +10,26 @@ class CypherFindExecutor extends CypherExecutor {
 
   CypherFindExecutor.withClient(client) : super.withClient(client);
 
-  Future findNodesAndRelationsByIds(Iterable<int> ids, Type type, int length) {
-    return executeCypher(new CypherFindBuilder().buildQueryToFindNodesAndRelationsByIds(ids, type, maxLength: length));
-  }
-  Future findAllNodesAndRelationsByIds(Iterable<int> ids, Type type) {
-    return executeCypher(new CypherFindBuilder().buildQueryToFindNodesAndRelationsByIds(ids, type, limit: 1));
+  Future findNodesAndRelationsByIds(Iterable<int> ids, Type type, {int nbTransitiveRelations}) {
+
+    String query = "";
+    if(nbTransitiveRelations != null) {
+      query = new CypherFindBuilder().buildQueryToFindNodesAndRelationsByIds(ids, type, maxLength: nbTransitiveRelations);
+    } else {
+      query = new CypherFindBuilder().buildQueryToFindNodesAndRelationsByIds(ids, type, limit: 1);
+    }
+
+    return executeCypher(query);
   }
 
-  Future findNodesAndRelations(Type type, int length, {Map properties}) {
-    return executeCypher(new CypherFindBuilder().buildQueryToFindNodesAndRelations(type, properties: properties, maxLength: length));
-  }
-  // TODO mma - executeCypher and properties...
-  Future findAllNodesAndRelations(Type type, {Map properties}) {
-    return executeCypher(new CypherFindBuilder().buildQueryToFindNodesAndRelations(type, properties: properties, limit: 1), properties: properties);
+  Future findNodesAndRelations(Type type, {Map properties, int nbTransitiveRelations}) {
+    String query = "";
+    if(nbTransitiveRelations != null) {
+      query = new CypherFindBuilder().buildQueryToFindNodesAndRelations(type, properties: properties, maxLength: nbTransitiveRelations);
+    } else {
+      query = new CypherFindBuilder().buildQueryToFindNodesAndRelations(type, properties: properties, limit: 1);
+    }
+
+    return executeCypher(query);
   }
 }

@@ -87,6 +87,7 @@ main() {
     });
   });
 
+  // TODO mma - rename test methods
   group('findNodeWithAllRelationsById', () {
     test('ok', () {
 
@@ -109,7 +110,7 @@ main() {
       Person josette = new Person('Josette', city: 'Berlin');
       gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
 
-      return neoService.findNodeWithAllRelationsById(24260, Person).then((node) {
+      return neoService.findNodeWithRelationsById(24260, Person).then((node) {
         expect(node, equals(gerard));
       });
     });
@@ -137,7 +138,7 @@ main() {
       Person josette = new Person('Josette', city: 'Berlin');
       gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
 
-      return neoService.findNodesWithAllRelationsByIds([24260, 24262], Person).then((nodes) {
+      return neoService.findNodesWithRelationsByIds([24260, 24262], Person).then((nodes) {
         expect(nodes, unorderedEquals([gerard,toto]));
       });
     });
@@ -165,7 +166,7 @@ main() {
       Person josette = new Person('Josette', city: 'Berlin');
       gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
 
-      return neoService.findNodesWithAllRelations(Person, properties: {"name": "Lucille"}).then((nodes) {
+      return neoService.findNodesWithRelations(Person, properties: {"name": "Lucille"}).then((nodes) {
         expect(nodes, unorderedEquals([lucille]));
       });
 
