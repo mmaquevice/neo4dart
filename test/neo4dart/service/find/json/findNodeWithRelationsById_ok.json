@@ -14,9 +14,24 @@
           "row": [
             [
               24260,
+              24261,
+              24262,
+              24260,
               24263
             ],
             [
+              {
+                "name": "Gerard",
+                "city": "Moscou"
+              },
+              {
+                "name": "Lucille",
+                "city": "Paris"
+              },
+              {
+                "name": "Toto",
+                "city": "Lisbonne"
+              },
               {
                 "name": "Gerard",
                 "city": "Moscou"
@@ -27,42 +42,43 @@
               }
             ],
             [
-              ["Person"],
-              ["Person"]
+              [
+                "Person"
+              ],
+              [
+                "Person"
+              ],
+              [
+                "Person"
+              ],
+              [
+                "Person"
+              ],
+              [
+                "Person"
+              ]
             ],
-            [180],
-            ["secretly loves"],
             [
+              47250,
+              47251,
+              47252,
+              180
+            ],
+            [
+              "works with",
+              "works with",
+              "works with",
+              "secretly loves"
+            ],
+            [
+              {},
+              {},
+              {},
               {
                 "since": "2 hours ago",
                 "howMuch": "a lot"
               }
             ]
-          ]
-        },
-        {
-          "row": [
-            [
-              24260,
-              24261
-            ],
-            [
-              {
-                "name": "Gerard",
-                "city": "Moscou"
-              },
-              {
-                "name": "Lucille",
-                "city": "Paris"
-              }
-            ],
-            [
-              ["Person"],
-              ["Person"]
-            ],
-            [47250],
-            ["works with"],
-            [{}]
           ]
         }
       ]
