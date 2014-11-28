@@ -7,6 +7,7 @@ import 'neo4dart/client/get/neo_client_get_test.dart' as neo_client_get;
 
 import 'neo4dart/service/insert/neo_service_insert_test.dart' as neo_service;
 import 'neo4dart/service/find/neo_service_find_test.dart' as neo_service_find;
+import 'neo4dart/service/update/neo_service_update_test.dart' as neo_service_update;
 
 import 'package:logging/logging.dart';
 
@@ -26,4 +27,5 @@ main() {
   neo_service.main();
 
   neo_service_find.main();
+  neo_service_update.main();
 }
