@@ -1,7 +1,5 @@
 library neo4dart.service.find.neo_service_update_test;
 
-import 'dart:convert';
-
 import 'package:unittest/unittest.dart';
 import 'package:neo4dart/neo4dart.dart';
 
@@ -9,8 +7,6 @@ import 'package:logging/logging.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-
-import '../../util/util.dart' as util;
 
 import 'package:neo4dart/testing/person.dart';
 import 'package:neo4dart/testing/love.dart';
