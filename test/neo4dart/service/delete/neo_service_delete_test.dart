@@ -41,34 +41,36 @@ main() {
 //      return neoService.insertNodeInDepth(toto);
 //    });
 //
-//    solo_test('ok', () {
-//
-//      NeoServiceDelete neoService = new NeoServiceDelete();
-//
-////      var client200 = new MockClient((request) {
-////        return new http.Response('[{"from": "/node/10/properties"}]', 200);
-////      });
-////      neoService.batchUpdateExecutor = new BatchUpdateExecutor.withClient(client200);
-//
-//      Person toto = new Person("Toto", city: "Blagoland");
-//      toto.id = 12;
-//
-//      return neoService.deleteNode(toto, Person, force: true);
-//    });
-//
-//    test('error 500', () {
-//
-//      NeoServiceUpdate neoService = new NeoServiceUpdate();
-//
-//      var client500 = new MockClient((request) {
-//        return new http.Response("", 500);
-//      });
-//      neoService.batchUpdateExecutor = new BatchUpdateExecutor.withClient(client500);
-//
-//      Person toto = new Person("Toto", city: "Blagoland");
-//      toto.id = 24260;
-//
-//      return expect(neoService.updateNode(toto), throwsA(new isInstanceOf<String>()));
-//    });
+    test('ok', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      Person toto = new Person("Toto", city: "Blagoland");
+      toto.id = 13;
+
+      return neoService.deleteNode(toto, Person);
+    });
+
+    test('error - constraint violation', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/constraint_violation.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      Person toto = new Person("Toto", city: "Blagoland");
+      toto.id = 13;
+
+      return expect(neoService.deleteNode(toto, Person), throwsA(new isInstanceOf<String>()));
+    });
   });
 }
