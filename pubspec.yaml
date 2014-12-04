@@ -1,5 +1,7 @@
 name: neo4dart
 version: 0.0.1
+authors:
+- Matthieu Maquevice <matth.maq@gmail.com>
 description: Driver for neo4j
 homepage: https://github.com/matth3o/neo4dart
 environment:
