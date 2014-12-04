@@ -21,7 +21,7 @@ Add Neo4dart to your project's `pubspec.yaml` file and run pub get:
 
 If you want to use the driver, all you have to do is to adopt the following conventions :
 
-* A node must extends `Node` and it must have a `toJson()` method representing his data :
+* A node must extends `Node` and it must have a `toJson()` method representing his data
 
 ```dart
 class Person extends Node {
@@ -38,7 +38,7 @@ class Person extends Node {
 }
 ```
 
-* A relation can be added via the annotation `@Relationship()` :
+* A relation can be added via the annotation `@Relationship()`
 
 ```dart
 class Person extends Node {
