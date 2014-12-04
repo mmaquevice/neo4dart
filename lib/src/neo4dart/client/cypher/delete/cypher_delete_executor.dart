@@ -10,24 +10,28 @@ class CypherDeleteExecutor extends CypherExecutor {
 
   CypherDeleteExecutor.withClient(client) : super.withClient(client);
 
-  Future deleteNode(Node node, Type type, {bool force: false}) {
+  Future deleteNode(Node node, {bool force: false}) {
 
-    String query = new CypherDeleteBuilder().buildQueryToDeleteNodes([node.id], type, force: force);
-    return executeCypher(query).then((response) {
-      _checkResponse(response);
-    });
+    String query = new CypherDeleteBuilder().buildQueryToDeleteNodes([node.id], force: force);
+    return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  Future deleteNodes(Iterable<Node> nodes) {
-    return null;
+  Future deleteNodes(Iterable<Node> nodes, {bool force: false}) {
+
+    String query = new CypherDeleteBuilder().buildQueryToDeleteNodes(nodes.map((node) => node.id).toList(), force: force);
+    return executeCypher(query).then((response) => _checkResponse(response));
   }
 
   Future deleteRelation(Relation relation) {
-    return null;
+
+    String query = new CypherDeleteBuilder().buildQueryToDeleteRelations([relation.id]);
+    return executeCypher(query).then((response) => _checkResponse(response));
   }
 
   Future deleteRelations(Iterable<Relation> relations) {
-    return null;
+
+    String query = new CypherDeleteBuilder().buildQueryToDeleteRelations(relations.map((r) => r.id).toList());
+    return executeCypher(query).then((response) => _checkResponse(response));
   }
 
   _checkResponse(response) {
