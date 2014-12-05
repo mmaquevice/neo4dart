@@ -72,6 +72,35 @@ main() {
     });
   });
 
+  group('deleteNodeById', () {
+
+    test('ok', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      return neoService.deleteNodeById(1);
+    });
+
+    test('error - constraint violation', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/constraint_violation.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      return expect(neoService.deleteNodeById(1), throwsA(new isInstanceOf<String>()));
+    });
+  });
+
   group('deleteNodes', () {
 
     test('ok', () {
@@ -108,6 +137,35 @@ main() {
       minnie.id = 86;
 
       return expect(neoService.deleteNodes([mickey, minnie]), throwsA(new isInstanceOf<String>()));
+    });
+  });
+
+  group('deleteNodesByIds', () {
+
+    test('ok', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      return neoService.deleteNodesByIds([1, 2]);
+    });
+
+    test('error - constraint violation', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/constraint_violation.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      return expect(neoService.deleteNodesByIds([1, 2]), throwsA(new isInstanceOf<String>()));
     });
   });
 
@@ -151,6 +209,35 @@ main() {
       love.id = 4;
 
       return expect(neoService.deleteRelation(love), throwsA(new isInstanceOf<String>()));
+    });
+  });
+
+  group('deleteRelationById', () {
+
+    test('ok', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      return neoService.deleteRelationById(1);
+    });
+
+    test('error - constraint violation', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/constraint_violation.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      return expect(neoService.deleteRelationById(1), throwsA(new isInstanceOf<String>()));
     });
   });
 
@@ -201,4 +288,32 @@ main() {
     });
   });
 
+  group('deleteRelationsByIds', () {
+
+    test('ok', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/ok.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      return neoService.deleteRelationsByIds([1, 2]);
+    });
+
+    test('error - constraint violation', () {
+
+      NeoServiceDelete neoService = new NeoServiceDelete();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/delete/json/constraint_violation.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherDeleteExecutor = new CypherDeleteExecutor.withClient(client200);
+
+      return expect(neoService.deleteRelationsByIds([1, 2]), throwsA(new isInstanceOf<String>()));
+    });
+  });
 }
