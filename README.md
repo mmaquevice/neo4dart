@@ -4,7 +4,7 @@ Neo4dart
 Neo4dart is a [Dart](https://www.dartlang.org) library acting as a driver for 
 [Neo4j](http://neo4j.com/).
 
-[![Build Status](https://drone.io/github.com/matth3o/neo4dart/status.png)](https://drone.io/github.com/matth3o/neo4dart/latest)
+[![Build Status](https://drone.io/github.com/mmaquevice/neo4dart/status.png)](https://drone.io/github.com/mmaquevice/neo4dart/latest)
 
 ## Features
 
