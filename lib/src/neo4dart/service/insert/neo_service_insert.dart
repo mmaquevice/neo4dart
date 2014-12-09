@@ -7,19 +7,19 @@ class NeoServiceInsert {
   BatchInsertExecutor tokenInsertExecutor = new BatchInsertExecutor();
   BatchFindExecutor tokenFindExecutor = new BatchFindExecutor();
 
-  Future insertNode(Node node) {
+  insertNode(Node node) async {
     return tokenInsertExecutor.insertNode(node, false);
   }
 
-  Future insertNodeInDepth(Node node) {
+  insertNodeInDepth(Node node) async {
     return tokenInsertExecutor.insertNode(node, true);
   }
 
-  Future insertNodes(Iterable<Node> nodes) {
+  insertNodes(Iterable<Node> nodes) async {
     return tokenInsertExecutor.insertNodes(nodes, false);
   }
 
-  Future insertNodesInDepth(Iterable<Node> nodes) {
+  insertNodesInDepth(Iterable<Node> nodes) async {
     return tokenInsertExecutor.insertNodes(nodes, true);
   }
 }

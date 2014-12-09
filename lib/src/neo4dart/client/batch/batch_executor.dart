@@ -12,7 +12,7 @@ class BatchExecutor {
 
   BatchExecutor.withClient(this.client);
 
-  Future executeBatch(Set<BatchToken> batchTokens) {
+  executeBatch(Set<BatchToken> batchTokens) async {
 
     List data = _convertBatchTokensToJsonArray(batchTokens);
     _logger.info(data);

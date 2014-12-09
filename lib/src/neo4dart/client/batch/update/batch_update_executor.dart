@@ -10,28 +10,28 @@ class BatchUpdateExecutor extends BatchExecutor {
 
   BatchUpdateExecutor.withClient(client) : super.withClient(client);
 
-  Future updateNode(Node node) {
+  updateNode(Node node) async {
     return executeBatch(new Set.from([new BatchUpdateBuilder().createNodeToken(node)])).then((response) {
       _checkResponse(response);
       return node;
     });
   }
 
-  Future updateNodes(Iterable<Node> nodes) {
+  updateNodes(Iterable<Node> nodes) async {
     return executeBatch(new BatchUpdateBuilder().createNodeTokens(nodes)).then((response) {
       _checkResponse(response);
       return nodes;
     });
   }
 
-  Future updateRelation(Relation relation) {
+  updateRelation(Relation relation) async {
     return executeBatch(new Set.from([new BatchUpdateBuilder().createRelationToken(relation)])).then((response) {
       _checkResponse(response);
       return relation;
     });
   }
 
-  Future updateRelations(Iterable<Relation> relations) {
+  updateRelations(Iterable<Relation> relations) async {
     return executeBatch(new BatchUpdateBuilder().createRelationTokens(relations)).then((response) {
       _checkResponse(response);
       return relations;

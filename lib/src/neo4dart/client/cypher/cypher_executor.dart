@@ -12,7 +12,7 @@ class CypherExecutor {
 
   CypherExecutor.withClient(this.client);
 
-  Future executeCypher(String query, {Map properties}) {
+  executeCypher(String query, {Map properties}) async {
 
     Map map;
     if(properties == null || properties.isEmpty) {

@@ -12,7 +12,7 @@ class NeoClientGet extends NeoClient {
 
   NeoClientGet.withClient(this._client);
 
-  Future findNodesByType(Type type) {
+  findNodesByType(Type type) async {
 
     String label = _convertTypeToLabel(type);
     String url = "http://localhost:7474/db/data/label/${label}/nodes";
@@ -26,7 +26,7 @@ class NeoClientGet extends NeoClient {
     return MirrorSystem.getName(symbol);
   }
 
-  Future findNodesByTypeAndProperties(Type type, Map properties) {
+  findNodesByTypeAndProperties(Type type, Map properties) async {
 
     String label = _convertTypeToLabel(type);
 
