@@ -6,19 +6,19 @@ class NeoServiceUpdate {
 
   BatchUpdateExecutor batchUpdateExecutor = new BatchUpdateExecutor();
 
-  Future updateNode(Node node) {
+  updateNode(Node node) async {
     return batchUpdateExecutor.updateNode(node);
   }
 
-  Future updateNodes(Iterable<Node> nodes) {
+  updateNodes(Iterable<Node> nodes) async {
     return batchUpdateExecutor.updateNodes(nodes);
   }
 
-  Future updateRelation(Relation relation) {
+  updateRelation(Relation relation) async {
     return batchUpdateExecutor.updateRelation(relation);
   }
 
-  Future updateRelations(Iterable<Relation> relations) {
+  updateRelations(Iterable<Relation> relations) async {
     return batchUpdateExecutor.updateRelations(relations);
   }
 }

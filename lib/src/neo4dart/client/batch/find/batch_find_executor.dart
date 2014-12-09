@@ -18,11 +18,11 @@ class BatchFindExecutor extends BatchExecutor {
 
   BatchFindExecutor.withClient(client) : super.withClient(client);
 
-  Future findNodeById(int id, Type type) {
+  findNodeById(int id, Type type) async {
     return executeBatch(new BatchFindBuilder().addNodeToBatch(id)).then((response) => _convertResponseToNode(response, type));
   }
 
-  Future findNodesByIds(Iterable<int> ids, Type type) {
+  findNodesByIds(Iterable<int> ids, Type type) async {
     return executeBatch(new BatchFindBuilder().addNodesToBatch(ids)).then((response) => _convertResponseToNodes(response, type));
   }
 
@@ -70,7 +70,7 @@ class BatchFindExecutor extends BatchExecutor {
     return nodes;
   }
 
-  Future findNodeAndRelationsById(int id, Type type) {
+  findNodeAndRelationsById(int id, Type type) async {
 
     return executeBatch(new BatchFindBuilder().addRelationsToBatchFromNodes([id])).then((response) {
 
@@ -93,7 +93,7 @@ class BatchFindExecutor extends BatchExecutor {
     });
   }
 
-  Future findAllNodesAndRelations(int originNodeId, Type originType, Iterable<int> nodeIds, Iterable<int> relationshipIds) {
+  findAllNodesAndRelations(int originNodeId, Type originType, Iterable<int> nodeIds, Iterable<int> relationshipIds) async {
 
       Set<BatchToken> tokens = new Set();
       BatchFindBuilder builder = new BatchFindBuilder();

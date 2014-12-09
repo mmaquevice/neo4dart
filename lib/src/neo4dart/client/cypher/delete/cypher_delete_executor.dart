@@ -10,49 +10,49 @@ class CypherDeleteExecutor extends CypherExecutor {
 
   CypherDeleteExecutor.withClient(client) : super.withClient(client);
 
-  Future deleteNode(Node node, {bool force: false}) {
+  deleteNode(Node node, {bool force: false}) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteNodes([node.id], force: force);
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  Future deleteNodes(Iterable<Node> nodes, {bool force: false}) {
+  deleteNodes(Iterable<Node> nodes, {bool force: false}) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteNodes(nodes.map((node) => node.id).toList(), force: force);
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  Future deleteNodeById(int id, {bool force: false}) {
+  deleteNodeById(int id, {bool force: false}) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteNodes([id], force: force);
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  Future deleteNodesByIds(Iterable<int> ids, {bool force: false}) {
+  deleteNodesByIds(Iterable<int> ids, {bool force: false}) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteNodes(ids, force: force);
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  Future deleteRelation(Relation relation) {
+  deleteRelation(Relation relation) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteRelations([relation.id]);
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  Future deleteRelations(Iterable<Relation> relations) {
+  deleteRelations(Iterable<Relation> relations) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteRelations(relations.map((r) => r.id).toList());
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  Future deleteRelationById(int id) {
+  deleteRelationById(int id) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteRelations([id]);
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  Future deleteRelationsByIds(Iterable<int> ids) {
+  deleteRelationsByIds(Iterable<int> ids) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteRelations(ids);
     return executeCypher(query).then((response) => _checkResponse(response));
@@ -73,6 +73,4 @@ class CypherDeleteExecutor extends CypherExecutor {
 
     return response;
   }
-
-
 }

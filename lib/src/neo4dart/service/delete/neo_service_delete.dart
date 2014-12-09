@@ -6,38 +6,35 @@ class NeoServiceDelete {
 
   CypherDeleteExecutor cypherDeleteExecutor = new CypherDeleteExecutor();
 
-  Future deleteNode(Node node, {bool force: false}) {
+  deleteNode(Node node, {bool force: false}) async {
     return cypherDeleteExecutor.deleteNode(node, force: force);
   }
 
-  Future deleteNodes(Iterable<Node> nodes, {bool force: false}) {
+  deleteNodes(Iterable<Node> nodes, {bool force: false}) async {
     return cypherDeleteExecutor.deleteNodes(nodes, force: force);
   }
 
-  Future deleteNodeById(int id, {bool force: false}) {
+  deleteNodeById(int id, {bool force: false}) async {
     return cypherDeleteExecutor.deleteNodeById(id, force: force);
   }
 
-  Future deleteNodesByIds(Iterable<int> ids, {bool force: false}) {
+  deleteNodesByIds(Iterable<int> ids, {bool force: false}) async {
     return cypherDeleteExecutor.deleteNodesByIds(ids, force: force);
   }
 
-  Future deleteRelation(Relation relation) {
+  deleteRelation(Relation relation) async {
     return cypherDeleteExecutor.deleteRelation(relation);
   }
 
-  Future deleteRelations(Iterable<Relation> relations) {
+  deleteRelations(Iterable<Relation> relations) async {
     return cypherDeleteExecutor.deleteRelations(relations);
   }
 
-  Future deleteRelationById(int id) {
+  deleteRelationById(int id) async {
     return cypherDeleteExecutor.deleteRelationById(id);
   }
 
-  Future deleteRelationsByIds(Iterable<int> ids) {
+  deleteRelationsByIds(Iterable<int> ids) async {
     return cypherDeleteExecutor.deleteRelationsByIds(ids);
   }
 }
-
-
-

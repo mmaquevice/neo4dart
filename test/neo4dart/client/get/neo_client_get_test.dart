@@ -80,14 +80,8 @@ main() {
     });
 
     test('if [properties are empty] then [exception]', () {
-        try {
-          new NeoClientGet().findNodesByTypeAndProperties(Person, {});
-        } on StateError catch(e) {
-          expect(e.message, 'Properties are empty.');
-          return;
-        }
-        throw "Expected StateError";
+          NeoClientGet neoClient = new NeoClientGet();
+          return expect(neoClient.findNodesByTypeAndProperties(Person, {}), throwsA(new isInstanceOf<StateError>()));
     });
-
   });
 }

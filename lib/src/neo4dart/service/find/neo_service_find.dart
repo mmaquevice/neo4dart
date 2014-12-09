@@ -12,7 +12,7 @@ class NeoServiceFind {
   CypherFindInterpreter cypherFindInterpreter = new CypherFindInterpreter();
   CypherFindExecutor cypherFindExecutor = new CypherFindExecutor();
 
-  Future findNodes(Type type, {Map properties}) {
+  findNodes(Type type, {Map properties}) async {
 
     if (properties == null || properties.length == 0) {
       return neoClientGet.findNodesByType(type);
@@ -21,15 +21,15 @@ class NeoServiceFind {
     return neoClientGet.findNodesByTypeAndProperties(type, properties);
   }
 
-  Future findNodeById(int id, Type type) {
+  findNodeById(int id, Type type) async {
     return tokenFindExecutor.findNodeById(id, type);
   }
 
-  Future findNodesByIds(Iterable<int> ids, Type type) {
+  findNodesByIds(Iterable<int> ids, Type type) async {
     return tokenFindExecutor.findNodesByIds(ids, type);
   }
 
-  Future findNodeWithRelationsById(int id, Type type, {int nbTransitiveRelations}) {
+  findNodeWithRelationsById(int id, Type type, {int nbTransitiveRelations}) async {
     return cypherFindExecutor.findNodesAndRelationsByIds([id], type, nbTransitiveRelations: nbTransitiveRelations).then((response) => _convertCypherResponseToNode(response, id, type));
   }
 
@@ -43,7 +43,7 @@ class NeoServiceFind {
     return nodeWithRelations;
   }
 
-  Future findNodesWithRelationsByIds(Iterable<int> ids, Type type, {int nbTransitiveRelations}) {
+  findNodesWithRelationsByIds(Iterable<int> ids, Type type, {int nbTransitiveRelations}) async {
     return cypherFindExecutor.findNodesAndRelationsByIds(ids, type, nbTransitiveRelations: nbTransitiveRelations).then((response) => _convertCypherResponseToNodesByIds(response, ids, type));
   }
 
@@ -63,7 +63,7 @@ class NeoServiceFind {
     return nodes;
   }
 
-  Future findNodesWithRelations(Type type, {Map properties, int nbTransitiveRelations}) {
+  findNodesWithRelations(Type type, {Map properties, int nbTransitiveRelations}) async {
     return cypherFindExecutor.findNodesAndRelations(type, properties: properties, nbTransitiveRelations: nbTransitiveRelations).then((response) => _convertCypherResponseToNodes(response, type, properties: properties));
   }
 

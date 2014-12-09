@@ -10,7 +10,7 @@ class CypherFindExecutor extends CypherExecutor {
 
   CypherFindExecutor.withClient(client) : super.withClient(client);
 
-  Future findNodesAndRelationsByIds(Iterable<int> ids, Type type, {int nbTransitiveRelations}) {
+  findNodesAndRelationsByIds(Iterable<int> ids, Type type, {int nbTransitiveRelations}) async {
 
     String query = "";
     if(nbTransitiveRelations != null) {
@@ -22,7 +22,7 @@ class CypherFindExecutor extends CypherExecutor {
     return executeCypher(query);
   }
 
-  Future findNodesAndRelations(Type type, {Map properties, int nbTransitiveRelations}) {
+  findNodesAndRelations(Type type, {Map properties, int nbTransitiveRelations}) async {
     String query = "";
     if(nbTransitiveRelations != null) {
       query = new CypherFindBuilder().buildQueryToFindNodesAndRelations(type, properties: properties, maxLength: nbTransitiveRelations);
