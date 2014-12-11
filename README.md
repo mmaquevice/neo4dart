@@ -15,7 +15,7 @@ Neo4dart is a [Dart](https://www.dartlang.org) library acting as a driver for
 Add Neo4dart to your project's `pubspec.yaml` file and run pub get:
 
     dependencies:
-      neo4dart: '0.0.1'
+      neo4dart: '0.0.4'
       
 ## Convention
 
