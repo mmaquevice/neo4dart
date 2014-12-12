@@ -12,21 +12,12 @@ class Love extends Relation {
   @EndNode()
   Person personLoved;
 
+  @Data()
   String howMuch;
+  @Data()
   String since;
 
   Love(this.personWhoLoves, this.personLoved, this.howMuch, this.since);
-
-  Map toJson() {
-    Map map = new Map();
-    if(howMuch != null) {
-      map["howMuch"] = howMuch;
-    }
-    if(since != null) {
-      map["since"] = since;
-    }
-    return map;
-  }
 
   bool operator ==(o) => o is Love && o.howMuch == howMuch && o.since == since;
 

@@ -1,7 +1,7 @@
 Neo4dart
 ========
 
-Neo4dart is a [Dart](https://www.dartlang.org) library acting as a driver for 
+Neo4dart is a [Dart](https://www.dartlang.org) library acting as a driver for
 [Neo4j](http://neo4j.com/).
 
 [![Build Status](https://drone.io/github.com/mmaquevice/neo4dart/status.png)](https://drone.io/github.com/mmaquevice/neo4dart/latest)
@@ -10,31 +10,26 @@ Neo4dart is a [Dart](https://www.dartlang.org) library acting as a driver for
 
 * Basic CRUD operations
 
-## Installation 
+## Installation
 
 Add Neo4dart to your project's `pubspec.yaml` file and run pub get:
 
     dependencies:
       neo4dart: '0.0.4'
-      
+
 ## Convention
 
 If you want to use the driver, all you have to do is to adopt the following conventions :
 
-* A node must extends `Node` and it must have a `toJson()` method representing his data
+* A node must extends `Node` and its properties must be annotated `@Data()`
 
 ```dart
 class Person extends Node {
 
+  @Data()
   String name;
+  @Data()
   String address;
-
-  Map toJson() {
-    Map map = new Map();
-    map["name"] = name;
-    map["address"] = address;
-    return map;
-  }
 }
 ```
 
@@ -49,7 +44,7 @@ class Person extends Node {
 }
 ```
 
-* A relation with dynamic data can be added via the annotation `@RelationshipVia()`. In this case the relation has to be an entity extending `Relation`. The data inserted in neo4j will be those returned by the `toJson()` method.
+* A relation with dynamic data can be added via the annotation `@RelationshipVia()`. In this case the relation has to be an entity extending `Relation`. Its properties must be annotated `@Data()`.
 
 ```dart
 class Love extends Relation {
@@ -58,14 +53,9 @@ class Love extends Relation {
   Person personWhoLoves;
   @EndNode()
   Person personLoved;
-  
-  String since;
 
-  Map toJson() {
-    Map map = new Map();
-      map["since"] = since;    
-    return map;
-  }
+  @Data()
+  String since;
 }
 
 

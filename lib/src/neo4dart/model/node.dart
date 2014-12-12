@@ -4,8 +4,6 @@ abstract class Node extends NeoEntity {
 
   List<String> labels = new List();
 
-  Map toJson();
-
   Node() {
     ClassMirror classMirror = reflectClass(this.runtimeType);
     Symbol symbol = classMirror.simpleName;
