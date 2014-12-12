@@ -25,7 +25,7 @@ Relation convertToRelation(Type type, RelationResponse relationResponse) {
   return instanceMirror.reflectee;
 }
 
-Node convertToNode(Type type, NodeResponse nodeResponse) {
+dynamic convertToNode(Type type, NodeResponse nodeResponse) {
 
   ClassMirror classMirror = reflectClass(type);
   List<String> parameters = _getConstructorParameters(type, false);
@@ -99,9 +99,9 @@ Map _findEntityByAnnotations(Object objectAnnotated, Type type) {
   return fieldsByRelationship;
 }
 
-Set<Node> _findNodesAnnotatedBy(Type type, Object instance) {
+Set _findNodesAnnotatedBy(Type type, Object instance) {
 
-  Set<Node> nodes = new Set();
+  Set nodes = new Set();
 
   Set<Symbol> symbols = _findSymbolsAnnotatedBy(type, instance);
 
@@ -146,7 +146,7 @@ Set<Type> _findTypesAnnotatedBy(Type type, Object instance) {
   return types;
 }
 
-Set<RelationshipWithNodes> _findRelationshipViaNodes(Node node) {
+Set<RelationshipWithNodes> _findRelationshipViaNodes(var node) {
 
   Set<RelationshipWithNodes> relationshipWithNodes = new Set();
 
@@ -154,8 +154,8 @@ Set<RelationshipWithNodes> _findRelationshipViaNodes(Node node) {
   fieldsByRelationship.forEach((relationship, relations) {
     relations.forEach((relation) {
       if (relation != null) {
-        Node startNode = _findNodesAnnotatedBy(StartNode, relation).first;
-        Node endNode = _findNodesAnnotatedBy(EndNode, relation).first;
+        var startNode = _findNodesAnnotatedBy(StartNode, relation).first;
+        var endNode = _findNodesAnnotatedBy(EndNode, relation).first;
         relationshipWithNodes.add(new RelationshipWithNodes(startNode, new Relationship(relationship.type, data: findFieldsAnnotatedValueByKey(relation, Data)), endNode, initialRelationship: relation));
       }
     });
@@ -164,11 +164,11 @@ Set<RelationshipWithNodes> _findRelationshipViaNodes(Node node) {
   return relationshipWithNodes;
 }
 
-Set<RelationshipWithNodes> _findRelationshipNodes(Node node) {
+Set<RelationshipWithNodes> _findRelationshipNodes(var node) {
 
   Set<RelationshipWithNodes> relations = new Set();
 
-  Map<Relationship, Iterable<Node>> nodesByRelationship = _findEntityByAnnotations(node, Relationship);
+  Map<Relationship, Iterable> nodesByRelationship = _findEntityByAnnotations(node, Relationship);
   nodesByRelationship.forEach((relationship, toNodes) {
     toNodes.forEach((toNode) {
       if (toNode != null) {
@@ -210,7 +210,7 @@ VariableMirror _findRelationField(Type typeNode, String typeRelation) {
   return field;
 }
 
-Node _convertToNode(Type type, Map dataNode, int idNode) {
+dynamic _convertToNode(Type type, Map dataNode, int idNode) {
 
   ClassMirror classMirror = reflectClass(type);
   List<String> parameters = _getConstructorParameters(type, false);
@@ -248,4 +248,25 @@ Map findFieldsAnnotatedValueByKey(Object objectAnnotated, Type type) {
     });
   });
   return valueByKey;
+}
+
+bool isNode(dynamic object) {
+  return _isAnnotatedBy(object, Node);
+}
+
+bool _isAnnotatedBy(dynamic object, Type type) {
+
+  ClassMirror classMirror = null;
+  if(object is ClassMirror || object.type.isSubclassOf(reflectClass(ClassMirror))) {
+    classMirror = object;
+  } else {
+    classMirror = reflectClass(object.runtimeType);
+  }
+
+  for(var instanceMirror in classMirror.metadata) {
+    if (instanceMirror.reflectee.runtimeType == type) {
+      return true;
+    }
+  }
+  return false;
 }

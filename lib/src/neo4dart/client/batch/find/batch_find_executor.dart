@@ -4,11 +4,11 @@ class BatchFindExecutor extends BatchExecutor {
 
   final _logger = new Logger("TokenFindExecutor");
 
-  Map<int, Node> nodesWithRelationsById = {};
+  Map<int, dynamic> nodesWithRelationsById = {};
 
-  Map<int, Node> nodesWithoutRelationsById = {};
+  Map<int, dynamic> nodesWithoutRelationsById = {};
 
-  Map<int, Node> nodesInProgressById = {};
+  Map<int, dynamic> nodesInProgressById = {};
 
   BatchInterpreter _interpreter = new BatchInterpreter();
 
@@ -26,9 +26,9 @@ class BatchFindExecutor extends BatchExecutor {
     return executeBatch(new BatchFindBuilder().addNodesToBatch(ids)).then((response) => _convertResponseToNodes(response, type));
   }
 
-  Node _convertResponseToNode(var response, Type type) {
+  dynamic _convertResponseToNode(var response, Type type) {
 
-    Set<Node> nodes = _convertResponseToNodes(response, type);
+    Set nodes = _convertResponseToNodes(response, type);
 
     if (nodes.isEmpty) {
       return null;
@@ -41,9 +41,9 @@ class BatchFindExecutor extends BatchExecutor {
     return nodes.first;
   }
 
-  Set<Node> _convertResponseToNodes(var response, Type type) {
+  Set _convertResponseToNodes(var response, Type type) {
 
-    Set<Node> nodes = new Set();
+    Set nodes = new Set();
 
     List<AroundNodeResponse> aroundNodes = _interpreter.convertResponse(response);
 
@@ -63,7 +63,7 @@ class BatchFindExecutor extends BatchExecutor {
       }
 
       NodeResponse nodeResponse = aroundNode.node;
-      Node node = convertToNode(type, nodeResponse);
+      var node = convertToNode(type, nodeResponse);
       nodes.add(node);
     });
 
@@ -87,7 +87,7 @@ class BatchFindExecutor extends BatchExecutor {
         _logger.info(aroundNodes);
 
         Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
-        Node nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type);
+        var nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type);
         return nodeWithRelations;
       });
     });
@@ -106,7 +106,7 @@ class BatchFindExecutor extends BatchExecutor {
         _logger.info(aroundNodes);
 
         Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
-        Node nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(originNodeId, aroundNodeById, typeNode: originType);
+        var nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(originNodeId, aroundNodeById, typeNode: originType);
         return nodeWithRelations;
       });
   }

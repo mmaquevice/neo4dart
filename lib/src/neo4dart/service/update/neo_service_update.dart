@@ -6,11 +6,11 @@ class NeoServiceUpdate {
 
   BatchUpdateExecutor batchUpdateExecutor = new BatchUpdateExecutor();
 
-  updateNode(Node node) async {
+  updateNode(var node) async {
     return batchUpdateExecutor.updateNode(node);
   }
 
-  updateNodes(Iterable<Node> nodes) async {
+  updateNodes(Iterable nodes) async {
     return batchUpdateExecutor.updateNodes(nodes);
   }
 

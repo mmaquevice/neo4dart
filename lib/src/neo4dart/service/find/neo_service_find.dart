@@ -33,13 +33,13 @@ class NeoServiceFind {
     return cypherFindExecutor.findNodesAndRelationsByIds([id], type, nbTransitiveRelations: nbTransitiveRelations).then((response) => _convertCypherResponseToNode(response, id, type));
   }
 
-  Node _convertCypherResponseToNode(var response, int nodeId, Type type) {
+  dynamic _convertCypherResponseToNode(var response, int nodeId, Type type) {
 
     CypherResponse cypherResponse = cypherFindInterpreter.convertResponse(response);
     List<AroundNodeResponse> aroundNodes = cypherFindInterpreter.convertCypherResponse(cypherResponse);
 
     Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
-    Node nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(nodeId, aroundNodeById, typeNode: type);
+    var nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(nodeId, aroundNodeById, typeNode: type);
     return nodeWithRelations;
   }
 
@@ -47,9 +47,9 @@ class NeoServiceFind {
     return cypherFindExecutor.findNodesAndRelationsByIds(ids, type, nbTransitiveRelations: nbTransitiveRelations).then((response) => _convertCypherResponseToNodesByIds(response, ids, type));
   }
 
-  List<Node> _convertCypherResponseToNodesByIds(var response, Iterable<int> ids, Type type) {
+  List _convertCypherResponseToNodesByIds(var response, Iterable<int> ids, Type type) {
 
-    List<Node> nodes = new List();
+    List nodes = new List();
 
     CypherResponse cypherResponse = cypherFindInterpreter.convertResponse(response);
     List<AroundNodeResponse> aroundNodes = cypherFindInterpreter.convertCypherResponse(cypherResponse);
@@ -67,9 +67,9 @@ class NeoServiceFind {
     return cypherFindExecutor.findNodesAndRelations(type, properties: properties, nbTransitiveRelations: nbTransitiveRelations).then((response) => _convertCypherResponseToNodes(response, type, properties: properties));
   }
 
-  List<Node> _convertCypherResponseToNodes(var response, Type type, {Map properties}) {
+  List _convertCypherResponseToNodes(var response, Type type, {Map properties}) {
 
-    List<Node> nodes = new List();
+    List nodes = new List();
 
     CypherResponse cypherResponse = cypherFindInterpreter.convertResponse(response);
     List<AroundNodeResponse> aroundNodes = cypherFindInterpreter.convertCypherResponse(cypherResponse);

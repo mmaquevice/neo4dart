@@ -6,7 +6,10 @@ import 'package:neo4dart/testing/love.dart';
 import 'package:collection/collection.dart';
 import 'package:quiver/core.dart';
 
-class Person extends Node {
+@Node()
+class Person {
+
+  int id;
 
   @Data()
   String name;

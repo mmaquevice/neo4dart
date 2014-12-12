@@ -21,7 +21,7 @@ main() {
   group('addNodeToBatch', () {
 
     test('ok', () {
-        Node node = new Person("Claude", city: "Gagny");
+        var node = new Person("Claude", city: "Gagny");
 
         BatchInsertBuilder handler = new BatchInsertBuilder();
         BatchToken token = handler.addNodeToBatch(node);
@@ -35,7 +35,7 @@ main() {
   group('addNodesToBatch', () {
 
     test('ok', () {
-      Set<Node> nodes = new Set();
+      Set nodes = new Set();
       nodes.add(new Person("Claude", city: "Gagny"));
       nodes.add(new Person("Liliane", city: "Gagny"));
 
@@ -49,10 +49,10 @@ main() {
     });
 
     test('ok - if [node.id is set] then [node is not converted into token]', () {
-      Set<Node> nodes = new Set();
+      Set nodes = new Set();
       nodes.add(new Person("Claude", city: "Gagny"));
 
-      Node eduardo = new Person("Eduardo", city: "Gagny");
+      var eduardo = new Person("Eduardo", city: "Gagny");
       eduardo.id = 100;
       nodes.add(eduardo);
 
@@ -206,7 +206,6 @@ main() {
     test('ok - if [relation.id is set] then [relation is not converted into token]', () {
       Person romeo = new Person("Romeo", city: "Roma");
       Person julieta = new Person("Julieta", city: "Venizia");
-      Person liliana = new Person("Liliana", city: "Friul");
 
       Love love = new Love(romeo, julieta, "so so", "1345");
       love.id = 100;

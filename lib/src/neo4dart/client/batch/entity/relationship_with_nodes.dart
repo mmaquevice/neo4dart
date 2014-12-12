@@ -2,9 +2,9 @@ part of neo4dart;
 
 class RelationshipWithNodes {
 
-  Node startNode;
+  dynamic startNode;
   Relationship relationship;
-  Node endNode;
+  dynamic endNode;
 
   Relation initialRelationship;
 
