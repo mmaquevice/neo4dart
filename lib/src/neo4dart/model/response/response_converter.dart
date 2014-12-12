@@ -8,7 +8,19 @@ class ResponseConverter {
 
   Map<int, dynamic> nodesInProgressById = {};
 
-  dynamic convertResponsesToNodeWithRelations(int id, Map<int, AroundNodeResponse> aroundNodeById, {Type typeNode}) {
+  dynamic convertAroundNodesToNode(int id, Map<int, AroundNodeResponse> aroundNodeById, {Type typeNode}) {
+
+    _initConverter();
+    return _convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: typeNode);
+  }
+
+  _initConverter() {
+    nodesWithRelationsById = {};
+    nodesWithoutRelationsById = {};
+    nodesInProgressById = {};
+  }
+
+  dynamic _convertResponsesToNodeWithRelations(int id, Map<int, AroundNodeResponse> aroundNodeById, {Type typeNode}) {
 
     if (nodesWithRelationsById.containsKey(id)) {
       return nodesWithRelationsById[id];
@@ -31,11 +43,11 @@ class ResponseConverter {
         _bindResponseToNode(node, relationResponse, aroundNodeById[relationResponse.idStartNode], aroundNodeById[relationResponse.idEndNode]);
 
         if(id != relationResponse.idStartNode) {
-          convertResponsesToNodeWithRelations(relationResponse.idStartNode, aroundNodeById);
+          _convertResponsesToNodeWithRelations(relationResponse.idStartNode, aroundNodeById);
         }
 
         if(id != relationResponse.idEndNode) {
-          convertResponsesToNodeWithRelations(relationResponse.idEndNode, aroundNodeById);
+          _convertResponsesToNodeWithRelations(relationResponse.idEndNode, aroundNodeById);
         }
       }
     });

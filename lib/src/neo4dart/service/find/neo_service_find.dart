@@ -12,6 +12,8 @@ class NeoServiceFind {
   CypherFindInterpreter cypherFindInterpreter = new CypherFindInterpreter();
   CypherFindExecutor cypherFindExecutor = new CypherFindExecutor();
 
+  ResponseConverter _responseConverter = new ResponseConverter();
+
   findNodes(Type type, {Map properties}) async {
 
     if (properties == null || properties.length == 0) {
@@ -39,7 +41,7 @@ class NeoServiceFind {
     List<AroundNodeResponse> aroundNodes = cypherFindInterpreter.convertCypherResponse(cypherResponse);
 
     Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
-    var nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(nodeId, aroundNodeById, typeNode: type);
+    var nodeWithRelations = _responseConverter.convertAroundNodesToNode(nodeId, aroundNodeById, typeNode: type);
     return nodeWithRelations;
   }
 
@@ -56,9 +58,8 @@ class NeoServiceFind {
 
     Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
 
-    ResponseConverter responseConverter = new ResponseConverter();
     for (int id in ids) {
-      nodes.add(responseConverter.convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type));
+      nodes.add(_responseConverter.convertAroundNodesToNode(id, aroundNodeById, typeNode: type));
     }
     return nodes;
   }
@@ -90,9 +91,8 @@ class NeoServiceFind {
       }
     }
 
-    ResponseConverter responseConverter = new ResponseConverter();
     for (int id in ids) {
-      nodes.add(responseConverter.convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type));
+      nodes.add(_responseConverter.convertAroundNodesToNode(id, aroundNodeById, typeNode: type));
     }
     return nodes;
   }

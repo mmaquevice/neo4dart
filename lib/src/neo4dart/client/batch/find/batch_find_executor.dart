@@ -4,13 +4,8 @@ class BatchFindExecutor extends BatchExecutor {
 
   final _logger = new Logger("TokenFindExecutor");
 
-  Map<int, dynamic> nodesWithRelationsById = {};
-
-  Map<int, dynamic> nodesWithoutRelationsById = {};
-
-  Map<int, dynamic> nodesInProgressById = {};
-
   BatchInterpreter _interpreter = new BatchInterpreter();
+  ResponseConverter _responseConverter = new ResponseConverter();
 
   BatchFindExecutor() {
     client = new http.Client();
@@ -87,7 +82,7 @@ class BatchFindExecutor extends BatchExecutor {
         _logger.info(aroundNodes);
 
         Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
-        var nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(id, aroundNodeById, typeNode: type);
+        var nodeWithRelations = _responseConverter.convertAroundNodesToNode(id, aroundNodeById, typeNode: type);
         return nodeWithRelations;
       });
     });
@@ -106,7 +101,7 @@ class BatchFindExecutor extends BatchExecutor {
         _logger.info(aroundNodes);
 
         Map aroundNodeById = new Map.fromIterable(aroundNodes, key : (k) => k.node.idNode, value: (v) => v);
-        var nodeWithRelations = new ResponseConverter().convertResponsesToNodeWithRelations(originNodeId, aroundNodeById, typeNode: originType);
+        var nodeWithRelations = _responseConverter.convertAroundNodesToNode(originNodeId, aroundNodeById, typeNode: originType);
         return nodeWithRelations;
       });
   }
