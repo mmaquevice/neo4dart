@@ -6,11 +6,11 @@ class NeoServiceDelete {
 
   CypherDeleteExecutor cypherDeleteExecutor = new CypherDeleteExecutor();
 
-  deleteNode(Node node, {bool force: false}) async {
+  deleteNode(var node, {bool force: false}) async {
     return cypherDeleteExecutor.deleteNode(node, force: force);
   }
 
-  deleteNodes(Iterable<Node> nodes, {bool force: false}) async {
+  deleteNodes(Iterable nodes, {bool force: false}) async {
     return cypherDeleteExecutor.deleteNodes(nodes, force: force);
   }
 

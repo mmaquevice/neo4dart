@@ -2,13 +2,13 @@ part of neo4dart;
 
 class ResponseConverter {
 
-  Map<int, Node> nodesWithRelationsById = {};
+  Map<int, dynamic> nodesWithRelationsById = {};
 
-  Map<int, Node> nodesWithoutRelationsById = {};
+  Map<int, dynamic> nodesWithoutRelationsById = {};
 
-  Map<int, Node> nodesInProgressById = {};
+  Map<int, dynamic> nodesInProgressById = {};
 
-  Node convertResponsesToNodeWithRelations(int id, Map<int, AroundNodeResponse> aroundNodeById, {Type typeNode}) {
+  dynamic convertResponsesToNodeWithRelations(int id, Map<int, AroundNodeResponse> aroundNodeById, {Type typeNode}) {
 
     if (nodesWithRelationsById.containsKey(id)) {
       return nodesWithRelationsById[id];
@@ -23,7 +23,7 @@ class ResponseConverter {
     }
 
     AroundNodeResponse aroundNode = aroundNodeById[id];
-    Node node = _retrieveNodeWithAroundNodeResponseData(id, aroundNode, typeNode: typeNode);
+    var node = _retrieveNodeWithAroundNodeResponseData(id, aroundNode, typeNode: typeNode);
     nodesInProgressById[id] = node;
 
     aroundNode.relations.forEach((relationResponse) {
@@ -44,7 +44,7 @@ class ResponseConverter {
     return node;
   }
 
-  Node _retrieveNodeWithAroundNodeResponseData(int idNode, AroundNodeResponse aroundNode, {Type typeNode}) {
+  dynamic _retrieveNodeWithAroundNodeResponseData(int idNode, AroundNodeResponse aroundNode, {Type typeNode}) {
 
     if (nodesWithoutRelationsById.containsKey(idNode)) {
       return nodesWithoutRelationsById[idNode];
@@ -54,12 +54,12 @@ class ResponseConverter {
       throw 'Node type is  null for node <$idNode>.';
     }
 
-    Node node = _convertToNode(typeNode, aroundNode.node.data, aroundNode.node.idNode);
+    Object node = _convertToNode(typeNode, aroundNode.node.data, aroundNode.node.idNode);
     nodesWithoutRelationsById[idNode] = node;
     return node;
   }
 
-  Node _bindResponseToNode(Node node, RelationResponse relationResponse, AroundNodeResponse startNode, AroundNodeResponse endNode) {
+  dynamic _bindResponseToNode(var node, RelationResponse relationResponse, AroundNodeResponse startNode, AroundNodeResponse endNode) {
 
     VariableMirror nodeFieldForRelation = _findRelationField(reflect(node).type.reflectedType, relationResponse.type);
     if (nodeFieldForRelation.type.isSubtypeOf(reflectType(Iterable))) {
@@ -67,21 +67,22 @@ class ResponseConverter {
       if (nodeFieldForRelation.type.isAssignableTo(reflectType(Set)) || nodeFieldForRelation.type.isAssignableTo(reflectType(List))) {
         // TODO mma : check if typeNeoEntity is really a neo entity
         Type typeNeoEntity = nodeFieldForRelation.type.typeArguments.map((t) => t.reflectedType).first;
-        NeoEntity neoEntity = _convertToNeoEntity(node, reflectType(typeNeoEntity), relationResponse,  startNode,  endNode);
+        var neoEntity = _convertToNeoEntity(node, reflectType(typeNeoEntity), relationResponse,  startNode,  endNode);
         if(neoEntity != null) {
           _addNeoEntityToCollectionField(node, nodeFieldForRelation, neoEntity);
         }
       }
     } else {
-      NeoEntity neoEntity = _convertToNeoEntity(node, nodeFieldForRelation.type, relationResponse,  startNode,  endNode);
+      var neoEntity = _convertToNeoEntity(node, nodeFieldForRelation.type, relationResponse,  startNode,  endNode);
       reflect(node).setField(nodeFieldForRelation.simpleName, neoEntity);
     }
 
     return node;
   }
 
-  NeoEntity _convertToNeoEntity(Node node, TypeMirror typeNeoEntity, RelationResponse relationResponse, AroundNodeResponse startNode, AroundNodeResponse endNode) {
-    if (typeNeoEntity.isSubtypeOf(reflectType(Node))) {
+  dynamic _convertToNeoEntity(var node, TypeMirror typeNeoEntity, RelationResponse relationResponse, AroundNodeResponse startNode, AroundNodeResponse endNode) {
+
+    if (isNode(typeNeoEntity)) {
       // TODO mma : check Direction
       if (node.id != relationResponse.idEndNode) {
         return _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, endNode, typeNode: typeNeoEntity.reflectedType);
@@ -95,7 +96,7 @@ class ResponseConverter {
     return null;
   }
 
-  _addNeoEntityToCollectionField(Node node, VariableMirror field, NeoEntity neoEntity) {
+  _addNeoEntityToCollectionField(var node, VariableMirror field, var neoEntity) {
     var nodeFieldForRelationInstance = reflect(node).getField(field.simpleName).reflectee;
     if (nodeFieldForRelationInstance == null) {
       if (field.type.isAssignableTo(reflectType(Set))) {
@@ -115,8 +116,8 @@ class ResponseConverter {
 
     Relation relation = convertToRelation(typeRelation, relationResponse);
 
-    Node startNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idStartNode, startAroundNodeResponse, typeNode : _findTypesAnnotatedBy(StartNode, relation).first);
-    Node endNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, endAroundNodeResponse, typeNode : _findTypesAnnotatedBy(EndNode, relation).first);
+    var startNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idStartNode, startAroundNodeResponse, typeNode : _findTypesAnnotatedBy(StartNode, relation).first);
+    var endNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, endAroundNodeResponse, typeNode : _findTypesAnnotatedBy(EndNode, relation).first);
 
     InstanceMirror relationMirror = reflect(relation);
     relationMirror.setField(_findSymbolsAnnotatedBy(StartNode, relation).first, startNode);

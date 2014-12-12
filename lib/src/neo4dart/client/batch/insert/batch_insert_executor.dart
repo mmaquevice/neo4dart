@@ -12,7 +12,7 @@ class BatchInsertExecutor extends BatchExecutor {
 
   BatchInsertExecutor.withClient(client) : super.withClient(client);
 
-  insertNode(Node node, bool inDepth) async {
+  insertNode(var node, bool inDepth) async {
 
     BatchInsertBuilder tokenInsertBuilder = new BatchInsertBuilder();
     tokenInsertBuilder.addNodeToBatch(node);
@@ -21,7 +21,7 @@ class BatchInsertExecutor extends BatchExecutor {
     return executeBatch(tokenInsertBuilder.batchTokens).then((response) => _addIdToNeoEntities(response, tokenInsertBuilder.batchTokens));
   }
 
-  insertNodes(Iterable<Node> nodes, bool inDepth) async {
+  insertNodes(Iterable nodes, bool inDepth) async {
 
     BatchInsertBuilder tokenInsertBuilder = new BatchInsertBuilder();
     tokenInsertBuilder.addNodesToBatch(nodes);

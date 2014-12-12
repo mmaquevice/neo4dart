@@ -46,14 +46,14 @@ class NeoClientGet extends NeoClient {
     return _client.get(url).then((response) => _convertResponseToEntities(response, type));
   }
 
-  List<Node> _convertResponseToEntities(var response, Type typeToConvertInto) {
+  List _convertResponseToEntities(var response, Type typeToConvertInto) {
     _logger.info("Response status : ${response.statusCode}");
 
     if (response.statusCode == 200) {
       _logger.info("Response body : ${response.body}");
 
       var bodyJson = new JsonDecoder().convert(response.body);
-      List<Node> nodes = new List();
+      List nodes = new List();
       for (var nodeJson in bodyJson) {
         nodes.add(_convertToNode(typeToConvertInto, nodeJson));
       }
@@ -63,7 +63,7 @@ class NeoClientGet extends NeoClient {
     }
   }
 
-  Node _convertToNode(Type type, Map nodeJson) {
+  dynamic _convertToNode(Type type, Map nodeJson) {
 
     ClassMirror classMirror = reflectClass(type);
     List<String> parameters = _getConstructorParameters(type, false);

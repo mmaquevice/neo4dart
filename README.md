@@ -21,10 +21,13 @@ Add Neo4dart to your project's `pubspec.yaml` file and run pub get:
 
 If you want to use the driver, all you have to do is to adopt the following conventions :
 
-* A node must extends `Node` and its properties must be annotated `@Data()`
+* A node must be annotated by `@Node()`, its properties with `@Data()` and it should have an `int id` public field.
 
 ```dart
-class Person extends Node {
+@Node()
+class Person {
+
+  int id;
 
   @Data()
   String name;

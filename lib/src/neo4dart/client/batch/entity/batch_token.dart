@@ -7,16 +7,17 @@ class BatchToken {
   String to;
   Object body = {
   };
-  NeoEntity neoEntity;
+  dynamic neoEntity;
 
   BatchToken(this.method, this.to, this.body, {this.id, this.neoEntity});
 
-  factory BatchToken.createNodeToken(Node node, {int id}) {
+  factory BatchToken.createNodeToken(var node, {int id}) {
     return new BatchToken("POST", "/node",  findFieldsAnnotatedValueByKey(node, Data), id : id, neoEntity: node);
   }
 
-  factory BatchToken.createLabelToken(Node node, int nodeTokenId, {int id}) {
-    return new BatchToken("POST", "{${nodeTokenId}}/labels", node.labels, id: id);
+  factory BatchToken.createLabelToken(var node, int nodeTokenId, {int id}) {
+    Type type = reflectClass(node.runtimeType).reflectedType;
+    return new BatchToken("POST", "{${nodeTokenId}}/labels", '$type', id: id);
   }
 
   factory BatchToken.createRelationToken(RelationshipWithNodes relation, BatchToken startToken, BatchToken endToken, {int id}) {

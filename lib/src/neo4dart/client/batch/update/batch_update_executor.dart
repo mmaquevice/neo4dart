@@ -10,14 +10,14 @@ class BatchUpdateExecutor extends BatchExecutor {
 
   BatchUpdateExecutor.withClient(client) : super.withClient(client);
 
-  updateNode(Node node) async {
+  updateNode(var node) async {
     return executeBatch(new Set.from([new BatchUpdateBuilder().createNodeToken(node)])).then((response) {
       _checkResponse(response);
       return node;
     });
   }
 
-  updateNodes(Iterable<Node> nodes) async {
+  updateNodes(Iterable nodes) async {
     return executeBatch(new BatchUpdateBuilder().createNodeTokens(nodes)).then((response) {
       _checkResponse(response);
       return nodes;

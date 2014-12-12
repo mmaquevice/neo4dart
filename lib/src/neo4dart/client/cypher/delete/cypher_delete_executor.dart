@@ -10,13 +10,13 @@ class CypherDeleteExecutor extends CypherExecutor {
 
   CypherDeleteExecutor.withClient(client) : super.withClient(client);
 
-  deleteNode(Node node, {bool force: false}) async {
+  deleteNode(var node, {bool force: false}) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteNodes([node.id], force: force);
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  deleteNodes(Iterable<Node> nodes, {bool force: false}) async {
+  deleteNodes(Iterable nodes, {bool force: false}) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteNodes(nodes.map((node) => node.id).toList(), force: force);
     return executeCypher(query).then((response) => _checkResponse(response));

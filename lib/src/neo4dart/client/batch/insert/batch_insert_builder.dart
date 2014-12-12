@@ -6,10 +6,10 @@ class BatchInsertBuilder {
 
   Set<BatchToken> batchTokens = new Set();
 
-  Set<Node> nodesWithRelationsConverted = new Set();
-  Set<Node> nodesWithRelationsViaConverted = new Set();
+  Set nodesWithRelationsConverted = new Set();
+  Set nodesWithRelationsViaConverted = new Set();
 
-  Set<BatchToken> addNodesToBatch(Iterable<Node> nodes) {
+  Set<BatchToken> addNodesToBatch(Iterable nodes) {
 
     Set<BatchToken> tokens = new Set();
     nodes.forEach((node) {
@@ -21,7 +21,7 @@ class BatchInsertBuilder {
     return tokens;
   }
 
-  BatchToken addNodeToBatch(Node node) {
+  BatchToken addNodeToBatch(var node) {
 
     _logger.info("Converting node ${node} to token...");
 
@@ -38,7 +38,7 @@ class BatchInsertBuilder {
     return token;
   }
 
-  BatchToken findTokenFromNode(Node node) {
+  BatchToken findTokenFromNode(var node) {
     if (node == null) {
       return null;
     }
@@ -78,7 +78,7 @@ class BatchInsertBuilder {
     return max + 1;
   }
 
-  Set<BatchToken> addNodesAndRelationsToBatch(Iterable<Node> nodes, bool inDepth) {
+  Set<BatchToken> addNodesAndRelationsToBatch(Iterable nodes, bool inDepth) {
     Set<BatchToken> tokens = new Set();
     nodes.forEach((node) {
       tokens.addAll(addNodeAndRelationsToBatch(node, inDepth));
@@ -87,7 +87,7 @@ class BatchInsertBuilder {
     return tokens;
   }
 
-  Set<BatchToken> addNodeAndRelationsToBatch(Node node, bool inDepth) {
+  Set<BatchToken> addNodeAndRelationsToBatch(var node, bool inDepth) {
 
     _logger.info("Converting node ${node} to token...");
 
@@ -144,7 +144,7 @@ class BatchInsertBuilder {
     return tokens;
   }
 
-  Set<BatchToken> addNodesAndRelationsViaToBatch(Iterable<Node> nodes, bool inDepth) {
+  Set<BatchToken> addNodesAndRelationsViaToBatch(Iterable nodes, bool inDepth) {
     Set<BatchToken> tokens = new Set();
     nodes.forEach((node) {
       tokens.addAll(addNodeAndRelationsViaToBatch(node, inDepth));
@@ -152,7 +152,7 @@ class BatchInsertBuilder {
     return tokens;
   }
 
-  Set<BatchToken> addNodeAndRelationsViaToBatch(Node node, bool inDepth) {
+  Set<BatchToken> addNodeAndRelationsViaToBatch(var node, bool inDepth) {
 
     _logger.info("Converting node ${node} to token...");
     Set<BatchToken> tokens = new Set();
