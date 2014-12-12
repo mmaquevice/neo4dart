@@ -156,7 +156,7 @@ Set<RelationshipWithNodes> _findRelationshipViaNodes(Node node) {
       if (relation != null) {
         Node startNode = _findNodesAnnotatedBy(StartNode, relation).first;
         Node endNode = _findNodesAnnotatedBy(EndNode, relation).first;
-        relationshipWithNodes.add(new RelationshipWithNodes(startNode, new Relationship(relationship.type, data: relation.toJson()), endNode, initialRelationship: relation));
+        relationshipWithNodes.add(new RelationshipWithNodes(startNode, new Relationship(relationship.type, data: findFieldsAnnotatedValueByKey(relation, Data)), endNode, initialRelationship: relation));
       }
     });
   });

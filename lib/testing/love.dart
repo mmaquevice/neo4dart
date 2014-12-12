@@ -19,17 +19,6 @@ class Love extends Relation {
 
   Love(this.personWhoLoves, this.personLoved, this.howMuch, this.since);
 
-  Map toJson() {
-    Map map = new Map();
-    if(howMuch != null) {
-      map["howMuch"] = howMuch;
-    }
-    if(since != null) {
-      map["since"] = since;
-    }
-    return map;
-  }
-
   bool operator ==(o) => o is Love && o.howMuch == howMuch && o.since == since;
 
   int get hashCode => hash2(howMuch.hashCode, since.hashCode);

@@ -15,7 +15,7 @@ class BatchUpdateBuilder {
   }
 
   BatchToken createRelationToken(Relation relation) {
-    return new BatchToken("PUT", "/relationship/${relation.id}/properties", relation.toJson());
+    return new BatchToken("PUT", "/relationship/${relation.id}/properties", findFieldsAnnotatedValueByKey(relation, Data));
   }
 
   Set<BatchToken> createRelationTokens(Iterable<Relation> relations) {
