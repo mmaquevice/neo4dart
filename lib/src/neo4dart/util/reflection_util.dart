@@ -1,7 +1,6 @@
 part of neo4dart;
 
-
-Relation convertToRelation(Type type, RelationResponse relationResponse) {
+dynamic convertToRelation(Type type, RelationResponse relationResponse) {
 
   ClassMirror classMirror = reflectClass(type);
   List<String> parameters = _getConstructorParameters(type, false);
@@ -150,7 +149,7 @@ Set<RelationshipWithNodes> _findRelationshipViaNodes(var node) {
 
   Set<RelationshipWithNodes> relationshipWithNodes = new Set();
 
-  Map<RelationshipVia, Iterable<Relation>> fieldsByRelationship = _findEntityByAnnotations(node, RelationshipVia);
+  Map<RelationshipVia, Iterable> fieldsByRelationship = _findEntityByAnnotations(node, RelationshipVia);
   fieldsByRelationship.forEach((relationship, relations) {
     relations.forEach((relation) {
       if (relation != null) {
@@ -252,6 +251,10 @@ Map findFieldsAnnotatedValueByKey(Object objectAnnotated, Type type) {
 
 bool isNode(dynamic object) {
   return _isAnnotatedBy(object, Node);
+}
+
+bool isRelation(dynamic object) {
+  return _isAnnotatedBy(object, Relation);
 }
 
 bool _isAnnotatedBy(dynamic object, Type type) {

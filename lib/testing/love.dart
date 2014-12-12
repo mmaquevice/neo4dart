@@ -5,7 +5,10 @@ import 'package:neo4dart/testing/person.dart';
 
 import 'package:quiver/core.dart';
 
-class Love extends Relation {
+@Relation()
+class Love {
+
+  int id;
 
   @StartNode()
   Person personWhoLoves;

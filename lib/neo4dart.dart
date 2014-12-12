@@ -18,6 +18,7 @@ part 'src/neo4dart/model/annotations/start_node.dart';
 part 'src/neo4dart/model/annotations/end_node.dart';
 part 'src/neo4dart/model/annotations/data.dart';
 part 'src/neo4dart/model/annotations/node.dart';
+part 'src/neo4dart/model/annotations/relation.dart';
 
 part 'src/neo4dart/client/neo_client.dart';
 
@@ -47,8 +48,6 @@ part 'src/neo4dart/service/find/neo_service_find.dart';
 part 'src/neo4dart/service/update/neo_service_update.dart';
 part 'src/neo4dart/service/delete/neo_service_delete.dart';
 
-part 'src/neo4dart/model/relation.dart';
-part 'src/neo4dart/model/neo_entity.dart';
 part 'src/neo4dart/model/neo_type.dart';
 part 'src/neo4dart/model/response_entity.dart';
 part 'src/neo4dart/model/response/neo_response.dart';

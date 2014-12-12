@@ -6,7 +6,7 @@ class RelationshipWithNodes {
   Relationship relationship;
   dynamic endNode;
 
-  Relation initialRelationship;
+  dynamic initialRelationship;
 
   RelationshipWithNodes(this.startNode, this.relationship, this.endNode, {this.initialRelationship});
 }

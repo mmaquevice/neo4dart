@@ -24,14 +24,14 @@ class BatchUpdateExecutor extends BatchExecutor {
     });
   }
 
-  updateRelation(Relation relation) async {
+  updateRelation(var relation) async {
     return executeBatch(new Set.from([new BatchUpdateBuilder().createRelationToken(relation)])).then((response) {
       _checkResponse(response);
       return relation;
     });
   }
 
-  updateRelations(Iterable<Relation> relations) async {
+  updateRelations(Iterable relations) async {
     return executeBatch(new BatchUpdateBuilder().createRelationTokens(relations)).then((response) {
       _checkResponse(response);
       return relations;

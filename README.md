@@ -39,7 +39,8 @@ class Person {
 * A relation can be added via the annotation `@Relationship()`
 
 ```dart
-class Person extends Node {
+@Node()
+class Person {
 ...
 
   @Relationship("works with")
@@ -47,10 +48,11 @@ class Person extends Node {
 }
 ```
 
-* A relation with dynamic data can be added via the annotation `@RelationshipVia()`. In this case the relation has to be an entity extending `Relation`. Its properties must be annotated `@Data()`.
+* A relation with dynamic data can be added via the annotation `@RelationshipVia()`. In this case the relation has to be annotated with `@Relation()`, its properties must be annotated `@Data()` and it should have an `int id` public field.
 
 ```dart
-class Love extends Relation {
+@Relation()
+class Love {
 
   @StartNode()
   Person personWhoLoves;
@@ -61,8 +63,8 @@ class Love extends Relation {
   String since;
 }
 
-
-class Person extends Node {
+@Node()
+class Person {
 ...
 
   @RelationshipVia("is in love with")

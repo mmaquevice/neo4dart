@@ -34,13 +34,13 @@ class CypherDeleteExecutor extends CypherExecutor {
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  deleteRelation(Relation relation) async {
+  deleteRelation(var relation) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteRelations([relation.id]);
     return executeCypher(query).then((response) => _checkResponse(response));
   }
 
-  deleteRelations(Iterable<Relation> relations) async {
+  deleteRelations(Iterable relations) async {
 
     String query = new CypherDeleteBuilder().buildQueryToDeleteRelations(relations.map((r) => r.id).toList());
     return executeCypher(query).then((response) => _checkResponse(response));
