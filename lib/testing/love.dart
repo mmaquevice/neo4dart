@@ -12,7 +12,9 @@ class Love extends Relation {
   @EndNode()
   Person personLoved;
 
+  @Data()
   String howMuch;
+  @Data()
   String since;
 
   Love(this.personWhoLoves, this.personLoved, this.howMuch, this.since);

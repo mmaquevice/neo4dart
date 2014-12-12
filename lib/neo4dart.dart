@@ -17,6 +17,7 @@ part 'src/neo4dart/model/annotations/relationship.dart';
 part 'src/neo4dart/model/annotations/relationship_via.dart';
 part 'src/neo4dart/model/annotations/start_node.dart';
 part 'src/neo4dart/model/annotations/end_node.dart';
+part 'src/neo4dart/model/annotations/data.dart';
 
 part 'src/neo4dart/client/neo_client.dart';
 

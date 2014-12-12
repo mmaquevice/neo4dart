@@ -43,7 +43,7 @@ class BatchInsertBuilder {
       return null;
     }
 
-    BatchToken token = _findTokenWith(node.toJson());
+    BatchToken token = _findTokenWith(findFieldsAnnotatedValueByKey(node, Data));
     return token;
   }
 

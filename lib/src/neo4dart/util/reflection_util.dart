@@ -84,10 +84,14 @@ Map _findEntityByAnnotations(Object objectAnnotated, Type type) {
   instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror value) {
     value.metadata.forEach((InstanceMirror value) {
       if (value.reflectee.runtimeType == type) {
-        if (instanceMirror.getField(key).reflectee is Iterable) {
-          fieldsByRelationship[value.reflectee] = instanceMirror.getField(key).reflectee;
+        var valueOfAnnotatedObject = instanceMirror.getField(key).reflectee;
+
+        if (valueOfAnnotatedObject is Iterable) {
+          fieldsByRelationship[value.reflectee] = valueOfAnnotatedObject;
         } else {
-          fieldsByRelationship[value.reflectee] = [instanceMirror.getField(key).reflectee];
+          if(valueOfAnnotatedObject != null) {
+            fieldsByRelationship[value.reflectee] = [valueOfAnnotatedObject];
+          }
         }
       }
     });
@@ -226,4 +230,22 @@ int _extractNodeId(String self) {
     throw "Node id cannot be retrieved from : ${self}.";
   }
   return int.parse(idNode);
+}
+
+Map findFieldsAnnotatedValueByKey(Object objectAnnotated, Type type) {
+
+  var valueByKey = {};
+
+  InstanceMirror instanceMirror = reflect(objectAnnotated);
+  instanceMirror.type.declarations.forEach((Symbol key, DeclarationMirror value) {
+    value.metadata.forEach((InstanceMirror value) {
+      if (value.reflectee.runtimeType == type) {
+        var valueOfAnnotatedObject = instanceMirror.getField(key).reflectee;
+        if(valueOfAnnotatedObject != null) {
+          valueByKey[MirrorSystem.getName(key)] = valueOfAnnotatedObject;
+        }
+      }
+    });
+  });
+  return valueByKey;
 }

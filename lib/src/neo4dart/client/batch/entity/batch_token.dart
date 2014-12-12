@@ -12,7 +12,7 @@ class BatchToken {
   BatchToken(this.method, this.to, this.body, {this.id, this.neoEntity});
 
   factory BatchToken.createNodeToken(Node node, {int id}) {
-    return new BatchToken("POST", "/node", node.toJson(), id : id, neoEntity: node);
+    return new BatchToken("POST", "/node",  findFieldsAnnotatedValueByKey(node, Data), id : id, neoEntity: node);
   }
 
   factory BatchToken.createLabelToken(Node node, int nodeTokenId, {int id}) {

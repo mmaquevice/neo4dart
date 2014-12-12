@@ -5,7 +5,7 @@ class BatchUpdateBuilder {
   final _logger = new Logger("BatchUpdateBuilder");
 
   BatchToken createNodeToken(Node node) {
-    return new BatchToken("PUT", "/node/${node.id}/properties", node.toJson());
+    return new BatchToken("PUT", "/node/${node.id}/properties", findFieldsAnnotatedValueByKey(node, Data));
   }
 
   Set<BatchToken> createNodeTokens(Iterable<Node> nodes) {

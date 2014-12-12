@@ -8,7 +8,9 @@ import 'package:quiver/core.dart';
 
 class Person extends Node {
 
+  @Data()
   String name;
+  @Data()
   String city;
 
   @Relationship("loves", data: const {
@@ -26,15 +28,6 @@ class Person extends Node {
   Set<Love> eternalLovers = new Set();
 
   Person(this.name, {this.city, this.lover}) : super();
-
-  Map toJson() {
-    Map map = new Map();
-    map["name"] = name;
-    if (city != null) {
-      map["city"] = city;
-    }
-    return map;
-  }
 
   // TODO mma - test client get with id
   bool operator ==(o) => o is Person && o.name == name && o.city == city && new  IterableEquality().equals(o.eternalLovers, eternalLovers);
