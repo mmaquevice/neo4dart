@@ -14,11 +14,11 @@ class NeoServiceUpdate {
     return batchUpdateExecutor.updateNodes(nodes);
   }
 
-  updateRelation(Relation relation) async {
+  updateRelation(var relation) async {
     return batchUpdateExecutor.updateRelation(relation);
   }
 
-  updateRelations(Iterable<Relation> relations) async {
+  updateRelations(Iterable relations) async {
     return batchUpdateExecutor.updateRelations(relations);
   }
 }

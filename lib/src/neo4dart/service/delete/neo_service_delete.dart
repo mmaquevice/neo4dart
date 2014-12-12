@@ -22,11 +22,11 @@ class NeoServiceDelete {
     return cypherDeleteExecutor.deleteNodesByIds(ids, force: force);
   }
 
-  deleteRelation(Relation relation) async {
+  deleteRelation(var relation) async {
     return cypherDeleteExecutor.deleteRelation(relation);
   }
 
-  deleteRelations(Iterable<Relation> relations) async {
+  deleteRelations(Iterable relations) async {
     return cypherDeleteExecutor.deleteRelations(relations);
   }
 

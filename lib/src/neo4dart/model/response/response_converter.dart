@@ -89,7 +89,7 @@ class ResponseConverter {
       }
     }
 
-    if (typeNeoEntity.isSubtypeOf(reflectType(Relation))) {
+    if (isRelation(typeNeoEntity)) {
       return _createRelationWithNodes(typeNeoEntity.reflectedType, relationResponse, startNode, endNode);
     }
 
@@ -112,9 +112,9 @@ class ResponseConverter {
     }
   }
 
-  Relation _createRelationWithNodes(Type typeRelation, RelationResponse relationResponse, AroundNodeResponse startAroundNodeResponse, AroundNodeResponse endAroundNodeResponse) {
+  dynamic _createRelationWithNodes(Type typeRelation, RelationResponse relationResponse, AroundNodeResponse startAroundNodeResponse, AroundNodeResponse endAroundNodeResponse) {
 
-    Relation relation = convertToRelation(typeRelation, relationResponse);
+    var relation = convertToRelation(typeRelation, relationResponse);
 
     var startNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idStartNode, startAroundNodeResponse, typeNode : _findTypesAnnotatedBy(StartNode, relation).first);
     var endNode = _retrieveNodeWithAroundNodeResponseData(relationResponse.idEndNode, endAroundNodeResponse, typeNode : _findTypesAnnotatedBy(EndNode, relation).first);

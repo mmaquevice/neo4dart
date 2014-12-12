@@ -14,11 +14,11 @@ class BatchUpdateBuilder {
     return tokens;
   }
 
-  BatchToken createRelationToken(Relation relation) {
+  BatchToken createRelationToken(var relation) {
     return new BatchToken("PUT", "/relationship/${relation.id}/properties", findFieldsAnnotatedValueByKey(relation, Data));
   }
 
-  Set<BatchToken> createRelationTokens(Iterable<Relation> relations) {
+  Set<BatchToken> createRelationTokens(Iterable relations) {
     Set<BatchToken> tokens = new Set();
     relations.forEach((relation) => tokens.add(createRelationToken(relation)));
     return tokens;
