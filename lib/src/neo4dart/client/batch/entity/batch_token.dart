@@ -16,7 +16,8 @@ class BatchToken {
   }
 
   factory BatchToken.createLabelToken(Node node, int nodeTokenId, {int id}) {
-    return new BatchToken("POST", "{${nodeTokenId}}/labels", node.labels, id: id);
+    Type type = reflectClass(node.runtimeType).reflectedType;
+    return new BatchToken("POST", "{${nodeTokenId}}/labels", '$type', id: id);
   }
 
   factory BatchToken.createRelationToken(RelationshipWithNodes relation, BatchToken startToken, BatchToken endToken, {int id}) {
