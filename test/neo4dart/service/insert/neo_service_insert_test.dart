@@ -104,7 +104,7 @@ main() {
     });
   });
 
-  group('insertNodeInDepth', () {
+  group('insertNode - in depth set to true', () {
 
     test('ok', () {
 
@@ -123,7 +123,7 @@ main() {
       matthieu.lover = gerard;
       gerard.lover = lucille;
 
-      return neoService.insertNodeInDepth(lucille).then((_) {
+      return neoService.insertNode(lucille, inDepth: true).then((_) {
         _logger.info(lucille);
         expect(lucille.id, equals(88));
         expect(matthieu.id, equals(89));

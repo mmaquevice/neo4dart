@@ -12,22 +12,18 @@ class BatchInsertExecutor extends BatchExecutor {
 
   BatchInsertExecutor.withClient(client) : super.withClient(client);
 
-  insertNode(var node, bool inDepth) async {
+  insertNode(var node, {bool inDepth: false}) async {
 
     BatchInsertBuilder tokenInsertBuilder = new BatchInsertBuilder();
-    tokenInsertBuilder.addNodeToBatch(node);
-    tokenInsertBuilder.addNodeAndRelationsToBatch(node, inDepth);
-    tokenInsertBuilder.addNodeAndRelationsViaToBatch(node, inDepth);
-    return executeBatch(tokenInsertBuilder.batchTokens).then((response) => _addIdToNeoEntities(response, tokenInsertBuilder.batchTokens));
+    Set<BatchToken> tokens = tokenInsertBuilder.buildTokens([node], inDepth: inDepth);
+    return executeBatch(tokens).then((response) => _addIdToNeoEntities(response, tokens));
   }
 
-  insertNodes(Iterable nodes, bool inDepth) async {
+  insertNodes(Iterable nodes, {bool inDepth: false}) async {
 
     BatchInsertBuilder tokenInsertBuilder = new BatchInsertBuilder();
-    tokenInsertBuilder.addNodesToBatch(nodes);
-    tokenInsertBuilder.addNodesAndRelationsToBatch(nodes, inDepth);
-    tokenInsertBuilder.addNodesAndRelationsViaToBatch(nodes, inDepth);
-    return executeBatch(tokenInsertBuilder.batchTokens).then((response) => _addIdToNeoEntities(response, tokenInsertBuilder.batchTokens));
+    Set<BatchToken> tokens = tokenInsertBuilder.buildTokens(nodes, inDepth: inDepth);
+    return executeBatch(tokens).then((response) => _addIdToNeoEntities(response, tokens));
   }
 
   _addIdToNeoEntities(var response, Set<BatchToken> batchTokens) {

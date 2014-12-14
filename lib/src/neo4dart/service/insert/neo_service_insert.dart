@@ -5,22 +5,13 @@ class NeoServiceInsert {
   final _logger = new Logger("NeoServiceInsert");
 
   BatchInsertExecutor tokenInsertExecutor = new BatchInsertExecutor();
-  BatchFindExecutor tokenFindExecutor = new BatchFindExecutor();
 
-  insertNode(var node) async {
-    return tokenInsertExecutor.insertNode(node, false);
+  insertNode(var node, {bool inDepth: false}) async {
+    return tokenInsertExecutor.insertNode(node, inDepth: inDepth);
   }
 
-  insertNodeInDepth(var node) async {
-    return tokenInsertExecutor.insertNode(node, true);
-  }
-
-  insertNodes(Iterable nodes) async {
-    return tokenInsertExecutor.insertNodes(nodes, false);
-  }
-
-  insertNodesInDepth(Iterable nodes) async {
-    return tokenInsertExecutor.insertNodes(nodes, true);
+  insertNodes(Iterable nodes, {bool inDepth: false}) async {
+    return tokenInsertExecutor.insertNodes(nodes, inDepth: inDepth);
   }
 }
 
