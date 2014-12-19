@@ -27,21 +27,25 @@ class BatchInsertBuilder {
     for (var node in nodes) {
       BatchToken token = _findTokenFromNode(node);
       if (token == null) {
-        tokens.add(_addNodeToBatch(node, inDepth, firstCall: true));
+        tokens.addAll(_addNodeToBatch(node, inDepth, firstCall: true));
       }
     }
     return tokens;
   }
 
-  BatchToken _addNodeToBatch(var node, bool inDepth, {bool firstCall: false}) {
+  Set<BatchToken> _addNodeToBatch(var node, bool inDepth, {bool firstCall: false}) {
 
     _logger.info("Converting node ${node} to token...");
+
+    Set<BatchToken> tokens = new Set();
 
     BatchToken token = _findTokenFromNode(node);
     if (token == null && node.id == null) {
       token = new BatchToken.createNodeToken(node, id: _findIdNotUsed());
+      tokens.add(token);
       _batchTokens.add(token);
       BatchToken tokenForLabel = new BatchToken.createLabelToken(node, token.id, id: _findIdNotUsed());
+      tokens.add(tokenForLabel);
       _batchTokens.add(tokenForLabel);
       _logger.info("Node ${node} has been inserted in batch via token ${token}.");
     } else {
@@ -51,16 +55,16 @@ class BatchInsertBuilder {
     if (firstCall || (!firstCall && inDepth)) {
       if (!_nodesWithRelationsConverted.contains(node)) {
         _nodesWithRelationsConverted.add(node);
-        _addNodeAndRelationsToBatch(node, inDepth);
+        tokens.addAll(_addNodeAndRelationsToBatch(node, inDepth));
       }
 
       if (!_nodesWithRelationsViaConverted.contains(node)) {
         _nodesWithRelationsViaConverted.add(node);
-        _addNodeAndRelationsViaToBatch(node, inDepth);
+        tokens.addAll(_addNodeAndRelationsViaToBatch(node, inDepth));
       }
     }
 
-    return token;
+    return tokens;
   }
 
   BatchToken _findTokenFromNode(var node) {
@@ -140,7 +144,8 @@ class BatchInsertBuilder {
 
     BatchToken startToken = _findTokenFromNode(relation.startNode);
     if (startToken == null) {
-      startToken = _addNodeToBatch(relation.startNode, inDepth);
+      _addNodeToBatch(relation.startNode, inDepth);
+      startToken = _findTokenFromNode(relation.startNode);
       if (startToken != null) {
         tokens.add(startToken);
       }
@@ -148,7 +153,8 @@ class BatchInsertBuilder {
 
     BatchToken endToken = _findTokenFromNode(relation.endNode);
     if (endToken == null) {
-      endToken = _addNodeToBatch(relation.endNode, inDepth);
+      _addNodeToBatch(relation.endNode, inDepth);
+      endToken = _findTokenFromNode(relation.endNode);
       if (endToken != null) {
         tokens.add(endToken);
       }
