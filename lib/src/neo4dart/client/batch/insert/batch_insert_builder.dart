@@ -11,11 +11,7 @@ class BatchInsertBuilder {
 
   Set<BatchToken> buildTokens(Iterable nodes, {bool inDepth: false}) {
     _initBuilder();
-
-    _addNodesToBatch(nodes);
-    _addNodesAndRelationsToBatch(nodes, inDepth);
-    _addNodesAndRelationsViaToBatch(nodes, inDepth);
-
+    _addNodesToBatch(nodes, inDepth);
     return _batchTokens;
   }
 
@@ -25,19 +21,19 @@ class BatchInsertBuilder {
     _nodesWithRelationsViaConverted = new Set();
   }
 
-  Set<BatchToken> _addNodesToBatch(Iterable nodes) {
+  Set<BatchToken> _addNodesToBatch(Iterable nodes, bool inDepth) {
 
     Set<BatchToken> tokens = new Set();
-    nodes.forEach((node) {
-      BatchToken token = _addNodeToBatch(node);
-      if(token != null) {
-        tokens.add(_addNodeToBatch(node));
+    for (var node in nodes) {
+      BatchToken token = _findTokenFromNode(node);
+      if (token == null) {
+        tokens.add(_addNodeToBatch(node, inDepth, firstCall: true));
       }
-    });
+    }
     return tokens;
   }
 
-  BatchToken _addNodeToBatch(var node) {
+  BatchToken _addNodeToBatch(var node, bool inDepth, {bool firstCall: false}) {
 
     _logger.info("Converting node ${node} to token...");
 
@@ -51,6 +47,19 @@ class BatchInsertBuilder {
     } else {
       _logger.info("Node ${node} is already present in batch.");
     }
+
+    if (firstCall || (!firstCall && inDepth)) {
+      if (!_nodesWithRelationsConverted.contains(node)) {
+        _nodesWithRelationsConverted.add(node);
+        _addNodeAndRelationsToBatch(node, inDepth);
+      }
+
+      if (!_nodesWithRelationsViaConverted.contains(node)) {
+        _nodesWithRelationsViaConverted.add(node);
+        _addNodeAndRelationsViaToBatch(node, inDepth);
+      }
+    }
+
     return token;
   }
 
@@ -68,7 +77,7 @@ class BatchInsertBuilder {
       return null;
     }
 
-    for(var batchToken in _batchTokens) {
+    for (var batchToken in _batchTokens) {
       if (batchToken != null) {
         if (new DeepCollectionEquality.unordered().equals(batchToken.body, body)) {
           return batchToken;
@@ -81,7 +90,7 @@ class BatchInsertBuilder {
 
   int _findIdNotUsed() {
     int max = -1;
-    for(var batchToken in _batchTokens) {
+    for (var batchToken in _batchTokens) {
       if (batchToken != null) {
         if (batchToken.id != null) {
           if (batchToken.id > max) {
@@ -108,51 +117,47 @@ class BatchInsertBuilder {
 
     Set<BatchToken> tokens = new Set();
     Set<RelationshipWithNodes> relations = _findRelationshipNodes(node);
-    relations.forEach((relation) {
+    for (var relation in relations) {
       _logger.info("Converting relation ${relation} to token...");
-      tokens.addAll(_convertRelationToBatchTokens(relation));
+      tokens.addAll(_convertRelationToBatchTokens(relation, inDepth));
 
       if (inDepth) {
         if (node != relation.startNode && !_nodesWithRelationsConverted.contains(relation.startNode)) {
-          _nodesWithRelationsConverted.add(relation.startNode);
-          tokens.addAll(_addNodeAndRelationsToBatch(relation.startNode, inDepth));
+          tokens.addAll([_addNodeToBatch(relation.startNode, inDepth)]);
         }
         if (node != relation.endNode && !_nodesWithRelationsConverted.contains(relation.endNode)) {
-          _nodesWithRelationsConverted.add(relation.endNode);
-          tokens.addAll(_addNodeAndRelationsToBatch(relation.endNode, inDepth));
+          tokens.addAll([_addNodeToBatch(relation.endNode, inDepth)]);
         }
       }
-    });
+    }
 
-    _nodesWithRelationsConverted.add(node);
     return tokens;
   }
 
-  Set<BatchToken> _convertRelationToBatchTokens(RelationshipWithNodes relation) {
+  Set<BatchToken> _convertRelationToBatchTokens(RelationshipWithNodes relation, bool inDepth) {
 
     Set<BatchToken> tokens = new Set();
 
     BatchToken startToken = _findTokenFromNode(relation.startNode);
     if (startToken == null) {
-      startToken = _addNodeToBatch(relation.startNode);
-      if(startToken != null) {
+      startToken = _addNodeToBatch(relation.startNode, inDepth);
+      if (startToken != null) {
         tokens.add(startToken);
       }
     }
 
     BatchToken endToken = _findTokenFromNode(relation.endNode);
     if (endToken == null) {
-      endToken = _addNodeToBatch(relation.endNode);
-      if(endToken != null) {
+      endToken = _addNodeToBatch(relation.endNode, inDepth);
+      if (endToken != null) {
         tokens.add(endToken);
       }
     }
 
-    if(relation.initialRelationship == null || relation.initialRelationship.id == null) {
+    if (relation.initialRelationship == null || relation.initialRelationship.id == null) {
 
       var token = new BatchToken.createRelationToken(relation, startToken, endToken, id: _findIdNotUsed());
       _batchTokens.add(token);
-
       tokens.add(token);
     }
 
@@ -170,25 +175,24 @@ class BatchInsertBuilder {
   Set<BatchToken> _addNodeAndRelationsViaToBatch(var node, bool inDepth) {
 
     _logger.info("Converting node ${node} to token...");
+
     Set<BatchToken> tokens = new Set();
     Set<RelationshipWithNodes> relations = _findRelationshipViaNodes(node);
-    relations.forEach((relation) {
+
+    for (var relation in relations) {
       _logger.info("Converting relation ${relation} to token...");
-      tokens.addAll(_convertRelationToBatchTokens(relation));
+      tokens.addAll(_convertRelationToBatchTokens(relation, inDepth));
 
       if (inDepth) {
         if (node != relation.startNode && !_nodesWithRelationsViaConverted.contains(relation.startNode)) {
-          _nodesWithRelationsViaConverted.add(relation.startNode);
-          tokens.addAll(_addNodeAndRelationsViaToBatch(relation.startNode, inDepth));
+          tokens.addAll([_addNodeToBatch(relation.startNode, inDepth)]);
         }
         if (node != relation.endNode && !_nodesWithRelationsViaConverted.contains(relation.endNode)) {
-          _nodesWithRelationsViaConverted.add(relation.endNode);
-          tokens.addAll(_addNodeAndRelationsViaToBatch(relation.endNode, inDepth));
+          tokens.addAll([_addNodeToBatch(relation.endNode, inDepth)]);
         }
       }
-    });
+    }
 
-    _nodesWithRelationsViaConverted.add(node);
     return tokens;
   }
 }

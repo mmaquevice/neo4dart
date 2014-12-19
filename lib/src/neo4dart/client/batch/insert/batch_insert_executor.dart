@@ -43,14 +43,14 @@ class BatchInsertExecutor extends BatchExecutor {
       }
     });
 
-    batchTokens.forEach((token) {
+    for(var token in batchTokens) {
       if (neoIdByRequestId.containsKey(token.id)) {
         if (token.neoEntity != null) {
           token.neoEntity.id = neoIdByRequestId[token.id];
           _logger.info('Matching ${token.id} to ${token.neoEntity.id}.');
         }
       }
-    });
+    }
 
     return true;
   }
