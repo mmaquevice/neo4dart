@@ -1,0 +1,32 @@
+{
+  "results": [
+    {
+      "columns": [
+        "rowType",
+        "nodeIds",
+        "nodes",
+        "labels",
+        "relationshipIds",
+        "relationshipTypes",
+        "relationships"
+      ],
+      "data": [
+        {
+          "row": [
+            "node",
+            6,
+            {
+              "name": "Lucille",
+              "city": "Paris"
+            },
+            ["Person"],
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

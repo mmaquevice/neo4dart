@@ -2,6 +2,7 @@
   "results": [
     {
       "columns": [
+        "rowType",
         "nodeIds",
         "nodes",
         "labels",
@@ -12,6 +13,7 @@
       "data": [
         {
           "row": [
+            "path",
             [
               24260,
               24261,

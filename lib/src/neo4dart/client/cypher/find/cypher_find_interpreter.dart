@@ -62,9 +62,28 @@ class CypherFindInterpreter {
 
   Map<int, AroundNodeResponse> extractAroundNodesFromCypherResponse(CypherResponse cypherResponse) {
 
+    Map<int, AroundNodeResponse> aroundNodesById = _extractRowTypePath(cypherResponse);
+
+    Map<int, AroundNodeResponse> aroundNodesByIdFromNodes = _extractRowTypeNode(cypherResponse);
+
+    aroundNodesByIdFromNodes.forEach((id, node) {
+      if(!aroundNodesById.containsKey(id)) {
+        aroundNodesById[id] = node;
+      }
+    });
+
+    return aroundNodesById;
+  }
+
+  Map<int, AroundNodeResponse> _extractRowTypePath(CypherResponse cypherResponse) {
+
     Map<int, AroundNodeResponse> aroundNodesById = new Map();
 
     for (Map<String, dynamic> row in cypherResponse.rows) {
+      if (row["rowType"] != 'path') {
+        continue;
+      }
+
       List nodeIds = row["nodeIds"];
       List nodes = row["nodes"];
       var labels = row["labels"];
@@ -104,6 +123,28 @@ class CypherFindInterpreter {
     }
 
     return aroundNodesById;
+  }
 
+  Map<int, AroundNodeResponse> _extractRowTypeNode(CypherResponse cypherResponse) {
+
+    Map<int, AroundNodeResponse> aroundNodesById = new Map();
+
+    for (Map<String, dynamic> row in cypherResponse.rows) {
+      if (row["rowType"] != 'node') {
+        continue;
+      }
+
+      int nodeId = row["nodeIds"];
+      Map node = row["nodes"];
+      var labels = row["labels"];
+
+      if (!aroundNodesById.containsKey(nodeId)) {
+        NodeResponse nodeResponse = new NodeResponse(nodeId, node);
+        LabelResponse labelResponse = new LabelResponse(nodeId, labels);
+        aroundNodesById[nodeId] = new AroundNodeResponse(labelResponse, nodeResponse, new List());
+      }
+    }
+
+    return aroundNodesById;
   }
 }

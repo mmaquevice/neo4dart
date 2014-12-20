@@ -30,6 +30,6 @@ class CypherFindExecutor extends CypherExecutor {
       query = new CypherFindBuilder().buildQueryToFindNodesAndRelations(type, properties: properties, limit: 1);
     }
 
-    return executeCypher(query);
+    return executeCypher(query, properties: properties);
   }
 }

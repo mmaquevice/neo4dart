@@ -17,7 +17,8 @@ class CypherFindBuilder {
       '''
     MATCH path=(p:$type ${propertiesInline.isEmpty ? '': "{${propertiesInline.join(', ')}}"})-[*..$maxLength]->()
     WITH DISTINCT(path) as path
-    RETURN [n in nodes(path) | ID(n)] as nodeIds,
+    RETURN 'path' as rowType,
+           [n in nodes(path) | ID(n)] as nodeIds,
            [n in nodes(path)] as nodes,
            [n in nodes(path) | labels(n)] as labels,
            [r in  relationships(path) | ID(r)] as relationshipIds,
@@ -25,6 +26,15 @@ class CypherFindBuilder {
            [r in  relationships(path)] as relationships
     ORDER BY length(path) DESC
     LIMIT $limit
+    UNION ALL
+    MATCH (n:$type ${propertiesInline.isEmpty ? '': "{${propertiesInline.join(', ')}}"})
+    RETURN  'node' as rowType,
+            ID(n) as nodeIds,
+            n as nodes,
+            labels(n) as labels,
+            '' as relationshipIds,
+            '' as relationshipTypes,
+            '' as relationships;
     ''';
 
     return query;
@@ -41,7 +51,8 @@ class CypherFindBuilder {
     MATCH path=(p:$type)-[*..$maxLength]->()
     WHERE ID(p) in [${nodeIds.join(',')}]
     WITH DISTINCT(path) as path
-    RETURN [n in nodes(path) | ID(n)] as nodeIds,
+    RETURN 'path' as rowType,
+           [n in nodes(path) | ID(n)] as nodeIds,
            [n in nodes(path)] as nodes,
            [n in nodes(path) | labels(n)] as labels,
            [r in  relationships(path) | ID(r)] as relationshipIds,
@@ -49,6 +60,16 @@ class CypherFindBuilder {
            [r in  relationships(path)] as relationships
     ORDER BY length(path) DESC
     LIMIT $limit
+    UNION ALL
+    MATCH (n:$type)
+    WHERE ID(n) in [${nodeIds.join(',')}]
+    RETURN  'node' as rowType,
+            ID(n) as nodeIds,
+            n as nodes,
+            labels(n) as labels,
+            '' as relationshipIds,
+            '' as relationshipTypes,
+            '' as relationships;
     ''';
 
     return query;

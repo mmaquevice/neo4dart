@@ -65,8 +65,8 @@ main() {
       NeoServiceFind neoService = new NeoServiceFind();
 
       var client200 = new MockClient((request) {
-          var responseBody = util.readFile('test/neo4dart/service/find/json/findNodeWithRelationsById_ok.json');
-          return new http.Response(responseBody, 200);
+        var responseBody = util.readFile('test/neo4dart/service/find/json/findNodeWithRelationsById_ok.json');
+        return new http.Response(responseBody, 200);
       });
       neoService.cypherFindExecutor = new CypherFindExecutor.withClient(client200);
 
@@ -82,6 +82,23 @@ main() {
       gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
 
       return neoService.findNodeWithRelationsById(24260, Person).then((node) {
+        expect(node, equals(gerard));
+      });
+    });
+
+    test('ok - node with no relation', () {
+
+      NeoServiceFind neoService = new NeoServiceFind();
+
+      var client200 = new MockClient((request) {
+        var responseBody = util.readFile('test/neo4dart/service/find/json/findNodeWithRelationsById_no_relation.json');
+        return new http.Response(responseBody, 200);
+      });
+      neoService.cypherFindExecutor = new CypherFindExecutor.withClient(client200);
+
+      Person gerard = new Person('Lucille', city: 'Paris');
+
+      return neoService.findNodeWithRelationsById(6, Person).then((node) {
         expect(node, equals(gerard));
       });
     });
@@ -102,6 +119,8 @@ main() {
       Person toto = new Person('Toto', city: 'Lisbonne');
       Person gerard = new Person('Gerard', city: 'Moscou');
 
+      Person calimero = new Person('Calimero', city: 'Land');
+
       lucille.coworkers = [toto];
       toto.coworkers = [gerard];
       gerard.coworkers = [lucille];
@@ -109,8 +128,8 @@ main() {
       Person josette = new Person('Josette', city: 'Berlin');
       gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
 
-      return neoService.findNodesWithRelationsByIds([24260, 24262], Person).then((nodes) {
-        expect(nodes, unorderedEquals([gerard,toto]));
+      return neoService.findNodesWithRelationsByIds([8, 16, 10], Person).then((nodes) {
+        expect(nodes, unorderedEquals([gerard, toto, calimero]));
       });
     });
   });
@@ -137,10 +156,14 @@ main() {
       Person josette = new Person('Josette', city: 'Berlin');
       gerard.eternalLovers = new Set.from([new Love(gerard, josette, 'a lot', '2 hours ago')]);
 
-      return neoService.findNodesWithRelations(Person, properties: {"name": "Lucille"}).then((nodes) {
-        expect(nodes, unorderedEquals([lucille]));
+      Person calimero = new Person('Calimero', city: 'Paris');
+
+      return neoService.findNodesWithRelations(Person, properties: {
+          "city": "Paris"
+      }).then((nodes) {
+        expect(nodes, unorderedEquals([lucille, calimero]));
       });
 
-      });
     });
+  });
 }

@@ -100,11 +100,10 @@ class NeoServiceFind {
   bool _arePropertiesMatching(Map requestProperties, Map nodeProperties) {
 
     for (String key in requestProperties.keys) {
-      if (nodeProperties.containsKey(key)) {
-        if (nodeProperties[key] != requestProperties[key]) {
-          return false;
-        }
-      } else {
+      if (!nodeProperties.containsKey(key)) {
+        return false;
+      }
+      if (nodeProperties[key] != requestProperties[key]) {
         return false;
       }
     }

@@ -2,6 +2,7 @@
   "results": [
     {
       "columns": [
+        "rowType",
         "nodeIds",
         "nodes",
         "labels",
@@ -12,12 +13,13 @@
       "data": [
         {
           "row": [
+            "path",
             [
-              24260,
-              24261,
-              24262,
-              24260,
-              24263
+              8,
+              15,
+              16,
+              8,
+              9
             ],
             [
               {
@@ -49,10 +51,10 @@
               ["Person"]
             ],
             [
-              47250,
-              47251,
-              47252,
-              180
+              26,
+              0,
+              4,
+              28
             ],
             [
               "works with",
@@ -69,6 +71,48 @@
                 "howMuch": "a lot"
               }
             ]
+          ]
+        },
+        {
+          "row": [
+            "node",
+            8,
+            {
+              "name": "Gerard",
+              "city": "Moscou"
+            },
+            ["Person"],
+            "",
+            "",
+            ""
+          ]
+        },
+        {
+          "row": [
+            "node",
+            16,
+            {
+              "name": "Toto",
+              "city": "Lisbonne"
+            },
+            ["Person"],
+            "",
+            "",
+            ""
+          ]
+        },
+        {
+          "row": [
+            "node",
+            10,
+            {
+              "name": "Calimero",
+              "city": "Land"
+            },
+            ["Person"],
+            "",
+            "",
+            ""
           ]
         }
       ]
